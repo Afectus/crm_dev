@@ -1,0 +1,49 @@
+{% load nodetag %}
+<div class="table-responsive">
+	<table id="projectstep_table" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>id</th>
+				<th>Приоритет</th>
+				<th>Создатель этапа</th>
+				<th>Исполнители</th>
+				<th>Название этапа</th>
+				<th>Дедлайн</th>
+				<th>Число комментариев</th>
+				<th>Действие</th>
+			</tr>
+		</thead>
+		{% for s in object_list  %} 
+			<tr>
+				<td>{{s.id}}</td>
+				<td>{{s.sort}}</td>
+				<td>{{s.project.user|who}}</td>
+				<td>{%for e in s.executor.all %}{{e.user|who}}<br> {% endfor %}</td>
+				<td>{{s.name}}</td>
+				<td>{{s.edate}}</td>
+				<td>{{s.projectcomment.all.count}}</td>
+				<td>
+					<div class="form-group">
+						<a class="btn btn-success" href="{% url 'project:projectstep_detail' s.id %}"><i class="fa fa-folder-open-o" aria-hidden="true"></i></a>
+						<a id="button_projectstep{{s.id}}_up" class="btn btn-success reload_button" href="{% url 'project:projectstep_up' s.id %}"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+						<a id="button_projectstep{{s.id}}_down" class="btn btn-success reload_button" href="{% url 'project:projectstep_down' s.id %}"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+						<a class="btn btn-danger" href="{% url 'project:projectstep_del' s.id %}"><i class="fa fa-remove"></i></a>	
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+</div>
+	
+<script>
+		$('.reload_button').on('click', () => {
+			projectstepsget();
+			$("#projectstep_table").toggle().toggle();
+		});
+
+		$('.reload_button').on('click', () => {
+			projectstepsget();
+			$("#projectstep_table").toggle().toggle();
+		});
+</script>
