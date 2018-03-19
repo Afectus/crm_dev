@@ -1,3 +1,2 @@
-# crm
-crm
-sdfdsfsf
+# crm_dev
+Development репозиторий CRM
