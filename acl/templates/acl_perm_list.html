@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{#{% load acltag %}#}
+
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2></h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Название</th>
+										<th>Пользователи</th>
+										<th>Группы</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>
+											{{ i.name }}</br>
+											id: {{ i.objectid }}
+										</td>
+										<td>
+											{% for u in i.aclu_set.all %}
+												<b>{{ u.user.first_name }} {{ u.user.last_name }} ({{ u.user.username }})</b> {{ u.get_type_display }} ({{ u.type }}) ({{ u.status|yesno:"Включено,Выключено,Отст." }}) <a href="{% url 'acl:acl_aclu_edit' u.id %}">[...]</a> <a href="{% url 'acl:acl_aclu_del' u.id %}">[x]</a> </br>
+											{% endfor %}
+											<div class="form-group">
+												<a href="{% url 'acl:acl_aclu_add' i.id %}" class="btn btn-success btn-block btn-xs">Добавить</a>
+											</div>
+										
+										</td>
+										<td>
+											{% for g in i.aclg_set.all %}
+												<b>{{ g.group.name }}</b> {{ g.get_type_display }} ({{ g.type }}) ({{ g.status|yesno:"Включено,Выключено,Отст." }}) <a href="{% url 'acl:acl_aclg_edit' g.id %}">[...]</a> <a href="{% url 'acl:acl_aclg_del' g.id %}">[x]</a></br>
+												
+												<ul>
+												{% for u in g.group.user_set.all %}
+													<li>{{ u.first_name }} {{ u.last_name }} ({{ u.username }})</li>
+												{% endfor %}
+												</ul>
+												</br>
+											{% endfor %}
+											<div class="form-group">
+												<a href="{% url 'acl:acl_aclg_add' i.id %}" class="btn btn-success btn-block btn-xs">Добавить</a>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+{% endblock %}
+

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Редактировать <small>{{ object.name }}</small></h3>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+			{% include "_form.html" %}
+			
+			
+		</div>
+	</div>
+</div>
+	
+	
+	
+	</br>
+
+{% endblock %}
+
