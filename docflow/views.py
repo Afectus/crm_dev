@@ -31,7 +31,7 @@ from node.models import *
 from django.urls import reverse
 from telegramtemplate.models import *
 
-list_notification = ['admin']
+list_notification = ['admin', 'disc']
 
 def get_message(typetemplate, user, path):
 	# Переменные шаблона:<br>
