@@ -29,6 +29,26 @@ from acl.views import *
 from notify.models import *
 from node.models import *
 from django.urls import reverse
+from telegramtemplate.models import *
+
+list_notification = ['admin']
+
+def get_message(typetemplate, user, path):
+	# Переменные шаблона:<br>
+	# (today) - Сегодняшняя дата<br>
+	# (user) - Пользователь<br>
+	# (url) - Ссылка на объект (crm.babah24.ru)<br>
+	today = datetime.date.today()
+
+	fullname = user.first_name + " " + user.last_name
+
+	t = telegramtemplate.objects.filter(name=typetemplate)
+	t = t.first()
+	message = t.message
+	message = message.replace('(today)', str(today))
+	message = message.replace('(user)', str(fullname))
+	message = message.replace('(url)', 'crm.babah24.ru%s' % path)
+	return message
 
 # grantchoice=(('L', 'Список'), ('R', 'Чтение'), ('С', 'Создание'), ('U', 'Редактирование'),)
 
@@ -137,6 +157,19 @@ class cash_payment_voucher_add(FormView):
 		# instance = form.save(commit=False)
 		# instance.user = profileuser.objects.get(user=self.request.user)
 		# instance.save()
+
+		#рассылка
+		nh = notifyhandler.objects.get(name='telegram')
+		message = get_message('vaucher_add', self.request.user, reverse('docflow:cash_payment_voucher_admin_list'))
+		
+		for ln in list_notification:
+			try:
+				nuk = notifyuserkey.objects.get(user=User.objects.get(username=ln), handler=nh)
+			except:
+				pass
+			else:
+				nq = notifyqueue.objects.create(user=User.objects.get(username=ln), handler=nh, value=message)
+
 		return super(cash_payment_voucher_add, self).form_valid(form)
 
 	def get_success_url(self):
@@ -179,6 +212,19 @@ class cash_payment_voucher_kontragent_add(FormView):
 		# instance = form.save(commit=False)
 		# instance.user = profileuser.objects.get(user=self.request.user)
 		# instance.save()
+
+		#рассылка
+		nh = notifyhandler.objects.get(name='telegram')
+		message = get_message('vaucher_add', self.request.user, reverse('docflow:cash_payment_voucher_admin_list'))
+		
+		for ln in list_notification:
+			try:
+				nuk = notifyuserkey.objects.get(user=User.objects.get(username=ln), handler=nh)
+			except:
+				pass
+			else:
+				nq = notifyqueue.objects.create(user=User.objects.get(username=ln), handler=nh, value=message)
+
 		return super(cash_payment_voucher_kontragent_add, self).form_valid(form)
 
 	def get_success_url(self):
