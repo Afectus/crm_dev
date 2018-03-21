@@ -29,27 +29,33 @@ class list_ostatkisklad(ListView):
 		if len(data) > 2:
 			if 'pagnum' not in self.request.session:
 				self.request.session['pagnum'] = len(data) - 1
+
 			try:
 				pagnum = int(self.request.GET.get('pagnum'))
 			except:
-					pass
+				pass
 			else:
-				self.request.session['pagnum'] = pagnum				   
+				self.request.session['pagnum'] = pagnum
+
 			pagnum = int(self.request.session.get('pagnum'))
+
 			if pagnum >= len(data):
 				pagnum = len(data) - 1
+				self.request.session['pagnum'] = len(data) - 1
 			elif pagnum <= 0:
 				pagnum = len(data) - 1
-				paginator = Paginator(data, pagnum)
+				self.request.session['pagnum'] = len(data) - 1
+
+			paginator = Paginator(data, abs(pagnum))
 			page = self.request.GET.get('page', 1)
-			data = paginator.page(2)
+
 			try:
 				data = paginator.page(page)
 			except PageNotAnInteger:
 				data = paginator.page(1)
 			except EmptyPage:
 				data = paginator.page(paginator.num_pages)
- 
+
 			return data
 		else:
 			return data
