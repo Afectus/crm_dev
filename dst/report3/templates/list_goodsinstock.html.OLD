@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<div class="well">
+		<div class="form-group">
+			{% if getpaginatornumm|length == 0 %}
+                {% include "_form.html" %}
+            {% else %}
+                Кол-во товаров на странице:
+                {{getpaginatornumm.0.paginatornumm}}
+                <br>
+                <a href="{% url 'update_paginator' getpaginatornumm.0.id %}">Изменить</a>
+            {% endif %}
+		</div>
+	</div>
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+        
+		
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Остаток товаров</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>Номер</th>
+										<th>Товар</th>
+										<th>Склад</th>
+										<th>Кол-во</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for x in goodsinstockk %}
+									<tr>
+										<td>{{ forloop.counter }}</td>
+										<td>{{x.goods.namefull}}</td>
+										<td>{{x.stock.name}}</td>
+										<td>{{x.value}}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+
+							{% if goodsinstockk.has_other_pages %}
+                                <ul class="pagination">
+                                    {% if goodsinstockk.has_previous %}
+                                        <li><a href="?page={{ goodsinstockk.previous_page_number }}">Предыдущая</a></li>
+                                    {% else %}
+                                        <li class="disabled"><span>Предыдущая</span></li>
+                                    {% endif %}
+                                    {% for i in goodsinstockk.paginator.page_range %}
+                                        {% if goodsinstockk.number == i %}
+                                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                        {% else %}
+                                            <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if goodsinstockk.has_next %}
+                                        <li><a href="?page={{ goodsinstockk.next_page_number }}">Следующая</a></li>
+                                    {% else %}
+                                        <li class="disabled"><span>Следующая</span></li>
+                                    {% endif %}
+                                        </ul>
+                            {% endif %}
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+</br>
+{% endblock %}
+
