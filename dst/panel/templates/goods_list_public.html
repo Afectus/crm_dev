@@ -1,0 +1,490 @@
+{% extends "base.html" %}
+{% block title %}Панель управления - список товаров{% endblock %}
+{% block description %}Панель управления - список товаров{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+	
+{% block script %}<script src="/static/js/print.js"></script>{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<script>
+function addtopricequeue(e, id,) {	
+	$.ajax({
+		type: 'GET',
+		url: '/pricetag/pricequeue/add/'+id,
+		//data: data,
+		dataType: 'json',
+		beforeSend: function()
+			{ 
+				//$(e).addClass('hidden');
+				$('.itertask'+id).html('Добавляю...');
+			},
+		success: function(data){
+			console.log(data);
+			if(data.res == 1)
+			{
+				$('.itertask'+id).html('Добавлено');
+			}
+			else if(data.res == 2) {
+				$('.itertask'+id).html('Дубль');
+			}
+			else 
+			{
+				$('.itertask'+id).html('fail');
+			}
+			},
+		error: function(xhr, textStatus, errorThrown){
+			console.log(errorThrown);
+			$('.itertask'+id).html('fail');
+		}
+	});
+
+	return false;
+}
+</script>
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<h2>Фильтр </h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+
+					
+						<form class="smart-form" id="form_filter" action="{% url 'panel:goods_list_public' %}" method="get" role="form">
+						{# {% csrf_token %} #}
+
+						{% for hidden in form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+						
+						{# {% for i in form.visible_fields %} #}
+						{# {% endfor %} #}
+
+							<header>
+								<h3>Список товаров <small>позиций</small></h3>
+							</header>
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label class="label">{{ form.q.label }}</label>
+										<label class="input">
+											{{ form.q }}
+										</label>
+										{% if form.q.errors %}
+										<p class="text-danger">{{ form.q.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.q.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label class="label">{{ form.barcode.label }}</label>
+										<label class="input">
+											{{ form.barcode }}
+										</label>
+										{% if form.barcode.errors %}
+										<p class="text-danger">{{ form.barcode.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.barcode.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-4">
+										<label class="label">{{ form.tax.label }}</label>
+										<label class="input">
+											{{ form.tax }}
+										</label>
+										{% if form.tax.errors %}
+										<p class="text-danger">{{ form.tax.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.tax.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										<label class="label">{{ form.stock.label }}</label>
+										<label class="input">
+											{{ form.stock }}
+										</label>
+										{% if form.stock.errors %}
+										<p class="text-danger">{{ form.stock.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.stock.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										<label class="label">{{ form.motivation.label }}</label>
+										<label class="input">
+											{{ form.motivation }}
+										</label>
+										{% if form.motivation.errors %}
+										<p class="text-danger">{{ form.motivation.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.motivation.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label class="label">{{ form.pricefrom.label }}</label>
+										<label class="input">
+											{{ form.pricefrom }}
+										</label>
+										{% if form.pricefrom.errors %}
+										<p class="text-danger">{{ form.pricefrom.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.pricefrom.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label class="label">{{ form.priceto.label }}</label>
+										<label class="input">
+											{{ form.priceto }}
+										</label>
+										{% if form.priceto.errors %}
+										<p class="text-danger">{{ form.priceto.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.priceto.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label class="checkbox">
+											{{ form.paging }}
+											<i></i>
+											{{ form.paging.label }}
+										</label>	
+									</section>
+									<section class="col col-6">
+										<label class="label">{{ form.video.label }}</label>
+										<label class="input">
+											{{ form.video }}
+										</label>
+										{% if form.video.errors %}
+										<p class="text-danger">{{ form.video.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.video.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							<footer>
+								<div class="pull-left">
+									<h4>Товаров: {{ count }}</h4>
+								</div>
+								<div class="pull-right">
+									<div class="form-group"> 
+										<button type="submit" class="btn btn-success">Применить</button>
+										<a href="{% url 'panel:goods_list_public' %}" class="btn btn-default">Сбросить</a>
+									</div>
+								</div>
+							</footer>
+						</form>
+					</div>
+					<!-- end widget content -->
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+
+			
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>СПИСОК</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+								
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th></th>
+										<th>Информация</th>
+										<th>Описание</th>
+										<th>Цена</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+										<tr>
+											<td>
+												{% if i.pict %}
+												<p class="text-center">
+												<a href="{{ i.pict120.url }}" target="_blank"><img src="{{ i.pict120.url}}" /></a>
+												</p>
+												{% endif %}
+												
+												{% if i.videomp4 %}
+													<div class="form-group">
+														<a href="http://192.168.0.250:8085/{{ i.videomp4 }}" target="_blank" class="btn btn-success btn-block"><i class="fa fa-play" aria-hidden="true"></i>  {{ i.videomp4 }}</a>
+													</div>
+												{% endif %}
+												
+																																		<div class="form-group">
+														<a href="http://192.168.0.250:8085/{{ i.id }}.mp4" target="_blank" class="btn btn-warning btn-block btn-xs"><i class="fa fa-play" aria-hidden="true"></i>  {{ i.id }}.mp4</a>
+												</div>
+												
+												{% if i.idbitrix %}
+													<div class="form-group">
+														<a href="http://babah24.ru/katalog/detail.php?ELEMENT_ID={{ i.idbitrix }}" target="_blank" class="btn btn-default btn-block">Смотреть на сайте</a>
+													</div>
+												{% endif %}
+																																			<div class="form-group">
+													<div class="itertask{{ i.id }}">
+														<a href="/pricequeue/add/{{ i.id }}/" class="btn btn-primary btn-block" onclick="addtopricequeue(this, {{ i.id }}); return false;">+Ценник</a>
+													</div>
+												</div>
+												
+												
+												
+											</td>
+											<td>
+												<a href="/goods/detail/{{ i.id }}" target="_blank">{{ i.name }}</a>
+												<p>
+												<div style="font-size: 12px;">
+													<span>СТАТУС: {{ i.status|mybool }}</span></br>
+													
+													<span>CRM ID: <a href="/admin/node/goods/{{ i.id }}/change/" target="_blank">{{ i.id }}</a></span></br>
+													
+													{% if i.id1c %}
+													<span>1C ID: <b>{{ i.id1c }}</b></span></br>
+													{% endif %}
+													
+													{% if i.art %}
+													<span>Артикул: <b>{{ i.art }}</b></span></br>
+													{% endif %}
+													
+													{% comment %}
+													<!-- {% if i.base %}
+													<span>База: <b>{{ i.base.name }}</b></span></br>
+													{% endif %} -->
+													{% endcomment %}
+													
+													{% if i.idbitrix %}
+													<span>BITRIX ID: <a href="http://babah24.ru/katalog/detail.php?ELEMENT_ID={{ i.idbitrix }}" target="_blank">{{ i.idbitrix }}</a></span></br>
+													{% endif %}
+													
+													
+													{% if i.barcodelist_set.all	%}
+													<div style="border: 1px silver dotted; padding: 5px;">
+													<span>Штрих код</span></br>
+													{% for bar in i.barcodelist_set.all %}
+													<span><b>
+													
+													{{ bar.barcode }} ({{ bar.unit }})
+
+													
+													</b></span></br>
+													{% endfor %}
+													</div>
+													{% endif %}
+													
+													{% comment %}
+													
+													<!--
+													{% if i.pricegoods_set.all %}
+													<div style="border: 1px silver dotted; padding: 5px;">
+														<span>Цены</span></br>
+														{% for pg in i.pricegoods_set.all %}
+															<span><b>
+															{{ pg.pricetype.name }} {{ pg.price|floatdot:2 }} ({{ pg.unit }})
+															</b></span></br>
+														{% endfor %}
+													</div>
+													{% endif %} -->
+													{% endcomment %}
+													
+												</div>
+												
+												
+												{% if i.goodscert %}
+													</br>
+													<a class="btn btn-success btn-xs btn-block"href="{{ i.goodscert.pdf.url }}" target="_blank">Сертификат</a>
+												{% endif %}
+												
+												
+												
+												</p>
+											</td>
+											<td>
+												<a href="http://babah24.ru/katalog/detail.php?ELEMENT_ID={{ i.idbitrix }}" target="_blank">{{ i.bname }}</a>
+												<p>
+												{% proplist i.id as prop %}
+												{% for p in prop %}
+												<div style="font-size: 12px;">
+													<span>{{ p.name }}:</span>
+													<span>
+													{% if p.multiple %}
+														{% for pv in p.value %}
+															<b>{{ pv }}</b>
+														{% endfor %}
+													{% else %}
+														<b>{{ p.value }}</b>
+													{% endif %}
+													<b>{{ p.baseunit }}</b>
+													</span>
+												</div>
+												{% endfor  %}
+												</p>
+												
+												<p>
+												<span>Категории:</span></br>
+												{% for t in i.tax.all %}
+													<small>{{ t.name }}</small>
+												{% endfor  %}
+												</p>
+	
+											</td>
+											<td>
+												{{ i.price|floatdot }} руб.
+												
+												{% if i.motivationinpoints1.ratio > 0 %}
+													<div>
+													<span class="label label-default">{{ i.motivationinpoints1.name }}</span>
+													</div>
+												{% endif %}
+												
+												{% if i.goodsinstock_set.all %}
+													</br>
+													{% for q in i.goodsinstock_set.all %}
+														<small class="text-muted">{{ q.stock.name }} {{ q.value }}</small></br>
+													{% endfor %}
+												{% endif %}
+												
+												
+												
+											</td>
+											<td>
+												{% if 'select' in request.GET and request.GET.select == 'true'%}
+													<div class="form-group">					
+														<a href="#" class="btn btn-warning btn-block btn-xs" target="_blank" onclick="$('#id_select').val('{{ i.id }}'); window.opener.setgoodsid('{{ i.id }}', window);return false;">Выбрать</a>
+													</div>
+												{% else %}
+													<div class="form-group">
+														<div class="itertask{{ i.id }}">
+															<a href="/pricequeue/add/{{ i.id }}/" class="btn btn-primary btn-block" onclick="addtopricequeue(this, {{ i.id }}); return false;">+Ценник</a>
+														</div>
+													</div>
+													<div class="form-group">					
+														<a href="{% url 'panel:goods_edit' i.id %}" class="btn btn-default btn-block btn-xs" target="_blank"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+													</div>
+												{% endif %}
+												
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Найдено: {{ count }}</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+		{% include "xpaginator.html" %}
+		</div>
+	</div>
+</div>
+
+</br>
+
+{% endblock %}
+

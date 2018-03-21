@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Добавить шаблон</h3>
+			<div>
+				Переменные шаблона:<br>
+				(today) - Сегодняшняя дата<br>
+				(user) - Пользователь<br>
+				(url) - Ссылка на объект (crm.babah24.ru)<br>
+				(projectname) - Название проекта<br>
+				(stepname) - Название этапа проекта<br>
+			</div>
+			<br>
+			{% include "_form2.html" %}
+		</div>
+	</div>
+</div>
+
+</br>
+
+{% endblock %}

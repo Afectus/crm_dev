@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Список событий <small>клиента</small></h3>
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<form id="form_filter" action="/buyerevent/list/1/" method="get" role="form">
+				{# {% csrf_token %} #}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+				<div class="bg-success myfilterblock">
+				
+					<div class="form-group"> 
+					<label>{{ form.q.label }}</label>
+					{{ form.q }}
+					{% if form.q.errors %}
+					<p class="text-danger">{{ form.q.errors|striptags }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.q.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+
+				</div>
+				
+				</br>
+				
+				<div class="bg-info myfilterblock">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.datestart.label }}</label>
+							
+							<div class="input-group date mydatepicker">
+								{{ form.datestart }}
+								<div class="input-group-addon">
+								<span class="glyphicon glyphicon-th"></span>
+								</div>
+							</div>
+							
+							{% if form.datestart.errors %}
+							<p class="text-danger">{{ form.datestart.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.datestart.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.dateend.label }}</label>
+							
+							<div class="input-group date mydatepicker">
+								{{ form.dateend }}
+								<div class="input-group-addon">
+								<span class="glyphicon glyphicon-th"></span>
+								</div>
+							</div>
+							
+							{% if form.dateend.errors %}
+							<p class="text-danger">{{ form.dateend.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.dateend.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							{{ form.dm }}
+							<label>{{ form.dm.label }}</label>
+							{% if form.dm.errors %}
+							<p class="text-danger">{{ form.dm.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.dm.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				
+				</br>
+
+				<div class="bg-success myfilterblock">
+				
+					<div class="form-group"> 
+					<label>{{ form.type.label }}</label>
+					{{ form.type }}
+					{% if form.type.errors %}
+					<p class="text-danger">{{ form.type.errors|striptags }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.type.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+
+				</div>
+				
+				</br>
+				<div class="myfilterblock">
+					<div class="pull-left">
+						<div class="form-group">
+							<button type="submit" class="btn btn-success">Применить</button>
+							<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+							<a href="/buyerevent/list" class="btn btn-success">Сбросить</a>
+						</div>
+					</div>
+					<div class="pull-right"><h4>Найдено: {{ count }}</h4></div>
+				</div>
+			</form>
+		
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+			<table id="buyer_list" class="table">
+				<thead>
+				  <tr>
+					<th>id</th>
+					<th>Клиент</th>
+					<th>Дата</th>
+					<th>Тип</th>
+					<th>Название</th>
+					<th>Содержание</th>
+					<th></th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>{{ i.id }}</td>
+							<td>{{ i.buyer|buyerdetail }} </td>
+							<td>{{ i.stime|date:"SHORT_DATE_FORMAT" }}</td>
+							<td>{{ i.get_type_display }}</td>
+							<td>{{ i.name }}</td>
+							<td>{{ i.comment }}</td>
+							<td>
+								{{ i|modellinkedit }}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+			
+
+			
+			
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Найдено: {{ count }}</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+
+	
+		
+		
+			<ul class="pagination">
+				{% if object_list.has_previous %}
+					<li><a href="/buyerevent/list/{{ object_list.paginator.page_range|first }}?{{ req }}"><i class="icon-double-angle-left"></i>Первая</a></li>
+				{% endif %}
+
+				{% if object_list.has_previous %}
+					<li><a href="/buyerevent/list/{{ object_list.previous_page_number }}?{{ req }}"><i class="icon-angle-left"></i>Предыдущая</a></li>
+				{% endif %}
+				
+				{% for p in object_list.paginator.page_range|mypaginatorslice:object_list.number %}
+					{% if p == object_list.number %}
+						<li class="active"><a href="" onclick="return false;">{{ object_list.number }}</a></li>
+						{% else %}
+							<li><a href="/buyerevent/list/{{ p }}?{{ req }}">{{ p }}</a></li>
+						{% endif %}
+				{% endfor %}
+					
+				{% if object_list.has_next %}
+					<li><a href="/buyerevent/list/{{ object_list.next_page_number }}?{{ req }}">Следующая<i class="icon-angle-right"></i></a></li>
+				{% endif %}
+
+				{% if object_list.has_next %}
+					<li><a href="/buyerevent/list/{{ object_list.paginator.page_range|last }}?{{ req }}">Последняя<i class="icon-double-angle-right"></i></a></li>
+				{% endif %}
+			</ul>
+
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+{% comment %}
+{% include "paginator.html" %}
+{% endcomment %}
+	
+	
+	
+	</br>
+
+{% endblock %}
+

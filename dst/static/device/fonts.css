@@ -1,0 +1,7 @@
+@font-face {
+	font-family: 'Conv_PFBeauSansPro-Reg';
+	src: url('/static/device/fonts/PFBeauSansPro-Reg.eot');
+	src: local('☺'), url('/static/device/fonts/PFBeauSansPro-Reg.woff') format('woff'), url('/static/device/fonts/PFBeauSansPro-Reg.ttf') format('truetype'), url('/static/device/fonts/PFBeauSansPro-Reg.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}

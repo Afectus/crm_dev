@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Виртуальная АТС отчет</h3>
+			<p>за сегодня: <b>{{ ucount }}</b></p>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			
+			
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>id</th>
+					<th>Менеджер</th>
+					<th>Телефон</th>
+					<th>Дата</th>
+					<th>Сообщение</th>
+					<th>Статус</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>{{ i.id }}</td>
+							<td>{{ i.user.username }}</td>
+							<td>{{ i.phone|hidephone }}</td>
+							<td>{{ i.time|date:"SHORT_DATETIME_FORMAT" }}</td>
+							<td>{{ i.text }}</td>
+							<td>{{ i.status }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+			
+
+{% include "paginator.html" %}
+			
+		</div>
+	</div>
+</div>
+
+
+
+
+
+{% endblock %}
+

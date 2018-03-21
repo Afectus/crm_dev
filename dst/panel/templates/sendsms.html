@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Панель управления - отправить смс{% endblock %}
+{% block description %}Панель управления - отправить смс{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Отправить смс</h3>
+			
+			{% if request.GET.send == 'true' %}
+				<div class="alert alert-success alert-dismissable" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+					<i class="fa fa-check"></i> 
+					Смс сообщение отправлено
+				</div>
+			{%endif%}
+			
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+			{% include "_form.html" %}
+			
+			
+		</div>
+	</div>
+</div>
+	
+	
+	
+	</br>
+
+{% endblock %}
+

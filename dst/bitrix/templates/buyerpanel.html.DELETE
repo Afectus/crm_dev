@@ -1,0 +1,15 @@
+
+{% load nodetag %}
+
+
+{% if auth %}
+
+Бонусов: {{ bonus }} руб.
+
+
+
+{% else %}
+
+	<a class="loginbtn transition" href="#" onclick="showbuyerlogin(); return false;">Кабинет покупателя</a>
+
+{% endif %}

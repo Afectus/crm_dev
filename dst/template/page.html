@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ object.seo_title }}{% endblock %}
+{% block description %}{{ object.seo_description }}{% endblock %}
+{% block keywords %}{{ object.seo_keywords }}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+{% if object.pagetemplate %}
+
+	{% include object.pagetemplate %}
+	
+{% else %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>{{ object.name }}</h1>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<p>
+				{{ object.pagetext|safe }}
+				</p>
+			</div>
+		</div>
+	</div>
+
+
+{% endif %}
+
+{% endblock %}
+

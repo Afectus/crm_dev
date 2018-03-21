@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+{% block title %}Панель управления - список покупателей{% endblock %}
+{% block description %}Панель управления - список покупателей{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load report2tag %}
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<h2>Фильтр </h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+
+					
+						<form class="smart-form" id="form_filter" action="" method="get" role="form">
+						{# {% csrf_token %} #}
+
+						{% for hidden in form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+						
+						{# {% for i in form.visible_fields %} #}
+						{# {% endfor %} #}
+
+							<header>
+								<h3>Список отправленных sms клиентам и интервал</h3>
+							</header>
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label>{{ form.datestart.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.datestart }}
+										</label>
+										{% if form.datestart.errors %}
+										<p class="text-danger">{{ form.datestart.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.datestart.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label>{{ form.dateend.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.dateend }}
+										</label>
+										{% if form.dateend.errors %}
+										<p class="text-danger">{{ form.dateend.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.dateend.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label>{{ form.idays.label }}</label>
+										<label class="input"></i>
+											{{ form.idays }}
+										</label>
+										{% if form.dateend.errors %}
+										<p class="text-danger">{{ form.idays.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.idays.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+
+							<footer>
+								<div class="pull-left">
+									<h4>Найдено: {{ count }}</h4>
+									<h4>Совершено покупок: {{ checkcount }}</h4>
+								</div>
+								<button type="submit" class="btn btn-primary">Применить</button>
+								<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+								<a href="{% url 'report2:sms_sale' %}" class="btn btn-default">Сбросить</a>
+								
+							</footer>
+						</form>
+
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+			
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>СПИСОК</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+
+						<div class="table-responsive">
+								
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Дата отправки</th>
+										<th>Покупатель</th>
+										<th>Работает</th>
+										<th>Отправлено</th>
+										<th>Переход клиента</th>
+										<th>Шаблон</th>
+										<th width="30%">Покупки</th>
+										<th width="30%">Покупки</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+									<tr>
+										<td>{{ i.id }} {{ i.c }}</td>
+										<td>{{ i.cdate|date:"SHORT_DATETIME_FORMAT" }}</td>
+										<td><a href="{% url 'panel:buyer_detail' i.buyer.id %}" target="_blank">{{ i.buyer }}</a></td>
+										<td>{{ i.status|yesno:"Да,Нет" }}</td>
+										<td>{{ i.send|yesno:"Да,Нет"}}</td>
+										<td>{{ i.back|yesno:"Да,Нет" }}</td>
+										<td>{{ i.message }}</td>
+										<td>
+											{% report2_smssale i idays as checklist %}
+											{% for c in checklist %}
+												Дата покупки: {{ c.time }}<br>
+												{% for ci in c.checkitem_set.all %}
+												<a href="{% url 'panel:goods_detail' ci.goods.id %}" target="_blank">{{ ci.goods.bname }}</a><br>
+													Количество: {{ ci.col|floatformat }}<br>
+													Сумма: {% widthratio ci.col 1 ci.price %}<br>
+												{% endfor %}
+												<br><br>
+											{% endfor %}
+
+
+										</td>
+										<td>
+											{% for c in i.buyer.check_set.all %}
+												Дата покупки: {{ c.time }}<br>
+												{% for ci in c.checkitem_set.all %}
+												<a href="{% url 'panel:goods_detail' ci.goods.id %}" target="_blank">{{ ci.goods.bname }}</a><br>
+													Количество: {{ ci.col|floatformat }}<br>
+													Сумма: {% widthratio ci.col 1 ci.price %}<br>
+												{% endfor %}
+												<br><br>
+											{% endfor %}
+
+
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+			
+			
+			
+			
+			
+			
+			
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+
+
+
+
+	
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Найдено: {{ count }}</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+
+			<ul class="pagination">
+				{% if object_list.has_previous %}
+					<li><a href="{{ urlpage }}/?xpage={{ object_list.paginator.page_range|first }}&{{ req }}"><i class="icon-double-angle-left"></i>Первая</a></li>
+				{% endif %}
+
+				{% if object_list.has_previous %}
+					<li><a href="{{ urlpage }}/?xpage={{ object_list.previous_page_number }}&{{ req }}"><i class="icon-angle-left"></i>Предыдущая</a></li>
+				{% endif %}
+				
+				{% for p in object_list.paginator.page_range|mypaginatorslice:object_list.number %}
+					{% if p == object_list.number %}
+						<li class="active"><a href="" onclick="return false;">{{ object_list.number }}</a></li>
+						{% else %}
+							<li><a href="{{ urlpage }}/?xpage={{ p }}&{{ req }}">{{ p }}</a></li>
+						{% endif %}
+				{% endfor %}
+					
+				{% if object_list.has_next %}
+					<li><a href="{{ urlpage }}/?xpage={{ object_list.next_page_number }}&{{ req }}">Следующая<i class="icon-angle-right"></i></a></li>
+				{% endif %}
+
+				{% if object_list.has_next %}
+					<li><a href="{{ urlpage }}/?xpage={{ object_list.paginator.page_range|last }}&{{ req }}">Последняя<i class="icon-double-angle-right"></i></a></li>
+				{% endif %}
+			</ul>
+
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+{% comment %}
+{% include "paginator.html" %}
+{% endcomment %}
+	
+	
+	
+	</br>
+
+{% endblock %}
+

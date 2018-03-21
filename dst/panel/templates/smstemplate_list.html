@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Смс шаблоны</h3>
+			
+			<p>Для рассылки используется шаблон с наивысшим приоритетом.</p>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>id</th>
+					<th>Статус</th>
+					<th>Приоритет</th>
+					<th>Название</th>
+					<th>Шаблон</th>
+					<th></th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>{{ i.id }}</td>
+							<td>{{ i.status|mybool }}</td>
+							<td>{{ i.sort }}</td>
+							<td>{{ i.name }}</td>
+							<td>{{ i.message }}</td>
+							<td><a href="/smstemplate/edit/{{ i.id }}" class="btn btn-primary">изменить</a></td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+			
+
+{% include "paginator.html" %}
+			
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
