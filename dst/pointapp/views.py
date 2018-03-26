@@ -22,7 +22,7 @@ class show_points_managment(DetailView):
     template_name = 'show_points_managment.html'
 
     def dispatch(self, request, *args, **kwargs):
-        get_object_or_denied(self.request.user, 'list_points_managment', 'L') #проверяем права
+        get_object_or_denied(self.request.user, 'show_points_managment', 'L') #проверяем права
         return super(show_points_managment, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
