@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from dj.views import make_upload_file
+from django.contrib.auth.models import User
 
 class softs(models.Model):
 	"""Модель для банеров"""
@@ -10,7 +11,7 @@ class softs(models.Model):
 	ctime = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True,)
 	utime = models.DateTimeField(verbose_name='Дата обновления объекта', auto_now=True,)
 	name = models.CharField(verbose_name='Название', max_length=100)
-	url = models.CharField(verbose_name = "Ссылка для банера", max_length=200)
+	desc = models.TextField(verbose_name = "Описание программы", max_length=1000, blank=True, null=True,)
 	soft = models.FileField(upload_to=make_upload_file, verbose_name = "Загружаеммая программа")
 
 

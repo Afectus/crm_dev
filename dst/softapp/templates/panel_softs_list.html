@@ -1,23 +1,113 @@
-{% extends "panel_base.html" %}
-{% block title %}Страницы{% endblock %}
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
 {% block content %}
-<li><a href="{% url 'panel_pages_add' %}">Добавить страницу</a></li>
-<br>Список новостей:
-<dl class="dl-horizontal">
-  {% for i in object_list %}
-    <li>Название Страницы : {{i.name}}</li>
-    <li>Кол-во просомтров: {{i.hit_count.hits}}</li>
-    <li>Дата создания: {{i.utime}}</li>
-    <li>Дата редактирования:{{i.ctime}}</li>
-    <li>Создал: {{i.createuser}}</li>
-    <li>Отредактировал: {{i.updateuser}}</li>
-    <li><a href="{% url 'panel_pages_edit' i.slug %}">Редактировать страницу</a></li>
-    <li><a href="{% url 'panel_pages_del' i.slug %}">Удалить страницу</a></li>
-    <br>
-  {% endfor %}
-</dl>
- 
+
+{% load nodetag %}
 
 
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<div class="well">
+		<div class="form-group">
+				<a class="btn btn-success" href="{% url 'panel_softs_add' %}">Добавить приложение</a>
+		</div>
+	</div>
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+        
+		
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Приложения </h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>Приложение</th>
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+									<tr>
+										<td>{{i.name}}</td>
+										<td>
+												<div class="form-group">
+													<a class="btn btn-success" href="{% url 'panel_softs_edit' i.id %}">Редактировать</a>
+												</div>
+										</td>
+										<td>
+											<div class="form-group">
+												<a class="btn btn-success" href="{% url 'panel_softs_del' i.id %}"> Удалить {{i.name}}</a>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+                        {% include "paginator.html" %}
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+</br>
 {% endblock %}
-
