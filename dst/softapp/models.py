@@ -14,11 +14,8 @@ class softs(models.Model):
 	desc = models.TextField(verbose_name = "Описание программы", max_length=1000, blank=True, null=True,)
 	soft = models.FileField(upload_to=make_upload_file, verbose_name = "Загружаеммая программа")
 
-
-
 	def clean(self):
 		self.utime = datetime.now()
-
 
 	def __str__(self):
 		return u'%s' % (self.id)

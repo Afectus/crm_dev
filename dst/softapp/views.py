@@ -13,7 +13,7 @@ class softs_list(ListView):
     paginate_by = 10
 
     def dispatch(self, request, *args, **kwargs):
-        get_object_or_denied(self.request.user, 'softapp', 'L') #проверяем права
+        #get_object_or_denied(self.request.user, 'softapp', 'L') #проверяем права
         return super(softs_list, self).dispatch(request, *args, **kwargs)
 
 
@@ -23,7 +23,7 @@ class softs_detail(DetailView):
     template_name = 'softs_detail.html'
 
     def dispatch(self, request, *args, **kwargs):
-        get_object_or_denied(self.request.user, 'softapp', 'L') #проверяем права
+        #get_object_or_denied(self.request.user, 'softapp', 'L') #проверяем права
         return super(softs_detail, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
