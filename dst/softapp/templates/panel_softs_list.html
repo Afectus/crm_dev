@@ -1,0 +1,23 @@
+{% extends "panel_base.html" %}
+{% block title %}Страницы{% endblock %}
+{% block content %}
+<li><a href="{% url 'panel_pages_add' %}">Добавить страницу</a></li>
+<br>Список новостей:
+<dl class="dl-horizontal">
+  {% for i in object_list %}
+    <li>Название Страницы : {{i.name}}</li>
+    <li>Кол-во просомтров: {{i.hit_count.hits}}</li>
+    <li>Дата создания: {{i.utime}}</li>
+    <li>Дата редактирования:{{i.ctime}}</li>
+    <li>Создал: {{i.createuser}}</li>
+    <li>Отредактировал: {{i.updateuser}}</li>
+    <li><a href="{% url 'panel_pages_edit' i.slug %}">Редактировать страницу</a></li>
+    <li><a href="{% url 'panel_pages_del' i.slug %}">Удалить страницу</a></li>
+    <br>
+  {% endfor %}
+</dl>
+ 
+
+
+{% endblock %}
+

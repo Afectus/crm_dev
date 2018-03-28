@@ -1,0 +1,9 @@
+{% extends "panel_base.html" %}
+{% block title %}Страницы{% endblock %}
+
+{% block content %}
+<form action="" method="post">{% csrf_token %}
+    <p>Вы точно хотите удалить страницу: "{{ object.name }}"?</p>
+    <input type="submit" value="Confirm" />
+</form>
+{% endblock %}
