@@ -1,19 +1,15 @@
-# -*- coding: utf-8 -*-
-
-from django.conf.urls import include, url
 from django.urls import path, re_path
+from django.contrib.auth.decorators import login_required
+
 from .views import *
-
-
-
-
+from .panel import *
 
 urlpatterns = [
-	url(r'^report3/ostatkisklad/list/$', list_ostatkisklad.as_view(), name='list_ostatkisklad'),
-	#url(r'^update/paginator(?P<pk>\d+)$', paginatornumm_update.as_view(), name='update_paginator'),
+	# views
+	re_path('^softapp/softs/list/?$', softs_list.as_view(), name='softs_list'),
+	# panel
+	re_path('^panel/softs/list/?$', login_required(panel_softs_list.as_view()), name='panel_softs_list'),
+	re_path('^panel/softs/add/?$', login_required(panel_softs_add.as_view()), name='panel_softs_add'),
+	re_path('^panel/softs/del/(?P<pk>\d+)/?$', login_required(panel_softs_del.as_view()), name='panel_softs_del'),
+	re_path('^panel/softs/edit/(?P<pk>\d+)/?$', login_required(panel_softs_edit.as_view()), name='panel_softs_edit'),
 ]
-
-
-
-
-
