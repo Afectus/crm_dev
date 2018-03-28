@@ -1,0 +1,82 @@
+			<form name="" action="" method="post" enctype="multipart/form-data" role="form">
+			{% csrf_token %}
+
+
+
+					<div class="form-group"> 
+					{% if form.uname.field.required %}<sup class="required">*</sup>{% endif %}
+					<label>{{ form.uname.label }}</label>
+					{{ form.uname }}
+					{% if form.uname.errors %}
+					<p class="text-danger">{{ form.uname.errors }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.uname.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+					
+					<div class="form-group"> 
+					{% if form.phone.field.required %}<sup class="required">*</sup>{% endif %}
+					<label>{{ form.phone.label }}</label>
+					{{ form.phone }}
+					{% if form.phone.errors %}
+					<p class="text-danger">{{ form.phone.errors }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.phone.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+					
+					<div class="form-group"> 
+					{% if form.city.field.required %}<sup class="required">*</sup>{% endif %}
+					<label>{{ form.city.label }}</label>
+					<div class="input-group">
+					{{ form.city }}
+					</div>
+					{% if form.city.errors %}
+					<p class="text-danger">{{ form.city.errors }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.city.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+					
+					<div class="form-group"> 
+					{% if form.addr.field.required %}<sup class="required">*</sup>{% endif %}
+					<label>{{ form.addr.label }}</label><div class="clearfix"></div>
+					{{ form.addr }}
+					{% if form.addr.errors %}
+					<p class="text-danger">{{ form.addr.errors }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.addr.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+					
+					<div class="form-group"> 
+					{% if form.discont.field.required %}<sup class="required">*</sup>{% endif %}
+					<label>{{ form.discont.label }}</label>
+					{{ form.discont }}
+					{% if form.discont.errors %}
+					<p class="text-danger">{{ form.discont.errors }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.discont.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+					
+					{% if form.comment %}
+					<div class="form-group"> 
+					{% if form.comment.field.required %}<sup class="required">*</sup>{% endif %}
+					<label>{{ form.comment.label }}</label>
+					{{ form.comment }}
+					{% if form.comment.errors %}
+					<p class="text-danger">{{ form.comment.errors }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.comment.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+					{% endif %}
+
+					{{ form.terminal }}
+					
+					
+					
+					
+					<button type="submit" class="btn btn-success">Сохранить и продолжить <i class="fa fa-angle-double-right"></i></button>
+				</form>

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+<script>
+
+function setgoodsid(id, win){
+	console.log(id, win);
+	$('#id_goods').val(id);
+	win.close()
+	return false;
+}
+
+$(document).ready(function() {
+	$('#id_goods').focusin(function() {
+		console.log('asd');
+		var select_goods = window.open("http://crm.babah24.ru{% url 'panel:goods_list_public' %}?select=true","select_goods","width=800,height=600,resizable=yes,scrollbars=yes,status=yes")
+		select_goods.focus()
+		$('#id_goods').blur();
+		
+		select_goods.onbeforeunload  = function evens(evt) {
+			console.log(evt);
+		} 
+		
+	});
+	
+	console.log(opener);
+});
+</script>
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+			{% include "_form2.html" %}
+			
+			
+		</div>
+	</div>
+</div>
+	
+	
+	
+	</br>
+
+{% endblock %}
+

@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+		
+					<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<h2>Фильтр </h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<a href="{% url 'order:add' %}" class="btn btn-success">Создать заказ</a>
+									<a href="{% url 'order:list' %}" class="btn btn-default">Рабочие заказы</a>
+									<a href="{% url 'order:arch_list' %}" class="btn btn-default">Архив заказов</a>
+									<a href="{% url 'order:inway_xls' %}" class="btn btn-default" target="_blank">Маршрутный лист</a>
+								</div>
+
+								<div class="form-group">
+									<a href="#" class="btn btn-default" onclick="$('.order_test').removeClass('hidden'); $(this).parent().hide(); return false;">Разблокировать тестирование заказа</a>
+								</div>
+							
+								<div class="order_test hidden">
+									<div class="form-group">
+										<a href="/api/order/test/" class="btn btn-success jconfirm">Отправить тестовый заказ</a>
+									</div>
+								</div>
+							</div>
+						
+							<div class="col-md-6">
+								<form class="smart-form" id="form_filter" action="" method="get" role="form">
+								{# {% csrf_token %} #}
+
+								{% for hidden in form.hidden_fields %}
+									{{ hidden }}
+								{% endfor %}
+								
+								{# {% for i in form.visible_fields %} #}
+								{# {% endfor %} #}
+
+									<fieldset>
+										<label class="label">{{ form.sort.label }}</label>
+										<label class="input">
+											{{ form.sort }}
+										</label>
+										{% if form.sort.errors %}
+										<p class="text-danger">{{ form.sort.errors|striptags }}</p>
+										{% endif %}										
+										<div class="note">{{ form.sort.field.help_text  }}</div>
+									</fieldset>	
+									
+									<footer>
+										<div class="pull-left"><h4>Найдено: {{ object_list.count }}</h4></div>
+										<button type="submit" class="btn btn-primary">Применить</button>
+										<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+										<a href="{% url 'order:list' %}" class="btn btn-default">Сбросить</a>
+										
+									</footer>
+								</form>
+							</div>
+						</div>
+
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+		
+		
+		
+		
+		
+		
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Список заказов</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Инфо</th>
+										<th>Клиент</th>
+										<th>Район</th>
+										<th>Комментарий</th>
+										{#<th>События</th>#}
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+								{% for i in object_list %}
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>
+											<b>#{{ i.bitrixorderid }}</b> от  {{ i.ctime|date:"SHORT_DATETIME_FORMAT"}}
+											</br>
+											<b>Статус:</b>
+											<a href="{% url 'order:status_edit' i.id %}?next={% url 'order:list' %}" class="btn btn-xs btn-{% if i.status == 'wait' %}primary{% elif i.status == 'accept' %}success{% elif i.status == 'cancel' %}warning{% elif i.status == 'fail' %}danger{% elif i.status == 'success' %}default{% else %}primary{% endif %}">{{ i.get_status_display }}</a>
+										</td>
+										<td>
+											<b>Телефон:</b> {{ i.phone }}
+											{% if i.uname %}</br>
+												<b>Имя покупателя:</b> {{ i.uname }}
+											{% endif %}
+										</td>
+										<td>{{ i.get_area_display }}</td>
+										<td>{{ i.comment }}</td>
+										{% comment %}
+										<td>
+											{% if i.orderevent_set.all %}
+											<table class="table table-bordered">
+												{% for oe in i.orderevent_set.all %}
+												<tr>
+													<td>{{ oe.ctime|date:"SHORT_DATETIME_FORMAT"}}</td>
+													<td>{{ oe.get_event_display }}</td>
+													<td>{% if oe.user %}{{ oe.user|who }}{% endif %}</td>
+													
+												</tr>
+												{% endfor %}
+											</table>
+											{% endif %}
+										</td>
+										{% endcomment %}
+										<td>
+											<div class="form-group">
+												<a href="{% url 'order:detail' i.id %}" class="btn btn-success" target="_blank">Подробнее</a>
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+{% include "paginator.html" %}
+
+
+
+{% endblock %}
+

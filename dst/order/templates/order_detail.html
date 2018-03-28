@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<div class="well">
+	</div>
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-shopping-cart" aria-hidden="true"></i> </span>
+					<h2>id: {{ object.id }}, заказ #{{ object.bitrixorderid }}</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+
+						<div class="row">
+							<div class="col-md-6">
+								<b>#{{ object.bitrixorderid }}</b> от  {{ object.ctime|date:"SHORT_DATETIME_FORMAT" }}
+  
+								{% comment %}
+								<b>Статус:</b> <span class="label label-{% if object.status == 'wait' %}primary{% elif object.status == 'accept' %}success{% elif object.status == 'cancel' %}warning{% elif object.status == 'fail' %}danger{% elif object.status == 'success' %}default{% else %}primary{% endif %}">{{ object.get_status_display }}</span>
+								{% endcomment %}
+								
+								<div class="form-group">
+									<b>Статус:</b>
+									<a href="{% url 'order:status_edit' object.id %}" class="btn btn-xs btn-{% if object.status == 'wait' %}primary{% elif object.status == 'accept' %}success{% elif object.status == 'cancel' %}warning{% elif object.status == 'fail' %}danger{% elif object.status == 'success' %}default{% else %}primary{% endif %}">{{ object.get_status_display }}</a>
+									
+								</div>
+								
+								
+								
+								</br></br>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									{% if object.status == 'wait' %}
+									<a href="{% url 'order:accept' object.id %}" class="btn btn-success">Принять заказ</a>
+									{% endif %}
+									
+									{% if object.status == 'accept' %}
+									<a href="{% url 'order:success' object.id %}" class="btn btn-success">Обработан</a>
+									{% endif %}
+									
+									<a href="{% url 'order:edit' object.id %}" class="btn btn-default">Редактировать</a>
+									
+									<a href="http://babah24.ru/bitrix/admin/sale_order_view.php?ID={{ object.bitrixorderid }}" class="btn btn-default" target="_blank">Заказ в Битрикс</a>
+									
+									<a href="{% url 'order:order_detail_print' object.id %}" class="btn btn-default" target="_blank">Печать</a>
+									
+								</div>
+							</div>
+							
+						</div>
+					
+						<div class="row">
+							<div class="col-md-6">
+								<b>Телефон:</b> {{ object.phone }}
+								{% if object.uname %}</br>
+									<b>Имя покупателя:</b> {{ object.uname }}
+								{% endif %}
+								{% if object.city %}</br>
+									<b>Город:</b> {{ object.get_city_display }}
+								{% endif %}
+								{% if object.area %}</br>
+									<b>Район:</b> {{ object.get_area_display }}
+								{% endif %}
+								{% if object.addr %}</br>
+									<b>Адрес доставки:</b> {{ object.addr }}
+								{% endif %}
+								{% if object.discont %}</br>
+									<b>Дисконтная карта:</b> {{ object.discont }}
+								{% endif %}
+								{% if object.comment %}</br>
+									<b>Комментарий:</b> {{ object.comment }}
+								{% endif %}
+								{% if object.terminal %}</br>
+									<b>Терминал:</b> {{ object.terminal|mybool }}
+								{% endif %}
+							</div>
+							<div class="col-md-6">
+								{% if object.cart %}
+									{{ object.cart }}
+								{% endif %}
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-12">
+
+									<span class="pull-left">
+										<h3>Корзина:</h3>
+									</span>
+									<span class="pull-right">
+										<h3>Итого: {{ cartsum|floatdot:2 }}</h3>
+									</span>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-12">
+								{% if object.ordercartlist_set.all %}
+								<div class="table-responsive">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>id</th>
+											<th></th>
+											<th>Товар</th>
+											<th>Наименование</th>
+											<th>Цена</th>
+											<th>Количество</th>
+											<th>Скидка</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+									{% for i in object.ordercartlist_set.all %}
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>
+											{% if i.goods.pict %}
+												<p class="text-center">
+												<a href="{{ i.goods.pict120.url }}" target="_blank"><img src="{{ i.goods.pict120.url}}" /></a>
+												</p>
+											{% endif %}
+											{% if i.goods.idbitrix %}
+												<div class="form-group">
+													<a href="http://babah24.ru/katalog/detail.php?ELEMENT_ID={{ i.goods.idbitrix }}" target="_blank" class="btn btn-default btn-block">Смотреть на сайте</a>
+												</div>
+											{% endif %}
+										</td>
+										<td>
+											<a href="{% url 'panel:goods_list_public' %}?q={{ i.goods.id }}" target="_blank">{{ i.goods.bname }}</a>
+								
+											<div><b>Цена:</b> {{ i.price|floatdot }} руб.</div>
+
+											{% if i.goods.goodsinstock_set.all %}
+												<b><div>Наличие:</div></b>
+												{% for q in i.goods.goodsinstock_set.all %}
+													<small class="text-muted">{{ q.stock.name }} {{ q.value }}</small></br>
+												{% endfor %}
+											{% endif %}
+											
+										</td>
+										<td>
+											{{ i.name }}
+											{% if i.comment %}
+												</br>
+												{{ i.comment }}
+											{% endif %}
+										</td>
+										<td>{{ i.price }}</td>
+										<td>{{ i.col }}</td>
+										<td>{{ i.discount_price }}</td>
+										<td>
+											<div class="form-group">
+												<a href="{% url 'order:ordercartlist_edit' i.id %}" class="btn btn-success">Изменить</a>
+											</div>
+											<div class="form-group">
+												<a href="{% url 'order:ordercartlist_del'  i.id %}" class="btn btn-default">Удалить</a>
+											</div>
+											
+										</td>
+									</tr>
+									</tbody>
+									{% endfor %}
+								</table>
+								</div>
+								{% else %}
+									Пустая
+								{% endif %}
+								
+								<a href="{% url 'order:ordercartlist_add' object.id %}" class="btn btn-default btn-block">Добавить товар</a>
+							</div>
+						</div>
+						
+						
+						<div class="row">
+							<div class="col-md-6">
+								<h3>Данные в базе о клиенте:</h3>
+								{% if buyer %}
+								<div class="table-responsive">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>Имя</th>
+											<th>Дата рождения</th>
+											<th>Телефон</th>
+										</tr>
+									</thead>
+									{% for b in buyer %}
+									<tr>
+										<td>{{ b.f }} {{ b.i }} {{ b.o }}</td>
+										<td>{{ b.bday|date:"SHORT_DATE_FORMAT"}}</td>
+										<td>{{ b.phone }}</td>
+										{% comment %}
+										<td>
+											<div class="form-group">
+												<a href="{% url 'order:order_event_detail' oe.id %}" target="_blank">Подробнее</a>
+											</div>
+										</td>
+										{% endcomment %}
+									</tr>
+									{% endfor %}
+								</table>
+								</div>
+								{% else %}
+									Отсутствуют
+								{% endif %}
+							</div>
+							<div class="col-md-6">
+								<h3>Заказы клиента:</h3>
+								{% if check %}	
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead>
+											<tr>
+												<th>id</th>
+												<th>Товар</th>
+												<th>Дата</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+										{% for c in check %}
+											<tr>
+												<td>{{ c.id }}</td>
+												<td>
+													{% for ci in c.checkitem_set.all %}
+														<a href="/goods/detail/{{ ci.goods.id }}">{{ ci.goods.name }}</a> {{ ci.price }} р. X {{ ci.col }} {{ ci.unit.value }} = {{ ci.sum }} р.
+														
+														
+														{% if ci.checkd_set.all %}
+														<div class="bg-warning">
+															{% for cd in ci.checkd_set.all %}
+																скидка: {{ cd.discount }} р. <a href="/discount/edit/{{ cd.discounts.id }}">{{ cd.discounts.name }}</a>
+															</br>
+															{% endfor %}
+														</div>
+														{% endif %}
+													{% endfor %}
+												</td>
+												<td>{{ c.time }}</td>
+												<td>{{ c.shop.name }}</td>
+											</tr>
+										{% endfor %}
+										</tbody>
+									</table>
+								</div>
+								<p>Всего: {{ check.count }}</p>
+								{% else %}
+									Отсутствуют
+								{% endif %}
+							</div>
+						</div>
+						
+						
+						
+						
+						<div class="row">
+							<div class="col-md-12">
+								<h3>События:</h3>
+								{% if object.orderevent_set.all %}
+								<div class="table-responsive">
+								<table class="table table-bordered">
+									{% for oe in object.orderevent_set.all %}
+									<tr>
+										<td>{{ oe.ctime|date:"SHORT_DATETIME_FORMAT"}}</td>
+										<td>{{ oe.get_event_display }}</td>
+										<td>{{ oe.comment }}</td>
+										<td>{% if oe.user %}{{ oe.user|who }}{% endif %}</td>
+										<td>{{ oe.info }}</td>
+										<td>
+											<div class="form-group">
+												<a href="{% url 'order:order_event_detail' oe.id %}" target="_blank">Подробнее</a>
+											</div>
+										</td>
+										
+									</tr>
+									{% endfor %}
+								</table>
+								</div>
+								{% endif %}
+							</div>
+							{% if object.sourcejson %}
+							<div class="col-md-12">
+								<h3>json:</h3>
+								
+									<pre>
+									{{ object.sourcejson|safe }}
+									</pre>
+								
+							</div>
+							{% endif %}
+						</div>
+						
+
+					
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+{% endblock %}
+
