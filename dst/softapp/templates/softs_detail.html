@@ -59,7 +59,7 @@
 						<div class="table-responsive">
 							{{context_show_softs.desc}}
 							<br>
-							<a class="btn btn-success" href="{% url 'softs_detail' context_show_softs.id %}"> Скачать {{context_show_softs.name}}</a>
+							<a class="btn btn-success" href="{{context_show_softs.soft.url }}" download> Скачать {{context_show_softs.name}}</a>
 						</div>
 					</div>
 					<!-- end widget content -->

@@ -31,18 +31,3 @@ class softs_detail(DetailView):
         context_data = super(softs_detail, self).get_context_data(**kwargs)
         context_data.update({'context_show_softs': context_show_softs})
         return context_data
-
-
-def softs_down (request):
-    # return HttpResponse("Hi")
-    return HttpResponse('d')
-
-
-def download(request, path):
-    file_path = os.path.join(settings.MEDIA_ROOT, path)
-    if os.path.exists(file_path):
-        with open(file_path, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-            return response
-    raise Http404
