@@ -1,6 +1,16 @@
-#django exclude
+#####################################################
+#django
+*/dj/settings_local.py
 migrations/
-
+CACHE/
+dump/
+#js
+node_modules/
+/node_modules
+na_nodejs/package-lock.json
+schema.js
+**/coreapi/schema.js
+#####################################################
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
