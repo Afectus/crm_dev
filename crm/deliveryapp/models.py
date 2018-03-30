@@ -1,9 +1,7 @@
 from django.db import models
+from order.models import *
 from django.contrib.auth.models import User
 from datetime import datetime
-
-from order.models import *
-
 tc=(
 	('car', 'Автомобиль'),
 	('bike', 'Велосипед'),
@@ -30,6 +28,7 @@ class ts(models.Model):
 		verbose_name_plural = u'Доставка_транспорт'
 		
 		
+
 delstatusc=(
 	('wait', 'Ожидает'),
 	('accept', 'Принят'),
@@ -67,6 +66,8 @@ class dellist(models.Model):
 		ordering=['-id']
 		verbose_name = u'Доставка_список'
 		verbose_name_plural = u'Доставка_список'
+
+
 
 
 deleventc=(
