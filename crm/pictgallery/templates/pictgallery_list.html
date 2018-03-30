@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<div class="well">
+		<div class="form-group">
+			<a class="btn btn-success" href="{% url 'pictgallery:pictgallery_add' %}"><i class="fa fa-plus" aria-hidden="true"></i> Добавить картинки</a>
+		</div>
+	</div>
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+		
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Картинки</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+					<style>
+						table {
+							table-layout: fixed;
+							width:100%
+						}
+						td {
+							word-wrap:break-word;
+						}
+					</style>
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th style="width:2%">id</th>
+										<th>Описание</th>
+										<th>Картинка</th>
+										<th>Оригинал</th>
+										<th>100х100</th>
+										<th>200х200</th>
+										<th>300х300</th>
+										<th>400х400</th>
+										<th>500х500</th>
+										<th>600х600</th>
+										<th>700х700</th>
+										<th>800х800</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>{{ i.desc }}</td>
+										<td>
+											<a href="{{ i.pict.url }}" target="_blank"><img src="{{ i.pict100.url }}" /></a>
+										</td>
+										<td>
+											<a href="{{ i.pict.url }}" target="_blank">{{ i.pict.url }}</a>
+										</td>
+										<td>
+											<a href="{{ i.pict100.url }}" target="_blank">{{ i.pict100.url }}</a>
+										</td>
+										<td>
+											<a href="{{ i.pict200.url }}" target="_blank">{{ i.pict200.url }}</a>
+										</td>
+										<td>
+											<a href="{{ i.pict300.url }}" target="_blank">{{ i.pict300.url }}</a>
+										</td>
+										<td>
+											<a href="{{ i.pict400.url }}" target="_blank">{{ i.pict400.url }}</a>
+										</td>
+										<td>
+											<a href="{{ i.pict500.url }}" target="_blank">{{ i.pict500.url }}</a>
+										</td>
+										<td>
+											<a href="{{ i.pict600.url }}" target="_blank">{{ i.pict600.url }}</a>
+										</td>
+										<td>
+											<a href="{{ i.pict700.url }}" target="_blank">{{ i.pict700.url }}</a>
+										</td>
+										<td>
+											<a href="{{ i.pict800.url }}" target="_blank">{{ i.pict800.url }}</a>
+										</td>
+										<td>
+											<div align="left" style="position: relative;">
+												<a class="btn btn-success" href="{% url 'pictgallery:pictgallery_edit' i.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+												<a class="btn btn-danger" color="gray" href="{% url 'pictgallery:pictgallery_del' i.id %}"><i class="fa fa-remove"></i></a> 
+											</div>					
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+{% endblock %}
+

@@ -1,0 +1,74 @@
+{% load nodetag %}
+
+<nav class="devpag">
+	<div class="page-info">
+	Страница {{ object_list.number }} из {{ object_list.paginator.num_pages }}</br>
+	</div>
+	
+	<ul class="pagination">
+		
+			{% if object_list.has_previous %}
+			<li class="page-item">
+				<a class="page-link pb2" href="{{ urlpage }}/?xpage={{ object_list.paginator.page_range|first }}&{{ req }}">
+				<i class="fa fa-step-backward" aria-hidden="true"></i>
+				</a>
+			</li>
+			{% else %}
+			<li class="page-item">
+				<a class="page-link pb2 btn disabled" href="#">
+				<i class="fa fa-step-backward" aria-hidden="true"></i>
+				</a>
+			</li>
+			{% endif %}
+		
+
+			{% if object_list.has_previous %}
+			<li class="page-item">
+				<a class="page-link pb2" href="{{ urlpage }}/?xpage={{ object_list.previous_page_number }}&{{ req }}">
+				<i class="fa fa-chevron-left" aria-hidden="true"></i>
+				</a>
+			</li>
+			{% else %}
+			<li class="page-item">
+				<a class="page-link pb2 btn disabled" href="#">
+				<i class="fa fa-chevron-left" aria-hidden="true"></i>
+				</a>
+			</li>
+			{% endif %}
+		
+		
+		{% for p in object_list.paginator.page_range|mypaginatorslice:object_list.number %}
+				{% if p == object_list.number %}
+					<li class="page-item active"><a class="page-link" href="#">{{ object_list.number }}</a></li>
+				{% else %}
+					<li class="page-item"><a class="page-link pb2" href="{{ urlpage }}/?xpage={{ p }}&{{ req }}">{{ p }}</a></li>
+				{% endif %}
+		{% endfor %}
+			
+		{% if object_list.has_next %}
+			<li class="page-item">
+				<a class="page-link pb2" href="{{ urlpage }}/?xpage={{ object_list.next_page_number }}&{{ req }}"><i class="fa fa-chevron-right" aria-hidden="true"></i>
+				</a>
+			</li>
+		{% else %}
+			<li class="page-item">
+				<a class="page-link pb2 btn disabled" href="#"><i class="fa fa-chevron-right" aria-hidden="true"></i>
+				</a>
+			</li>
+		{% endif %}
+
+		{% if object_list.has_next %}
+			<li class="page-item">
+				<a class="page-link pb2" href="{{ urlpage }}/?xpage={{ object_list.paginator.page_range|last }}&{{ req }}">
+				<i class="fa fa-step-forward" aria-hidden="true"></i>
+				</a>
+			</li>
+		{% else %}
+			<li class="page-item">
+				<a class="page-link pb2 btn disabled" href="#">
+				<i class="fa fa-step-forward" aria-hidden="true"></i>
+				</a>
+			</li>
+		{% endif %}
+	</ul>
+</nav>

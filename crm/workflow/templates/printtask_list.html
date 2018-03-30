@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+{% block script %}<script src="/static/js/print.js"></script>{% endblock %}
+
+{% block content %}
+
+{% load nodetag %}
+
+<script>
+
+//запрос сертификатов
+var itemid1c = [];
+{% for i in object_list %}
+	itemid1c.push({ id1c: '{{ i.goods.id1c }}'});
+{% endfor %}
+
+var jsonitemid1c = '{"head": "ПРИЛОЖЕНИЕ", "base": 1, "id": [{% for i in object_list %}"{{ i.goods.id1c }}"{% if not forloop.last %},{% endif %}{% endfor %}]}';
+console.log('====',jsonitemid1c);
+
+function getcert() {
+	$.ajax({
+		type: 'POST',
+		url: 'http://crm.babah24.ru/api1c/get/cert',
+		data: jsonitemid1c,
+		dataType: 'html',
+		beforeSend: function(){},
+		success: function(data){
+			console.log(data);
+			/*if(data.res == 1)
+			{
+				//console.log('delete goods');
+				$('.imagebase'+id).remove();
+			}*/
+		},
+		error: function(xhr, textStatus, errorThrown){
+			console.log(errorThrown);
+		}
+	});
+	return false;
+}
+
+//запрос сертификатов
+
+
+var itembarcode = [];
+{% for i in itembarcode %}
+	itembarcode.push({ name: '{{ i.goods.name }}', copies: '{{ i.copies }}', barcode: '{{ i.barcode }}' });
+{% endfor %}
+console.log(itembarcode);
+
+
+function sendtoprintbarcode() {
+	socketa.emit('print', { 'clientid': clientid, 'name': 'barcodelist', 'items': itembarcode });
+	//socketa.emit('print', { 'clientid': clientid, 'name': 'ttp225barcode', 'items': itembarcode });
+	return false;
+}
+
+
+var itemprice = [];
+{% for i in itemprice %}
+	itemprice.push({ copies: '{{ i.copies }}', imageprice: '{{ i.imageprice.url }}' });
+{% endfor %}
+console.log(itemprice);
+
+function sendtoprintprice() {
+	socketa.emit('print', { 'clientid': clientid, 'name': 'price', 'items': itemprice, 'downloadprice': false });	
+	return false;
+}
+
+function downloadprice(e) {
+	console.log(clientid);
+	$('.downloadprice').attr('disabled','disabled');
+	socketa.emit('print', { 'clientid': clientid, 'name': 'price', 'items': itemprice, 'downloadprice': true });	
+	return false;
+}
+
+
+
+function printtaskhideprice() {
+	$('.imageprice').hide();
+	return false;
+}
+
+
+
+
+function getprice(id, idbitrix=false, copies=1, barcode=0) {
+	if(idbitrix)
+	{
+		//новое окно для добавления ценника картинки
+		var newWin = window.open('http://babah24.ru/c/print/print.php?ELEMENT_ID='+idbitrix+'&save=1',idbitrix, 'width=850, height=800', 'scrollbars=yes');
+	}
+	
+	//var copies = $('input[name="copies'+id+'"]').val();
+
+	$.ajax({
+		type: 'GET',
+		url: '/printtask/add/'+id+'/'+copies+'/'+barcode,
+		//data: data,
+		dataType: 'json',
+		beforeSend: function()
+			{ 
+
+
+			},
+		success: function(data){
+			console.log(data);
+			if(data.res == 1)
+			{
+				
+			}
+			},
+		error: function(xhr, textStatus, errorThrown){
+			console.log(errorThrown);
+		}
+	});
+
+	return false;
+}
+
+var itembarcodeforbarcode = [];
+{% for i in itemprice %}
+	itembarcodeforbarcode.push({ id: '{{ i.goods.id }}', idbitrix: '{{ i.goods.idbitrix }}' });
+{% endfor %}
+console.log(itemprice);
+
+
+function updatepricecolor()
+{
+	$.each(itembarcodeforbarcode, function(i, val) {
+		//$( "#" + i ).append( document.createTextNode( " - " + val ) );
+		console.log(val.id,val.idbitrix);
+		getprice(val.id, val.idbitrix, 1, 0);
+	});
+	return false;
+}
+
+//updatepricecolor();
+//getprice(this, {{ i.id }}, {{ i.idbitrix }}, 1, 0);
+
+</script>
+
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Очередь печати</h3>
+			
+			<div class="form-group">
+				<a href="#" class="btn btn-warning" onclick="sendtoprintbarcode(); return false;">Печать штрих кода</a>
+				<a href="#" class="btn btn-warning" onclick="sendtoprintprice(); return false;">Печать ценников</a>
+				<a href="#" class="btn btn-warning downloadprice" onclick="downloadprice(); return false;">Скачать ценники</a>
+				<a href="/printtask/clear" class="btn btn-warning jqueryconfirm">Удалить все задания</a>
+				<a href="/printtask/printbarcodetext/" class="btn btn-warning">Печать один штрихкод</a>
+				<a href="/printtask/printtext/" class="btn btn-warning">Печать текст</a>
+				
+			</div>
+			
+			</br>
+
+			<div class="form-group">
+				Количество: 
+				<a href="/printtask/copies/0/" class="btn btn-default btn-xs">По остаткам</a>
+				<a href="/printtask/copies/1/" class="btn btn-default btn-xs">1</a>
+				<a href="/printtask/copies/2/" class="btn btn-default btn-xs">2</a>
+				<a href="/printtask/copies/3/" class="btn btn-default btn-xs">3</a>
+				<a href="/printtask/copies/4/" class="btn btn-default btn-xs">4</a>
+				<a href="/printtask/copies/5/" class="btn btn-default btn-xs">5</a>
+				
+				{% for s in stock %}
+					<a href="/printtask/stock/{{ s.id }}/" class="btn btn-default btn-xs">{{ s.name }}</a>
+				{% endfor %}
+				
+			</div>
+			
+			</br>
+			<p>Отладочная информация</p>
+			<pre class="nodejsdebugger">
+			</pre>
+			
+			<div>Всего: {{ object_list.count }} Копий: {{ sum }}</div>
+			
+			
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>id/idgoods/bitrix/id1c</th>
+					<th>Работает</th>
+					<th>Товар</th>
+					<th>Штрихкод</th>
+					<th>Копий</th>
+					<th>Ценник <a href="#" class="btn btn-default btn-xs" onclick="printtaskhideprice(); return false;">Скрыть</a></th>
+					<th>Изменить</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>
+								{{ i.id }}/{{ i.goods.id }}/<a href="http://babah24.ru/bitrix/admin/iblock_element_edit.php?IBLOCK_ID=1&type=catalog&ID={{ i.goods.idbitrix }}&lang=ru&find_section_section=-1&WF=Y" target="_blank">{{ i.goods.idbitrix }}</a>
+								</br>
+								{{ i.goods.id1c }}
+								
+								</br>
+								<a href="http://babah24.ru/c/print/print.php?ELEMENT_ID={{ i.goods.idbitrix }}&clear_cache=Y" target="_blank">Ценник оригинал</a>
+								
+							</td>
+							<td>{{ i.status|mybool }}</td>
+							<td>{{ i.goods.name }} / {{ i.goods.bname }} / {{ i.goods.art }} {{ i.barcode }}</td>
+							<td>{{ i.barcode }}</td>
+							<td>{{ i.copies }}</td>
+							<td>{% if i.imageprice %}<img class="imageprice" src="{{ i.imageprice300.url }}" />{% endif %}</td>
+							<td>
+								{% if not i.send %}
+								<div class="form-group">
+									<a href="/printtask/edit/{{ i.id }}" class="btn btn-primary btn-sm">изменить</a>
+								</div>
+								</br>
+								<div class="form-group">
+									<a href="/printtask/del/{{ i.id }}" class="btn btn-warning btn-sm">Удалить</a>
+								</div>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+			
+
+			{% include "paginator.html" %}
+			
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+

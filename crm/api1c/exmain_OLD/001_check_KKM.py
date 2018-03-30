@@ -1,0 +1,180 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import sys, os, django
+
+projecthome = '/var/www/crm/'
+if projecthome not in sys.path:
+    sys.path.append(projecthome)
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj.settings")
+django.setup()
+
+import time
+import requests
+import datetime
+import csv
+import tempfile
+from django.utils import timezone
+#import tempfile
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+
+from api1c.models import *
+from node.models import *
+import func
+model = check
+modelname = model().__class__.__name__
+ccount = 0 #количество новых
+exist = 0
+total = len(func.getfilelist('001'))
+iter=0
+
+
+for i in func.getfilelist('001'):
+	print i
+	iter=iter+1
+	
+	#TEST CHECK IF EXIST
+	data=model.objects.filter(fname=i)
+	if data.exists(): #если положительно, чек существует, пропускаем его
+		print 'EXIST CHECK %s' % i	
+		exist = exist+1
+		print "total=%s, iter=%s, exist=%s, new=%s" % (total, iter, exist, ccount)
+		continue
+	else: #если отрицательно, создаем чек
+		print 'CREATE CHECK %s' % i
+		ccount = ccount + 1
+		data=model.objects.create(fname=i)
+		print "total=%s, iter=%s, exist=%s, new=%s" % (total, iter, exist, ccount)
+	######
+	
+	
+	for value in func.listcsv(i):
+		#print value['НомерЧекаККМ']
+		###PROCESS###
+
+		#берем дату
+		getdate=func.getdate(value['Дата'])	
+		shopget=func.getforeign(shop, value['Магазин']) #пробуем взять магазин
+		cashboxget=func.getforeign(cashbox, value['Касса']) #пробуем взять кассумагазин
+				
+		try: #ВидОперации
+			value['ВидОперации']
+		except:
+			operation='sale'
+		else:
+			if value['ВидОперации'] == 'Продажа':
+				operation='sale'
+			elif value['ВидОперации'] == 'Возврат':
+				operation='return'
+			else:
+				operation='sale'
+		
+		##
+		#дописываем чек
+		data.nckkm=value['НомерЧекаККМ']
+		data.time=getdate
+		data.shop=shopget #shop=value['Магазин']
+		data.cashbox=cashboxget #cashbox=value['Касса']
+		data.seller=value['ОтветственныйКод']
+		data.bonuswho=value['ВладелецДисконтнойКартыКод']
+		data.nal=func.getfloat(value['ОплатаНаличные'])
+		data.beznal=func.getfloat(value['ОплатаБезНаличные'])
+		data.bonuspay=func.getfloat(value['ОплатаБонусы'])
+		data.bonusadd=func.getfloat(value['НачислениеБонусов'])
+		data.discountcard=value['ДисконтнаяКарта']
+		data.operation=operation
+		data.save()
+
+		
+		#пишем файл отдельными функциями, для сохранности оригинала
+		tmp=open('/home/ftp1c/tmp/%s' % (i)).read()
+		sf = NamedTemporaryFile(delete=True)
+		sf.write(tmp)
+		sf.flush()
+		sf = File(sf)
+		data.sourcefile.save(id_generator(), sf)
+		sf.close()
+		
+				
+		#вяжем чек с покупателем
+		if data.bonuswho: #if data.bonuswho and data.discountcard: #если есть дисконт. карта
+			try: #пробуем взять покупателя по id1c
+				b=buyer.objects.get(id1c=data.bonuswho)
+			except:
+				pass
+			else:
+				#print b
+				data.buyer = b #вяжем покупателя
+				data.save()
+		break #обрываем цикл, остальные строки дубли
+		# #####################################################
+		
+	#ПИШЕМ ПОЗИЦИИ ЧЕКА СО СКИДКАМИ
+	for value in func.listcsv(i):
+		print "CHECKITEM %s %s %s" % (value['НомерЧекаККМ'], value['Дата'], value['Цена'])
+
+		try: #тестируем на наличие товара по коду 1с
+			g=goods.objects.filter(id1c=value['НоменклатураКод']).first()
+			#g=goods.objects.get(id1c=value['НоменклатураКод'])
+		except:
+			g=None
+		#ВидОперации
+		try: #ВидОперации
+			value['ВидОперации']
+		except:
+			operation='sale'
+		else:
+			if value['ВидОперации'] == 'Продажа':
+				operation='sale'
+			elif value['ВидОперации'] == 'Возврат':
+				operation='return'
+			else:
+				operation='sale'
+
+		#ЧЕК ВЗЯТ ИЛИ СОЗДАН В ПЕРЕМЕННОЙ C		
+		
+		print 'price=', value['Цена'], func.getfloat(value['Цена'])
+		print 'sum=', value['Сумма'], func.getfloat(value['Сумма'])
+		print 'discount=', value['Скидка'], func.getfloat(value['Скидка'])
+		
+		try: #пробуем взять позицию товара с чеком
+			ci=checkitem.objects.get(fcheck=data, goods=g)
+		except:
+			#создаем позицию товара к чеку
+			ci=checkitem(
+				fcheck=data,
+				goods=g,
+				col=func.getfloat(value['Количество']),
+				unit=func.getforeign(baseunit, value['ЕдиницаИзмеренияКод']),
+				price=func.getfloat(value['Цена']),
+				sum=func.getfloat(value['Сумма']),
+				operation=operation,
+				)
+			ci.save()
+		
+		#ПОЗИЦИЯ ЧЕКА В ЛЮБОМ СЛУЧАЕ В ПЕРЕМЕННОЙ ci
+			
+		#ПИШЕМ СКИДКИ В ПОЗИЦИЮ ci
+		discountprice = func.getfloat(value['Скидка'])
+		if discountprice > 0:
+			d=func.getforeign(discounts, value['ОписаниеСкидки'])
+			#создаем скидку к позиции товара с чеком
+			cd=checkd(
+				checkitem=ci,
+				discounts=d,
+				discount=func.getfloat(value['Скидка']),
+				descdiscount=value['ОписаниеСкидки']
+				)
+			cd.save()
+			print "discount=", value['Скидка']
+		#####################################################
+			
+
+	func.logfile(i)
+	
+print "count new %s %s" % (modelname, ccount)
+	
+	
+	

@@ -1,0 +1,357 @@
+{% extends "video_base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load videotag %}
+
+{% block bodystyle %}{% endblock %}
+
+
+<div class="modal fade" id="modalmsg" >
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Сообщение</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p id="msgmodal"></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script language="javascript" type="text/javascript">
+var screenip='{{ screen.ip }}';
+var websocket=null;
+var count = null;
+
+function waitsconn(){
+	count = count - 1;
+	var msg = "Ожидания готовности экрана..."+count;
+	$('#msgmodal').html(msg);
+	setTimeout(
+		function () {
+			if (websocket.readyState === 1) {
+				console.log("socket connect")
+				$('#modalmsg').modal('hide');
+				
+				//пускаем видео
+				SendRequest('{{ data.first.id }}', 'master_video;0;{% if data.first.videomp4 %}{{ data.first.videomp4 }}{% else %}{{ data.first.video }}{% endif %};local'); focusbarcodeinput();
+				
+				
+				return;
+			} 
+			else
+			{
+				if (count <= 0)
+				{
+					console.log("socket is error");
+					$('#msgmodal').html('Экран недоступен');
+					return;
+				}
+				else
+				{
+					
+					console.log("wait socket connect..."+count);
+					$('#msgmodal').html(msg);
+					waitsconn(websocket);
+				}
+			}
+		}, 1000);
+}
+
+function wsconnect()
+{
+	count = 10;
+	//if (websocket != null) {websocket.close();}
+	console.log('socket wsconnect()')
+	res = new WebSocket('ws://'+screenip+':8080/');
+	waitsconn();
+	$('#modalmsg').modal('show');
+	return res;
+}
+function ws_close()
+{
+	websocket.close();
+	return websocket;
+}
+function SendRequest(id, message_text)
+{
+	console.log('SendRequest',id,message_text)
+	if(screenip != null)
+	{
+		if(websocket != null)
+		{
+			if(websocket.readyState == websocket.OPEN)
+			{
+				console.log('socket open, websocket.send')
+				websocket.send(message_text);
+				//showvideocount(id);
+			} else 
+			{
+				console.log('socket close, new socket')
+				websocket = wsconnect();
+			}
+		}
+		else
+		{
+			console.log('socket null, new socket')
+			websocket = wsconnect();
+		}
+	}
+	else
+	{
+		console.log('select media');
+		//$('#msgmodal').html('Выберите экран');
+		//var x = $('.screenlist').html();
+		//$('#msgmodal').html(x);
+		//$('#modalselectmedia').modal('show');
+	}
+	return false;
+}
+
+$(document).ready(function() {
+
+	websocket = wsconnect();
+
+});
+
+
+
+
+function redirectlocationhash()
+{
+	if(window.location.hash) {
+		$(window.location.hash).addClass('bg-danger');
+		$(window.location.hash).addClass('lead');
+		//console.log(window.location.hash);
+	}
+	return false;
+}
+
+
+function focusbarcodeinput()
+{
+	$('#id_barcode').val('');
+	$('#id_barcode').focus();
+	console.log('clear');
+	return true;
+}
+
+
+
+
+
+</script>
+		
+
+
+
+
+<div class="" style="bottom: 30px; position: fixed; background-color: #fff; width: 100%; z-index: 65000;">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<form id="goodsbarcodesearch" action="{{ next }}" method="get" enctype="multipart/form-data" role="form" class="form-inline" autocomplete="off">
+				{# {% csrf_token %} #}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+				{# {% for i in form.visible_fields %} #}
+				
+
+				<div class="form-group"> 
+				{# <label>{{ form.barcode.label }}</label> #}
+				{{ form.barcode }}
+				{% comment %}
+				{% if form.barcode.errors %}
+				<p class="text-danger">{{ form.barcode.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.barcode.field.help_text  }}</p>
+				{% endcomment %}
+				</div>
+
+
+				{# <button type="submit" class="btn btn-success">Отправить</button> #}
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+</br>
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="form-group">
+				<a class="btn btn-success btn-block" href="/video/select/{% if 'id' in request.GET %}?id={{ request.GET.id }}{% endif %}">{{ screen.name }}</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+{% if object_list %}
+{% for i in object_list %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-6 text-center">
+			
+			
+			
+			{% if i.pict %}
+			<img src="{{ i.pict120.url}}" />
+			{% endif %}
+			
+			<p>
+			{{ i.bname }}
+			</p>
+
+			</hr>
+
+			<p>
+			<div style="font-size: 12px;">
+				<span>СТАТУС: {{ i.status|mybool }}</span></br>
+				
+				<span>CRM ID:{{ i.id }}</span></br>
+				
+				{% if i.id1c %}
+				<span>1C ID: <b>{{ i.id1c }}</b></span></br>
+				{% endif %}
+				
+				{% if i.art %}
+				<span>Артикул: <b>{{ i.art }}</b></span></br>
+				{% endif %}
+
+			</div>
+			</p>
+
+			<p>
+			<span>Категории:</span></br>
+			{% for t in i.tax.all %}
+				<small>{{ t.name }}</small>
+			{% endfor  %}
+			</p>
+			
+
+
+
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-6 text-center">
+
+			<div class="">
+			{{ i.price|floatdot }} руб.	
+			</div>
+			
+			{% if i.barcodelist_set.all	%}
+			<div style="border: 1px silver dotted; padding: 5px;">
+			<span>Штрих код</span></br>
+			{% for bar in i.barcodelist_set.all %}
+			<span><b>
+			
+			{{ bar.barcode }} ({{ bar.unit }})
+
+			</b></span></br>
+			{% endfor %}
+			</div>
+			{% endif %}
+			
+			<hr>
+			
+			{% if barcode %}
+				{% if i.video %}
+				<div class="form-group">					
+					<a href="#" class="btn btn-warning btn-lg" onclick="SendRequest('{{ i.id }}', 'master_video;0;{{ i.video }};local'); focusbarcodeinput();">
+					
+					<i class="fa fa-play-circle fa-4x" aria-hidden="true"></i>
+					</a>
+				</div>
+				{% else %}
+					Нет видео
+				{% endif %}
+			{% endif %}
+			
+		</div>
+	</div>
+</div>
+{% endfor %}
+
+{% else %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+		<h4>Сканируйте штрих код</h4>
+		
+		<a href="" class="btn btn-success"><i class="fa fa-refresh fa-4x" aria-hidden="true"></i></a>
+		
+		
+		</div>
+	</div>
+{% endif %}
+
+
+
+
+
+	
+	
+<script>
+
+
+
+$('input[name="barcode"]').on("change paste keyup", function(){
+    if($(this).val().length >= 13){
+		$('#goodsbarcodesearch').submit();
+		//$("#id_barcode").prop('disabled', true);
+    }
+});
+
+$(document).ready(function() {
+
+	redirectlocationhash();
+	focusbarcodeinput();
+	//setTimeout(function() {focusbarcodeinput()}, 1000);
+	
+
+
+});
+
+
+</script>
+	
+
+{% if data.exists %}
+	{% if data.first.video %}
+		<script>
+		/*
+		SendRequest('{{ data.first.id }}', 'master_video;0;{{ data.first.video }};local'); focusbarcodeinput();
+		*/
+		</script>
+	{% endif %}
+{% endif %}	
+	
+
+{% endblock %}
+

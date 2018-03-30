@@ -1,0 +1,117 @@
+{% extends "form_1c_base.html" %}
+{% block title %}Панель управления{% endblock %}
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<p>
+			<h4>json</h4>
+			<kbd>{{ object|objtojson|safe }}</kbd>
+			</p>
+		</div>
+	</div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+			<div>Перенаправление через: <span id="nextcount"></span> сек.</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+
+
+//var data1c = new Object();
+
+var datajson = '{{ object|objtojson|safe }}';
+
+data1c.makedcard = function(data)
+{
+	//console.log(data)
+	var jres = JSON.parse(data);
+	//console.log(jres);
+	//var fieldcard = document.getElementById('id_card');
+	//fieldcard.value=code;
+	//code=tmpdcard;
+	//console.log(tmpdcard);
+	//var myinfo = document.getElementById('myinfo');
+	//console.log(myinfo);
+	//myinfo.innerHTML += code+'</br>';
+	//var sform = document.getElementById('searchcardform'); //get form by id
+	//sform.submit();
+	return true;
+}
+
+var nextcount = 2000;
+
+var nextcounttmp = (nextcount+3000)/1000;
+document.getElementById('nextcount').innerHTML = nextcounttmp;
+var x = setInterval(function() {
+	nextcounttmp = nextcounttmp - 1;
+	//console.log(nextcounttmp);
+	if(nextcounttmp>=0)
+	{
+		document.getElementById('nextcount').innerHTML = nextcounttmp;
+	}
+	//if(nextcounttmp<=1 && nextcounttmp>-2){} //несколько попыток
+}, 1000);
+
+
+setTimeout(function() {
+	var data1cex = data1c.makedcard(datajson);
+	//if (data1cex)
+	//{
+	//console.log('{{ next }}');
+	window.location = '{{ next }}';
+	//window.location.replace('{{ next }}');
+	//}
+}, nextcount);
+
+</script>
+
+
+
+
+{% comment %}
+<div class="container">
+
+	<div class="row">
+	
+		<div class="col-md-12">
+		
+			<h3>Поиск дисконтных карт</h3>
+
+			{% if object %}
+			
+				{{ object }}
+				
+				<a href="/form/1c/getcard/?salt={{ salt }}&crc={{ crc }}&phone={{ object.phone }}" class="btn btn-success">Показать</a>
+				
+				
+				<a href="#" class="btn btn-success" onclick="data1c.makedcard(datajson);return false;">Записать в 1с</a>
+				
+				
+				<h4>Дисконтные карты</h4>
+				{% for d in object.discountcard_set.all %}
+					{{ d.name }} </br>
+				{% endfor %}
+
+			{% endif %}
+
+		</div>
+	</div>
+</div>
+{% endcomment %}
+
+
+{% endblock %}

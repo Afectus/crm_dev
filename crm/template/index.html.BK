@@ -1,0 +1,684 @@
+{% extends "base.html" %}
+{% block title %}CRM{% endblock %}
+{% block description %}{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+
+{% block script %}
+<!-- PAGE RELATED PLUGIN(S)  -->
+<!-- <script src="/static/smartadmin/js/plugin/moment/moment.min.js"></script>
+<script src="/static/smartadmin/js/plugin/chartjs/chart.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script> -->
+
+{% endblock %}
+
+
+
+{% load nodetag %}
+
+
+{% block content %}
+
+
+{% comment %}
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+			<h1 class="page-title txt-color-blueDark"></h1>
+		</div>
+		<div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+			<ul id="sparks" class="">
+				<li class="sparks-info">
+					<h5> актуальность данных <span class="txt-color-blue">{{ lastexc1c.ctime|date:"SHORT_DATETIME_FORMAT" }}</span></h5>
+				</li>
+			</ul>
+					
+			{% if request.GET.data == 'forbidden' %}
+				</br>
+				<div class="alert alert-danger alert-dismissable" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+					<i class="fa fa-check"></i> 
+					Доступ закрыт
+				</div>
+			{%endif%}
+		</div>
+	</div>
+
+	
+
+
+	<!-- widget grid -->
+	<section id="widget-grid" class="">
+		<!-- row -->
+		<div class="row">
+			
+			
+			<!-- NEW WIDGET START -->
+			<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+				<!-- Widget ID (each widget will need unique ID)-->
+				<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-00" role="" data-widget-editbutton="true">
+					<!-- widget options:
+					usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+					data-widget-colorbutton="false"
+					data-widget-editbutton="false"
+					data-widget-togglebutton="false"
+					data-widget-deletebutton="false"
+					data-widget-fullscreenbutton="false"
+					data-widget-custombutton="false"
+					data-widget-collapsed="true"
+					data-widget-sortable="false"
+					-->
+					<header>
+						<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+						<h2>Мотивация</h2>
+
+					</header>
+					<!-- widget div-->
+					<div>
+
+						<!-- widget edit box -->
+						<div class="jarviswidget-editbox">
+							<!-- This area used as dropdown edit box -->
+						</div>
+						<!-- end widget edit box -->
+
+						<!-- widget content -->
+						<div class="widget-body">
+							<script>
+
+							function motivationget() {
+								$.ajax({
+									type: 'GET',
+									url: '/motivation/report/list/json/',
+									//data: data,
+									//dataType: 'json',
+									beforeSend: function(){
+									
+										$('.motivation_json').html('<h2>Загрузка данных...</h2>')
+									
+									},
+									success: function(data){
+										//console.log(data);
+										$('.motivation_json').html(data);
+									},
+									error: function(xhr, textStatus, errorThrown){
+										console.log(errorThrown);
+									}
+								});
+							}
+
+							$( document ).ready(function() {
+								motivationget();
+							});
+							</script>
+						
+							<div class="form-group">
+								<a href="#" class="btn btn-success" onclick="motivationget(); return false;">Обновить</a>
+							</div>
+						
+							<!-- start json -->
+							<div class="motivation_json"><h2>Загрузка данных...</h2></div>
+							<!-- end json -->
+							
+						</div>
+						<!-- end widget content -->
+					</div>
+					<!-- end widget div -->
+				</div>
+				<!-- end widget -->
+			</article>
+			<!-- WIDGET END -->
+		
+			
+			{% if motivation %}
+			<!-- NEW WIDGET START -->
+			<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+				<!-- Widget ID (each widget will need unique ID)-->
+				<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" role="" data-widget-editbutton="true" data-widget-collapsed="true">
+					<!-- widget options:
+					usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+					data-widget-colorbutton="false"
+					data-widget-editbutton="false"
+					data-widget-togglebutton="false"
+					data-widget-deletebutton="false"
+					data-widget-fullscreenbutton="false"
+					data-widget-custombutton="false"
+					data-widget-collapsed="true"
+					data-widget-sortable="false"
+					-->
+					<header>
+						<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+						<h2>Мотивация</h2>
+
+					</header>
+					<!-- widget div-->
+					<div>
+
+						<!-- widget edit box -->
+						<div class="jarviswidget-editbox">
+							<!-- This area used as dropdown edit box -->
+						</div>
+						<!-- end widget edit box -->
+
+						<!-- widget content -->
+						<div class="widget-body">
+							<p>Мотивация</p>
+							
+							<div class="table-responsive">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+										<th>Магазин</th>
+										<th>Коэффициент</th>
+										<th>Категория товара (балл)</th>
+										<th>Количество продаж</th>
+										<th>Бонус</th>
+										<th>Результат</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for i in motivation %}
+											<tr>
+												<td>{{ i.name }}</td>
+												<td>{{ i.motivationratio }}</td>
+												<td>{{ i.check__checkitem__goods__motivationinpoints}}</td>
+												<td>{{ i.c|floatdot }}</td>
+												<td>{{ i.bonus }}</td>
+												<td>{{ i.r }}</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+								
+							</div>
+						</div>
+						<!-- end widget content -->
+					</div>
+					<!-- end widget div -->
+				</div>
+				<!-- end widget -->
+			</article>
+			<!-- WIDGET END -->
+
+			{% endif %}
+
+			
+			<!-- NEW WIDGET START -->
+			<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+				<!-- Widget ID (each widget will need unique ID)-->
+				<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" role="" data-widget-editbutton="true">
+					<!-- widget options:
+					usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+					data-widget-colorbutton="false"
+					data-widget-editbutton="false"
+					data-widget-togglebutton="false"
+					data-widget-deletebutton="false"
+					data-widget-fullscreenbutton="false"
+					data-widget-custombutton="false"
+					data-widget-collapsed="true"
+					data-widget-sortable="false"
+					-->
+					<header>
+						<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+						<h2>План продаж</h2>
+
+					</header>
+					<!-- widget div-->
+					<div>
+
+						<!-- widget edit box -->
+						<div class="jarviswidget-editbox">
+							<!-- This area used as dropdown edit box -->
+						</div>
+						<!-- end widget edit box -->
+
+						<!-- widget content -->
+						<div class="widget-body">
+							<p>Отчет</p>
+							
+							<!-- this is what the user will see -->
+								<canvas id="barChart" height="120"></canvas>
+						</div>
+						<!-- end widget content -->
+					</div>
+					<!-- end widget div -->
+				</div>
+				<!-- end widget -->
+			</article>
+			<!-- WIDGET END -->
+
+
+			{% if saleplanshop %}
+			<!-- NEW WIDGET START -->
+			<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+				<!-- Widget ID (each widget will need unique ID)-->
+				<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" role="" data-widget-editbutton="true">
+					<!-- widget options:
+					usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+					data-widget-colorbutton="false"
+					data-widget-editbutton="false"
+					data-widget-togglebutton="false"
+					data-widget-deletebutton="false"
+					data-widget-fullscreenbutton="false"
+					data-widget-custombutton="false"
+					data-widget-collapsed="true"
+					data-widget-sortable="false"
+					-->
+					<header>
+						<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+						<h2>План продаж</h2>
+
+					</header>
+					<!-- widget div-->
+					<div>
+
+						<!-- widget edit box -->
+						<div class="jarviswidget-editbox">
+							<!-- This area used as dropdown edit box -->
+						</div>
+						<!-- end widget edit box -->
+
+						<!-- widget content -->
+						<div class="widget-body">
+							<p>Отчет</p>
+							
+							<div class="table-responsive">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+										<th>Название</th>
+										<th>Магазин</th>
+										<th>Период</th>
+										<th>Выполнено</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for i in saleplanshop %}
+											<tr>
+												<td>{{ i.name }}</td>
+												<td>{{ i.shop.name }}</td>
+												<td>{{ i.sdate|date:"SHORT_DATE_FORMAT" }} - {{ i.edate|date:"SHORT_DATE_FORMAT" }}</td>
+												
+												<td>
+													План: {{ i.value|floatdot:2 }}</br>
+													Заработано: {{ i|total_all|floatdot:2 }}</br>
+													Чеков: {{ i|total_check }}</br>
+
+													<small>
+													Наличные: {{ i|total_nal }}</br>
+													Безналичные: {{ i|total_beznal }}</br>
+													</small>
+													
+												</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+								
+							</div>
+						</div>
+						<!-- end widget content -->
+					</div>
+					<!-- end widget div -->
+				</div>
+				<!-- end widget -->
+			</article>
+			<!-- WIDGET END -->
+
+			{% endif %}
+		</div>
+	</section>
+
+	
+<script>
+
+$(document).ready(function() {
+	var color = Chart.helpers.color;
+	var horizontalBarChartData = {
+		labels: [{% for i in saleplanshop %} "{{ i.shop.name }} {{ i.name }}", {% endfor %}],
+		datasets: [{
+			label: 'Заработано',
+			backgroundColor: 'red',
+			borderColor: 'red',
+			data: [
+				{% for i in saleplanshop %}
+					{{ i|total_all|floatdot:0 }},
+				{% endfor %}
+			]
+		}, {
+			label: 'План',
+			backgroundColor: 'blue',
+			borderColor: 'blue',
+			data: [
+				{% for i in saleplanshop %}
+					{{ i.value|floatdot:0 }},
+				{% endfor %}
+			]
+		}]
+
+	};
+
+	window.onload = function() {
+		var ctx = document.getElementById("barChart").getContext("2d");
+		window.myHorizontalBar = new Chart(ctx, {
+			type: 'horizontalBar',
+			data: horizontalBarChartData,
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'График'
+				},
+				scales: {
+					xAxes: [{
+						stacked: true,
+					}],
+					yAxes: [{
+						stacked: true
+					}]
+				},
+				barThickness: 0.1,
+			}
+		});
+
+	};
+});
+
+</script>
+	
+	
+	
+	
+
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table id="buyer_list" class="table">
+				<caption><h3>Мои задачи</h3></caption>
+				<thead>
+				  <tr>
+					<th></th>
+					<th>Сроки</th>
+					<th>Статус</th>
+					<th>Тип задания</th>
+					<th>Создатель</th>
+					<th>Заголовок</th>
+					<th>Описание</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in mytask %}
+						<tr>
+							<td>
+								<a href="/worktask/detail/{{ i.id }}">{{ i.id }}</a>
+								
+
+							</td>
+							<td>
+								{{ i.ctime|date:"SHORT_DATETIME_FORMAT" }} 
+								</br>-</br>
+								{{ i.etime|date:"SHORT_DATETIME_FORMAT" }}
+							</td>
+							<td>
+								<span class="label label-{% if i.status == 'open' %}primary{% else %}default{% endif %}">
+								{{ i.get_status_display }}
+								</span>
+							</td>
+							<td>
+								Приоритет {{ i.get_priority_display }}
+								</br>
+								<span class="text-muted">{{ i.get_type_display }}</span>
+							</td>
+							<td>
+								{{ i.user.first_name }} {{ i.user.last_name }}
+							</td>
+							<td><a href="/worktask/detail/{{ i.id }}">{{ i.name }}</a></td>
+							<td>
+								{{ i.message|truncatechars:100 }}
+								
+								{% if i.filetask_set.all %}
+									</br>
+									<span class="text-muted">файлов в задании: {{ i.filetask_set.all.count }}</span>
+								{% endif %}
+								
+								{% if i.liketask_set.all %}
+									<div>
+									<span class="text-muted">Пользователи оценили задание ({{ i.liketask_set.all.count }} голоса(ов))</span>
+									<table class="table table-condensed">
+										<thead>
+										  <tr>
+											<th></th>
+											<th></th>
+										  </tr>
+										</thead>
+										<tbody>
+											{% for lt in i.liketask_set.all %}
+												<tr>
+													<td>{{ lt.user.first_name }} {{ lt.user.last_name }}</td>
+													<td>{{ lt.value|ratingstar }} </td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+									</div>
+								{% endif%}
+
+								{% if i.commenttask_set.all %}
+									<div class="thumbnail">
+										<i class="fa fa-user" aria-hidden="true"></i> {{ i.commenttask_set.all.last.user.first_name }} {{ i.commenttask_set.all.last.user.last_name }} <small class="text-muted">последний комментарий {{ i.commenttask_set.all.last.ctime|date:"SHORT_DATETIME_FORMAT" }}</small>
+										</br>
+										<i class="fa fa-commenting-o" aria-hidden="true"></i> {{ i.commenttask_set.all.last.message|safe|truncatechars:"40" }}
+										</br>
+										<a href="/worktask/detail/{{ i.id }}">смотреть все комментарии: {{ i.commenttask_set.all.count }}</a>
+										
+										
+										
+									</div>
+								{% endif %}
+								
+								
+								
+							</td>
+							<td>
+								<div class="form-group">
+									<a href="/worktask/detail/{{ i.id }}" class="btn btn-success btn-xs">подробнее</a>
+								</div>
+							</td>
+						</tr>
+					{% empty %}
+						<tr><td colspan="100%">нет записей</td></tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table id="buyer_list" class="table">
+				<caption><h3>Свободные задачи</h3></caption>
+				<thead>
+				  <tr>
+					<th></th>
+					<th>Сроки</th>
+					<th>Статус</th>
+					<th>Тип задания</th>
+					<th>Создатель</th>
+					<th>Заголовок</th>
+					<th>Описание</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in freetask %}
+						<tr>
+							<td>
+								<a href="/worktask/detail/{{ i.id }}">{{ i.id }}</a>
+								
+
+							</td>
+							<td>
+								{{ i.ctime|date:"SHORT_DATETIME_FORMAT" }} 
+								</br>-</br>
+								{{ i.etime|date:"SHORT_DATETIME_FORMAT" }}
+							</td>
+							<td>
+								<span class="label label-{% if i.status == 'open' %}primary{% else %}default{% endif %}">
+								{{ i.get_status_display }}
+								</span>
+							</td>
+							<td>
+								Приоритет {{ i.get_priority_display }}
+								</br>
+								<span class="text-muted">{{ i.get_type_display }}</span>
+							</td>
+							<td>
+								{{ i.user.first_name }} {{ i.user.last_name }}
+							</td>
+							<td><a href="/worktask/detail/{{ i.id }}">{{ i.name }}</a></td>
+							<td>
+								{{ i.message|truncatechars:100 }}
+								
+								{% if i.filetask_set.all %}
+									</br>
+									<span class="text-muted">файлов в задании: {{ i.filetask_set.all.count }}</span>
+								{% endif %}
+								
+								{% if i.liketask_set.all %}
+									<div>
+									<span class="text-muted">Пользователи оценили задание ({{ i.liketask_set.all.count }} голоса(ов))</span>
+									<table class="table table-condensed">
+										<thead>
+										  <tr>
+											<th></th>
+											<th></th>
+										  </tr>
+										</thead>
+										<tbody>
+											{% for lt in i.liketask_set.all %}
+												<tr>
+													<td>{{ lt.user.first_name }} {{ lt.user.last_name }}</td>
+													<td>{{ lt.value|ratingstar }} </td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+									</div>
+								{% endif%}
+
+								{% if i.commenttask_set.all %}
+									<div class="thumbnail">
+										<i class="fa fa-user" aria-hidden="true"></i> {{ i.commenttask_set.all.last.user.first_name }} {{ i.commenttask_set.all.last.user.last_name }} <small class="text-muted">последний комментарий {{ i.commenttask_set.all.last.ctime|date:"SHORT_DATETIME_FORMAT" }}</small>
+										</br>
+										<i class="fa fa-commenting-o" aria-hidden="true"></i> {{ i.commenttask_set.all.last.message|safe|truncatechars:"40" }}
+										</br>
+										<a href="/worktask/detail/{{ i.id }}">смотреть все комментарии: {{ i.commenttask_set.all.count }}</a>
+										
+										
+										
+									</div>
+								{% endif %}
+								
+								
+								
+							</td>
+							<td>
+								<div class="form-group">
+									<a href="/worktask/detail/{{ i.id }}" class="btn btn-success btn-xs">подробнее</a>
+								</div>
+							</td>
+						</tr>
+					{% empty %}
+						<tr><td colspan="100%">нет записей</td></tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Корректировка позиций <small>товара</small></h3>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table id="buyer_list" class="table">
+				<thead>
+				  <tr>
+					<th></th>
+					<th>Дата</th>
+					<th>Статус</th>
+					<th>Важность</th>
+					<th>Создатель</th>
+					<th>Товар</th>
+					<th>Название</th>
+					<th>Ссылка</th>
+					<th>Сообщение</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in goodfix %}
+						<tr>
+							<td>
+								<a href="/panel/goodfix/edit/{{ i.id }}/">{{ i.id }}</a>
+							</td>
+							<td>{{ i.ctime|date:"SHORT_DATETIME_FORMAT" }}</td>
+							<td>
+								<span class="label label-{% if i.status == 'open' %}primary{% else %}default{% endif %}">
+								{{ i.get_status_display }}
+								</span>
+							</td>
+							<td>
+								{{ i.get_priority_display }}
+							</td>
+							<td>
+								{{ i.user.first_name }} {{ i.user.last_name }}
+							</td>
+							<td>{{ i.goods.id }} {{ i.goods.id1c }} {{ i.goods.art }} {{ i.goods.name }}</td>
+							<td>{{ i.name }}</td>
+							<td>{{ i.link }}</td>
+							<td>{{ i.message }}</td>
+							<td>
+								<div class="form-group">
+									<a href="/panel/goodfix/edit/{{ i.id }}" class="btn btn-primary btn-sm">изменить</a>
+								</div>
+							</td>
+						</tr>
+					{% empty %}
+						<tr><td colspan="100%">нет записей</td></tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+		</div>
+	</div>
+</div>
+
+{% endcomment %}
+
+
+{% endblock %}

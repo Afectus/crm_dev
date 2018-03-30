@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<script>
+$(document).ready(function() {
+	$("#id_executor").chosen({
+		placeholder_text_multiple: " Поиск исполнителя",
+		no_results_text: "не найдено",
+		search_contains: true,
+	});
+});
+</script>
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Добавить</h3>
+			{% include "_form2.html" %}
+		</div>
+	</div>
+</div>
+
+</br>
+
+{% endblock %}
+

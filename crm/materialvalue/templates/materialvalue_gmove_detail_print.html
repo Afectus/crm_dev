@@ -1,0 +1,150 @@
+{% extends "materialvalue_base.html" %}
+{% block title %}Перемещение{% endblock %}
+{% block description %}Перемещение{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+{% load materialvaluetag %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			{% if object.gmtype == 'relocation' %}
+				<center><h1>Накладная</h1></center>
+			{% elif object.gmtype == 'writeoff' %}
+				<center><h1>Акт списания</h1></center>
+			{% endif %}
+			<center><h2>{{ object.name }}</h2></center>
+			<table class="table">
+					<tr>
+						<th>Дата</th>
+						<td>{{ object.cdate }}</td>
+					</tr>
+					<tr>
+						<th>{{ object.get_gmtype_display }} с</th>
+						<td>
+							{% previous_location object.mvmove_set.last as plocaction%}	
+							{{ plocaction.shopstock|default_if_none:""}}
+								{% if plocaction.shopstock.type is 'stock'  %}
+									(склад)
+								{% elif plocaction.shopstock.type is 'shop' %}
+									(магазин)
+								{% endif %}
+						</td>
+					</tr>
+					{% if object.gmtype == 'relocation' %}
+						<tr>
+							<th>Куда</th>
+							<td>
+								{{ object.mvmove_set.last.shopstock|default_if_none:""}}
+								{% if object.mvmove_set.last.shopstock.type is 'stock'  %}
+									(склад)
+								{% elif object.mvmove_set.last.shopstock.type is 'shop' %}
+									(магазин)
+								{% endif %}
+							</td>
+
+						</tr>				
+					{% endif %}
+				</table>
+
+		</div>
+	</div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Список материальных ценностей</h3>
+			<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>№</th>
+							<th>id</th>
+							<th>Название</th>
+							<th>Модель</th>
+							<th>Серийный номер</th>
+							<th>Количество</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for i in object.mvmove_set.all|dictsort:"id"  %} 
+						<tr>
+							<td>{{ forloop.counter }}</td>
+							<td>{{ i.materialvalue.id }}</td>
+							<td>{{ i.materialvalue.name }}</td>
+							<td>{{ i.materialvalue.model }}</td>
+							<td>{{ i.materialvalue.serial }}</td>
+							<td>{{ i.materialvalue.amount }}</td>	
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+		</div>
+	</div>
+</div>
+
+<br>
+
+{% if object.gmtype == 'relocation' %} 
+	<div class="container">
+		<div class="row">
+			<div class="col-md-1 col-sm-1 col-xs-1">
+				<p><b>СДАЛ:</b></p>    
+			</div>
+			<div class="col-md-11 col-sm-11 col-xs-11" style="border-bottom: 1px black solid;">
+				</br>
+			</div>
+		</div>
+	</div>
+	
+	</br>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-1 col-sm-1 col-xs-1">
+				<p><b>ПРИНЯЛ:</b></p>    
+			</div>
+			<div class="col-md-11 col-sm-11 col-xs-11" style="border-bottom: 1px black solid;">
+				</br>
+			</div>
+		</div>
+	</div>
+
+
+{% elif object.gmtype == 'writeoff' %} 
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2 col-sm-2 col-xs-2">
+				<p>
+					<b>ОТВЕТСТВЕННОЕ ЛИЦО:</b>
+				</p>
+			</div>
+			<div class="col-md-10 col-sm-10 col-xs-10" style="border-bottom: 1px black solid;">
+				</br>
+			</div>
+		</div>
+	</div>
+	
+	</br>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2 col-sm-2 col-xs-2">
+				<p>
+					<b>ГЛАВНЫЙ БУХГАТЕР:</b>
+				</p>
+			</div>
+			<div class="col-md-10 col-sm-10 col-xs-10" style="border-bottom: 1px black solid;">
+				</br>
+			</div>
+		</div>
+	</div>
+	
+{% endif %}
+
+{% endblock %}

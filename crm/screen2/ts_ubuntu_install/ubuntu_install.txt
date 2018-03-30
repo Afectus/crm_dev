@@ -1,0 +1,113 @@
+apt-get update
+apt-get install -y openssh-server
+apt-get install -y mc proftpd fail2ban xinput-calibrator nginx python-pip python3-pip mplayer vlc libav-tools libvdpau-dev tmux
+apt-get install -y gnome-tweak-tool #autosturtup firefox
+apt-get install -y ubuntu-restricted-extras #дополнительные кодеки
+
+pip3 install netifaces
+pip install netifaces
+
+#adduser disc
+#sudoers
+#disc ALL=(ALL) NOPASSWD:ALL
+
+
+##INSTALL firefox
+apt-get purge firefox
+#Version: 57.0+build4-0ubuntu0.16.04.5
+#Version: 54.0+build3-0ubuntu0.16.04.1
+#Version: 45.0.2+build1-0ubuntu1
+#apt-cache show firefox | grep Version
+apt-get install -y firefox=45.0.2+build1-0ubuntu1
+apt-mark hold firefox
+#apt-cache show firefox-locale-ru | grep Version
+apt-get purge firefox-locale-ru
+apt-get install -y firefox-locale-ru=45.0.2+build1-0ubuntu1
+apt-mark hold firefox-locale-ru
+
+##mozilla extesions
+#MozRepl
+#R-kiosk
+#Status-4-Evar
+
+##mozilla disable fullscreen message user.js
+#user_pref("full-screen-api.warning.delay",0);
+#user_pref("full-screen-api.warning.timeout",0);
+#user_pref("app.update.enabled", false);
+#user_pref("app.update.auto", false);
+#user_pref("app.update.silent", false);
+
+#about:config
+#app.update.auto - false
+#app.update.enabled - false
+#app.update.silent - false
+
+##################
+
+##VNC x11
+apt install -y x11vnc
+#in autostart /etc/rc.local
+#/usr/bin/x11vnc -forever -auth guess -display :0 > /dev/null &
+
+
+##crontab
+#/usr/bin/python3 /home/babah/ping.py > /dev/null
+#rc.local
+#/usr/bin/python3 /home/babah/setip.py > /dev/null
+
+
+##test sound
+#aplay -L
+#speaker-test -Dhdmi:CARD=PCH -c 6
+
+##change sound
+#aplay -l
+#alsamixer
+#alsactl store
+
+
+##get FTP
+tmux
+su - babah
+rsync --delete-after -av 192.168.0.250::babah_media /home/babah/FTP
+
+
+#################################################
+#################### NOT INSTALL ################
+##apt-get install git
+
+
+
+##add user
+##adduser babah
+##usermod -a -G input babah
+
+##/etc/network/interfaces
+##dns-nameservers 192.168.0.10
+
+##
+##pip3 install pymysql
+##pip3 install tornado
+##pip3 install evdev
+##pip install evdev
+##pip install git+https://github.com/dpallot/simple-websocket-server.git
+##pip3 install git+https://github.com/dpallot/simple-websocket-server.git
+
+##DEBUG
+##play video and audio on mplayer
+##export DISPLAY=:0.0 #form user babah_24
+##mplayer -ao alsa:device=hdmi -fs /home/babah/FTP/video/0101610Maskarad@.mp4
+##mplayer -vo fbdev2 -fs /home/babah/FTP/video/0101610Maskarad@.mp4
+##mplayer -ao alsa:device=hdmi -fs /home/babah/FTP/video/aleks_sad.mp4
+##mplayer -ao alsa:device=hdmi -fs /home/babah/FTP/video/avrora.mp4
+##cvlc --aout alsa --alsa-audio-device hdmi --no-osd --no-spu -f ##/home/babah/FTP/video/avrora.mp4
+
+##test sound
+##aplay -L
+##speaker-test  -Dhdmi:CARD=PCH  -c 6
+
+##change sound
+##aplay -l
+##alsamixer
+##alsactl store
+

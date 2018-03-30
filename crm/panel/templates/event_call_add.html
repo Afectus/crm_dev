@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Панель управления - создать событие{% endblock %}
+{% block description %}Панель управления - создать событие{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Создать событие <small>обзвон клиента {{ object.id1c }}: {{ object.f }} {{ object.i }} {{ object.o }}, тел: {{ object.phone|hidephone }}</small></h3>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+			{% include "_form.html" %}
+			
+			
+		</div>
+	</div>
+</div>
+	
+	
+	
+	</br>
+
+{% endblock %}
+

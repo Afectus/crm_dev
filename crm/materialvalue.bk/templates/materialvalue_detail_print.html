@@ -1,0 +1,33 @@
+{% extends "materialvalue_base.html" %}
+{% block title %}Список{% endblock %}
+{% block description %}Список{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1><b>Название: {{ object.name }}</b></h1>
+			
+			<h1><b>Модель: {{ object.model }}</b></h1>
+			
+			<h1><b>Серийный номер: {{ object.serial }}</b></h1>
+			
+			
+			{% if object.photo %}
+			<img src="{{ object.photo800.url }}" class="img-responsive" />
+			{% endif %}
+			
+			
+		</div>
+	</div>
+</div>
+
+
+
+
+{% endblock %}

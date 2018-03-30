@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Покупатель <small>{{ object.id1c }}: {{ object.f }} {{ object.i }} {{ object.o }}, тел: {{ object.phone|hidephone }}</small></h3>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+
+	
+		<div class="col-md-4">
+
+			<span><strong>id:</strong> {{ object.id }}</span></br>
+			<span><strong>id1c:</strong> {{ object.id1c }}</span></br>
+			{% if object.sex %}
+			<span><strong>пол:</strong> {{ object.get_sex_display }}</span></br>
+			{% endif %}
+			
+			
+			{% if object.bday %}
+			<span><strong>День рождения:</strong> {{ object.bday }}</span></br>
+			{% endif %}
+				
+			{% if object.discountcard_set.all %}
+			<span><strong>Диск. карта:</strong></span> </br>
+			{% for card in object.discountcard_set.all %}
+			<span>{{ card.name }}</span> </br>
+			{% endfor %}
+			{% endif %}
+			
+			<span><strong>Бонусов:</strong> {{ object.bonus }}</span></br>
+		
+		</div>
+		<div class="col-md-8">
+			{% if object.child_set.all %}
+			<div>
+				<h4>Дети</h4>
+				{% for ch in object.child_set.all %}
+					{{ ch.name }} {{ ch.bday }} {{ ch.male }}
+					</br>
+				{% endfor %}
+				</br>
+			</div>
+			{% endif %}
+
+			</br>
+				
+
+			<div>
+			{% if object.eventcall_set.all %}
+				<div>
+				<span>Обзвон:</span>
+				{% for eventc in object.eventcall_set.all %}
+				<a href="/event/edit/call/{{ eventc.id }}">
+					{{ eventc.ctime }}
+				</a>
+				{% endfor %}
+				</div>
+			{% endif %}
+			<a href="/event/add/call/{{ object.id }}">Создать событие обзвон клиента</a>
+			</div>
+			
+			</br>
+			
+			<div>
+			{% if object.buyerevent_set.all %}
+				<div>
+				<span>События:</span>
+				{% for eventb in object.buyerevent_set.all %}
+				<a href="/buyerevent/edit/{{ eventb.id }}">
+					{{ eventb.stime }}
+				</a>
+				{% endfor %}
+				</div>
+			{% endif %}
+			<a href="/buyerevent/add/{{ object.id }}">Создать событие</a>
+			</div>
+			
+			
+			</br>
+								
+			{% if object.smsqsend_set.all %}
+				<div>
+				<span>Смс:</span>
+				{% for smsdata in object.smsqsend_set.all %}
+				<a href="/smsqsend/detail/{{ smsdata.id }}">
+					{{ smsdata.cdate }}
+				</a>
+				{% endfor %}
+				</div>
+			{% endif %}
+			
+			</br>
+		
+				
+			{% if object.check_set.all %}	
+			<div>
+				<h4>Чеки</h4>	
+				<p>Всего: {{ object.check_set.count }}</p>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>id/номер чека</th>
+							<th>Товар</th>
+							<th>Кол.</th>
+							<th>Дата</th>
+							<th>Сумма</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for c in object.check_set.all %}
+							<tr>
+								<td>{{ c.id }}/{{ c.nckkm }}</td>
+								<td>
+								
+				
+										{% for ci in c.checkitem_set.all %}
+											{{ ci.goods.id1c }} <a href="/goods/detail/{{ ci.goods.id }}">{{ ci.goods.name }}</a> {{ ci.price }} р. X {{ ci.col }} {{ ci.unit.value }} = {{ ci.sum }} р.
+											
+											
+											{% if ci.checkd_set.all %}
+											<div class="bg-warning">
+												{% for cd in ci.checkd_set.all %}
+													скидка: {{ cd.discount }} р. <a href="/discount/edit/{{ cd.discounts.id }}">{{ cd.discounts.name }}</a>
+												</br>
+												{% endfor %}
+											</div>
+											{% endif %}
+										{% endfor %}
+
+								</td>
+								<td>{{ c.col }}</td>
+								<td>{{ c.time }}</td>
+								<td>{{ c.price }}</td>
+								<td>
+									Магазин: {{ c.shop.name }}</br>
+									Касса: {{ c.cashbox.name }}</br>
+									Продавец: {{ c.seller }}</br>
+								</td>
+								<td>
+									Скидка: {{ c.discount }}</br>
+									Описание скидки: {{ c.descdiscount }}</br>
+									Сумма: {{ c.sum }}</br>
+									Оплата наличные: {{ c.nal }}</br>
+									Оплата без наличные: {{ c.beznal }}</br>
+									Оплата бонусы: {{ c.bonuspay }}</br>
+									Начисление бонусов: {{ c.bonusadd }}</br>
+									Владелец дисконтной карты код: {{ c.bonuswho }}</br>
+									Дисконтная карта: {{ c.discountcard }}</br>
+									<p><a href="{{ c.sourcefile.url }}" target="_blank">{{ c.sourcefile.url }}</a></p>
+								</td>
+								
+								
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			
+			</div>
+			
+			
+			
+			
+			{% endif %}
+								
+
+
+		</div>
+		
+
+	</div>
+	</br>
+	<div class="row">
+	
+			
+		<div class="col-md-2">
+			{% if object.phone %}
+				<div class="form-group">
+					<span class="callresult">
+					<a href="#" class="btn btn-xs btn-danger" onclick="makecall(this, {{ object.id }}); return false;">Позвонить</a>
+					</span>
+				</div>
+			{% endif %}
+		</div>
+		<div class="col-md-2">	
+			<div class="form-group">
+				<a href="/sendsms2b/{{ object.id }}" class="btn btn-xs btn-warning">Отправить sms</a></br>
+			</div>
+		</div>
+		<div class="col-md-2">
+			<div class="form-group">
+				<div class="smsqsendajaxspinner{{ object.id }} hidden">
+				<img src="/static/img/spinner.gif" />
+				</div>
+				<a href="/smsqsend/add/{{ object.id }}/" class="btn btn-primary btn-xs smsqsendajax" onclick="smsqsend(this, {{object.id }}); return false;">В очередь смс рассылки</a></br>
+			</div>
+		</div>
+		
+		<div class="col-md-2">
+			<div class="form-group">
+			<a href="/buyer/edit/{{ object.id }}" class="btn btn-primary btn-xs">Редактировать</a>
+			</div>
+		</div>
+	
+	</div>
+	
+	
+	
+	
+	
+</div>
+
+	</br>
+
+{% endblock %}
+

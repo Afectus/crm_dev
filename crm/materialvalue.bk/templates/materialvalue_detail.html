@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+		<!-- Widget ID (each widget will need unique ID)-->
+		<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-list-alt" aria-hidden="true"></i> </span>
+					<h2>Материальная ценность {{ object.name }} #{{ object.id }}</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+					
+					
+						<div class="row">
+							<div class="col-md-6">
+							
+									<div class="form-group">
+										<a href="{% url 'materialvalue:materialvalue_list' %}" class="btn btn-default">Список ценностей</a>
+									</div>
+							
+							
+									<table class="table">
+											<tr><th>Название</th><td>{{ object.name }}</td></tr>
+											<tr><th>Категория</th><td>{{ object.get_category_display }}</td></tr>
+											<tr><th>Статус</th><td>{{ object.get_status_display }}</td></tr>
+											<tr><th>Модель</th><td>{{ object.model }}</td></tr>
+											<tr><th>Серийный номер</th><td>{{ object.serial }}</td></tr>
+											<tr><th>Количество</th><td>{{ object.amount }}</td></tr>
+										</table>
+								<div class="form-group">
+										<a class="btn btn-success" href="{% url 'materialvalue:materialvalue_edit' object.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Редактировать</a><br><br>
+										
+										<a class="btn btn-success" href="{% url 'materialvalue:materialvalue_addphoto' object.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Редактировать фото</a><br><br>
+										
+										<a class="btn btn-success" href="{% url 'materialvalue:materialvalue_addmorephoto' object.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Добавить ещё фото</a>
+										
+										<a class="btn btn-default" href="{% url 'materialvalue:materialvalue_detail_print' object.id %}" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> Печать</a>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+										<table class="table">
+												{% if object.pictdesc %}
+												<tr><th>Изображение описания</th><td><a href="{{ object.pictdesc.url }}" target="_blank"><img src="{{ object.pictdesc200.url }}" class="img-responsive" /></a></td></tr>
+												{% endif %}
+												{% if object.photo %}
+												<tr><th>Фотографии</th><td><a href="{{ object.photo.url }}" target="_blank"><img src="{{ object.photo200.url }}" class="img-responsive" /></a></td></tr>
+												{% endif %}
+												{% if object.additionalphoto_set.all %}
+												<tr><th>Дополнительные<br>фотографии</th>
+													<td>
+														<div align="left">
+														{% for p in object.additionalphoto_set.all %}
+															<div style="display: inline-block">
+																<a href="{{p.photo.url}}" target="_blank"><img src="{{ p.photo50.url }}" class="img-responsive"/></a>
+															</div>
+														{% endfor %}
+														</div>
+													</td>
+												</tr>
+												{% endif %}
+												
+										</table>
+								
+							</div>
+							
+						</div>
+							
+					</div>
+					<!-- end widget content -->
+				</div>
+				<!-- end widget div-->
+
+			</div>
+			<!-- end widget -->
+
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Движение материальной ценности "{{ object.name }}"</h2>
+				</header>
+
+		
+				<div class="well">
+					<div class="form-group">
+						<a class="btn btn-success" href="{% url 'materialvalue:materialvaluemove_toshop' object.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Движение в магазин</a>
+						<a class="btn btn-success" href="{% url 'materialvalue:materialvaluemove_tostock' object.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Движение на склад</a>
+					</div>
+				</div>
+			
+				<!-- widget div-->
+				<div>
+
+					<!-- widget content -->
+					<div class="widget-body\">
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Дата</th>
+										<th>Местоположение<br>(склад/магазин)</th>
+										<th>Комментарий</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object.materialvaluemove_set.all|dictsort:"id"  %} 
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>{{ i.mdate }}</td>
+										<td>
+												{{ i.stock|default_if_none:""}}
+												{{ i.shop|default_if_none:""}}
+										</td>
+										<td>{{ i.note }}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+{% include "paginator.html" %}
+
+{% endblock %}
+

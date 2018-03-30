@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+<script>
+$(document).ready(function() {
+	$("input[type='file']").change(function() {
+		var fname = $(this).val().split('\\').pop();
+		fname = fname.match(/([^\\/]+)\.([^\\/]+)$/)[1];
+		$('#id_name').val(fname);
+		console.log(fname);
+	});
+});
+</script>
+
+{% include "_form2.html" %}
+
+
+{% endblock %}
+

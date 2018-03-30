@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load reporttag %}
+
+
+<script>
+$(document).ready(function() {
+	$("#id_goods").chosen({
+		placeholder_text_multiple: "Поиск",
+		no_results_text: "не найдено",
+		search_contains: true,
+	});
+});
+</script>
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Отчет сумма период</h3>
+			
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<form id="form_filter" action="/report/sumperiod/1/" method="get" role="form">
+				{# {% csrf_token %} #}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+				{# {% for i in form.visible_fields %} #}
+
+
+				<div class="bg-info myfilterblock">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.timestart.label }}</label>
+							
+							<div class="input-group date mydatepicker">
+								{{ form.timestart }}
+								<div class="input-group-addon">
+								<span class="glyphicon glyphicon-th"></span>
+								</div>
+							</div>
+							
+							{% if form.timestart.errors %}
+							<p class="text-danger">{{ form.timestart.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.timestart.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.timeend.label }}</label>
+							
+							<div class="input-group date mydatepicker">
+								{{ form.timeend }}
+								<div class="input-group-addon">
+								<span class="glyphicon glyphicon-th"></span>
+								</div>
+							</div>
+							
+							{% if form.timeend.errors %}
+							<p class="text-danger">{{ form.timeend.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.timeend.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.timedm.label }}</label>
+							</br>
+							{{ form.timedm }}
+							{% if form.timedm.errors %}
+							<p class="text-danger">{{ form.timedm.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.timedm.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="bg-success myfilterblock">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group"> 
+							<label>{{ form.shop.label }}</label>
+							{{ form.shop }}
+							{% if form.shop.errors %}
+							<p class="text-danger">{{ form.shop.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.shop.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group"> 
+							<label>{{ form.cashbox.label }}</label>
+							{{ form.cashbox }}
+							{% if form.cashbox.errors %}
+							<p class="text-danger">{{ form.cashbox.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.cashbox.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group"> 
+							<label>{{ form.sort.label }}</label>
+							{{ form.sort }}
+							{% if form.sort.errors %}
+							<p class="text-danger">{{ form.sort.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.sort.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group"> 
+							<label>{{ form.period.label }}</label>
+							{{ form.period }}
+							{% if form.period.errors %}
+							<p class="text-danger">{{ form.period.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.period.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+
+				</br>
+
+				<div class="myfilterblock">
+					<div class="form-group"> 
+						<button type="submit" class="btn btn-success">Применить</button>
+						<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+						<a href="/report/sumperiod" class="btn btn-success">Сбросить</a>
+						
+						<span class="filter-tumbler">
+						{{ form.paging }} <label>{{ form.paging.label }}</label>
+						</span>
+
+					</div>
+				</div>
+
+			</form>
+		</div>
+	</div>
+</div>	
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">	
+	
+			<canvas id="myChart" width="400" height="400"></canvas>
+	
+		</div>
+	</div>
+</div>	
+	
+	
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+				<table class="table">
+					<caption><h4>СУММА ПЕРИОД</h4></caption>
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for i in object_list %}
+						<tr class="bg-success">
+							<td>{{ i.shop|reportgetshop }}</td>
+							<td>
+								{% if i.week %}
+									неделя: {{ i.week }}
+								{% endif %}
+								{% if i.month %}
+									месяц: {{ i.month }}
+								{% endif %}
+								{% if i.year %}
+									год: {{ i.year }}
+								{% endif %}
+							</td>
+							<td>{{ i.s|floatdot:2 }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+	
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h5>Всего: {{ count }}</h5>
+			<ul class="pagination">
+				{% if object_list.has_previous %}
+					<li><a href="/report/sumperiod/{{ object_list.paginator.page_range|first }}?{{ req }}"><i class="icon-double-angle-left"></i>Первая</a></li>
+				{% endif %}
+
+				{% if object_list.has_previous %}
+					<li><a href="/report/sumperiod/{{ object_list.previous_page_number }}?{{ req }}"><i class="icon-angle-left"></i>Предыдущая</a></li>
+				{% endif %}
+				
+				{% for p in object_list.paginator.page_range|mypaginatorslice:object_list.number %}
+					{% if p != 0 %}
+						{% if p == object_list.number %}
+								<li class="active"><a href="" onclick="return false;">{{ object_list.number }}</a></li>
+							{% else %}
+								<li><a href="/report/sumperiod/{{ p }}?{{ req }}">{{ p }}</a></li>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+					
+				{% if object_list.has_next %}
+					<li><a href="/report/sumperiod/{{ object_list.next_page_number }}?{{ req }}">Следующая<i class="icon-angle-right"></i></a></li>
+				{% endif %}
+
+				{% if object_list.has_next %}
+					<li><a href="/report/sumperiod/{{ object_list.paginator.page_range|last }}?{{ req }}">Последняя<i class="icon-double-angle-right"></i></a></li>
+				{% endif %}
+			</ul>
+
+		</div>
+	</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+
+<script>
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels: [
+			{% for i in object_list %}
+			{% if i.s %}
+			"{{ i.shop|reportgetshop }} {% if i.week %} неделя: {{ i.week }} {% endif %} {% if i.month %} месяц: {{ i.month }} {% endif %} {% if i.year %} год: {{ i.year }} {% endif %}",
+			{% endif %}
+			{% endfor %}
+			],
+        datasets: [{
+            label: 'Данные',
+            data: [
+				{% for i in object_list %}
+				{% if i.s %}
+				{{ i.s|floatdot:2 }},
+				{% endif %}
+				{% endfor %}
+				],
+            backgroundColor: [
+				{% for i in object_list %}
+				{% if i.s %}
+                '{{ i.shop|shopgetcolor }}',
+				{% endif %}
+				{% endfor %}
+            ],/*
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],*/
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+
+
+
+
+
+{% endblock %}
+
+
+
+
+

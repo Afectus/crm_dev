@@ -1,0 +1,88 @@
+{% extends "form_1c_base.html" %}
+{% block title %}Панель управления{% endblock %}
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<script>
+function setdcard(code)
+{
+	var fieldcard = document.getElementById('id_card');
+	fieldcard.value=code;
+	//code=tmpdcard;
+	//console.log(tmpdcard);
+	//var myinfo = document.getElementById('myinfo');
+	//console.log(myinfo);
+	//myinfo.innerHTML += code+'</br>';
+	var sform = document.getElementById('searchcardform'); //get form by id
+	//sform.submit();
+	return true;
+}
+
+
+
+</script>
+
+
+{% comment %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>javascript</h4>
+			<p>
+				<kbd>
+				data1c.setvaluetoinput('id_seller', '123')</br>
+				</kbd>
+			</p>
+		</div>
+	</div>
+</div>
+{% endcomment %}
+
+<div class="container">
+
+	<div class="row">
+	
+		<div class="col-md-12">
+
+			<h3>Создание дисконтной карты</h3>
+
+			{% comment %}
+			<p>Поля отмеченные <sup class="required">*</sup> обязательные для заполнения</p>
+			{% endcomment %}
+
+				<form id="makedcard" action="" method="post" enctype="multipart/form-data" role="form" novalidate>
+					{% csrf_token %}
+					{% for hidden in form.hidden_fields %}
+						{{ hidden }}
+					{% endfor %}
+					{% if salt %}<input type="hidden" name="salt" value="{{ salt }}" />	{% endif %}
+					{% if crc %}<input type="hidden" name="crc" value="{{ crc }}" />{% endif %}
+					
+					<fieldset>
+					{% for i in form.visible_fields %}
+
+						<div class="form-group">
+							{% if i.field.required %}<sup class="required">*</sup>{% endif %}
+							<label>{{ i.label }}</label>
+							{{ i }}
+							{% if i.errors %}
+							<p class="text-danger">{{ i.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ i.field.help_text  }}</p>
+						</div>
+
+					{% endfor %}
+					
+					<button type="submit" class="btn btn-primary">Записать</button>
+					
+					</fieldset>
+				</form>
+		</div>
+	</div>
+</div>
+	
+{% endblock %}

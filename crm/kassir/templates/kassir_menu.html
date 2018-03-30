@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Кассир</h3>
+			
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			
+			<div class="row">
+				<div class="col-md-4">
+					<h3><a href="{% url 'kassir:kassir_buyer_list_redirect' %}">Список покупателей</a></h3>
+					<p>Список покупателей</p>
+				</div>
+				
+				<div class="col-md-4">
+					<h3><a href="{% url 'kassir:kassir_buyer_list_redirect' %}">Список покупателей</a></h3>
+					<p>Список покупателей</p>
+				</div>
+				
+				<div class="col-md-4">
+					<h3><a href="{% url 'kassir:kassir_buyer_list_redirect' %}">Список покупателей</a></h3>
+					<p>Список покупателей</p>
+				</div>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+
+	</br>
+
+{% endblock %}
+

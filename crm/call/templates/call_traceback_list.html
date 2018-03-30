@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+<!-- 	<div class="well">
+
+
+	</div> -->
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Отчет звонков</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Время</th>
+										<th>Маршрут</th>
+										<th>Информация о клиенте</th>
+										<th>Входящий номер</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+								{% for i in object_list %}
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>{{ i.ctime|date:"SHORT_DATETIME_FORMAT"}}</td>
+										<td>
+											<span class="label label-{% if i.route == 'external' %}primary{% elif i.route == 'internal' %}success{% elif i.route == 'callback' %}warning{% else %}default{% endif %}">{{ i.route }}</span>
+										</td>
+										<td>
+										<h4>{{ i.phone }}</h4>
+										<h4>
+										{% if i.f %}{{ i.f }}{% endif %} 
+										{% if i.i %}{{ i.i }}{% endif %} 
+										{% if i.o %}{{ i.o }}{% endif %} 
+										</h4>
+										<h5>{% if i.bday %}д.р. {{ i.bday }}{% endif %} </h5>
+										</td>
+										<td>{{ i.incoming_number }}</td>
+										<td>
+											<div class="form-group">
+												<a href="{% url 'call:call_traceback_detail' i.id %}" class="btn btn-success">Подробнее</a>
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- END COL -->
+	</div>
+	<!-- END ROW -->
+</section>
+
+{% include "paginator.html" %}
+
+
+
+{% endblock %}
+

@@ -1,0 +1,221 @@
+{% extends "form_1c_base.html" %}
+{% block title %}Панель управления{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load api1ctag %}
+
+<script>
+function setdcard(code)
+{
+	var fieldcard = document.getElementById('id_card');
+	fieldcard.value=code;
+	//code=tmpdcard;
+	//console.log(tmpdcard);
+	//var myinfo = document.getElementById('myinfo');
+	//console.log(myinfo);
+	//myinfo.innerHTML += code+'</br>';
+	var sform = document.getElementById('searchcardform'); //get form by id
+	sform.submit();
+	return true;
+}
+</script>
+
+
+<div class="container">
+
+	<div class="row">
+	
+		<div class="col-md-12">
+		
+			<h3>Поиск дисконтных карт</h3>
+			
+			
+			{% if request.GET.message == 'exist' %}
+				<div class="alert alert-success" role="alert">
+				Данная карта уже существует
+				</div>
+			{% endif %}
+			
+			{% if request.GET.message == 'make' %}
+				<div class="alert alert-success" role="alert">
+				Дисконтная карта создана
+				</div>
+			{% endif %}
+			
+			{% if request.GET.message == 'update' %}
+				<div class="alert alert-success" role="alert">
+				Данные обновлены
+				</div>
+			{% endif %}
+			
+			{% if request.GET.message == 'buyerrel' %}
+				<div class="alert alert-success" role="alert">
+				Родственник добавлен
+				</div>
+			{% endif %}
+
+
+			{% if object_list %}
+			<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Данные</th>
+						<th>Родственники</th>
+						<th>Карта</th>
+						<th></th>
+					</tr>
+				</thead>
+				{% for i in object_list %}
+				<tr>
+					<td class="i_fio">
+						<div>
+							<b>ID:</b> {{ i.id }} [{{ i.id1c }}]
+						</div>
+						<div>
+							<b>ФИО:</b> {{ i.f }} {{ i.i }} {{ i.o }}
+						</div>
+						<div>
+							<b>Пол:</b>
+							{{ i.get_sex_display }}
+						</div>
+						<div>
+							<b>Д.р.:</b> {{ i.bday|date:"SHORT_DATE_FORMAT" }}
+						</div>
+						<div>
+							<b>Рассылка:</b> {{ i.adv|mybool }}
+						</div>
+						<div>
+							<b>Телефон:</b> {{ i.phone|hidephone }}
+						</div>
+						
+						{% if not i.f or not i.i or not i.o or not i.sex or not i.bday or not i.phone %}
+							<div class="alert alert-danger" role="alert">
+							Есть не заполненные поля
+							<a href="{% url 'api1c:form_1c_editcard' i.id %}/?salt={{ salt }}&crc={{ crc }}" class="btn btn-success btn-xs">указать данные</a>
+							</div>
+						{% endif %}
+					</td>
+					<td class="i_relcards">
+						{% if i.buyerrel_set.all %}
+						<table class="table table-sm">
+							{% comment %}
+							<thead>
+								<tr>
+									<th>ИО</th>
+									<th></th>
+									<th>Д.Р.</th>
+									<th></th>
+								</tr>
+							</thead>
+							{% endcomment %}
+							<tbody>
+								{% for br in i.buyerrel_set.all %}
+								<tr>
+									<td>{{ br.i }} {{ br.o }}</td>
+									<td>{{ br.get_type_display }}</td>
+									<td>{{ br.bday|date:"SHORT_DATE_FORMAT" }}</td>
+									<td><a href="{% url 'api1c:form_1c_relcard_edit' br.id %}/?salt={{ salt }}&crc={{ crc }}" class="btn btn-success btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						{% endif %}
+						<div>
+							<a href="{% url 'api1c:form_1c_relcard' i.id %}/?salt={{ salt }}&crc={{ crc }}" class="btn btn-success btn-xs btn-block"><i class="fa fa-plus" aria-hidden="true"></i> Добавить родственника</a>
+						</div>
+
+					</td>
+					<td class="i_cards">
+						{% if i.discountcard_set.all %}
+						{% for d in i.discountcard_set.all %}
+							{% if d %}
+								<a href="#" class="btn btn-warning" onclick="data1c.sendidto1c1('{{ d.name }}');">
+								ВЫБРАТЬ
+								{% if d.name %}
+								</br>
+								{{ d.name }}
+								</br>
+								[{{d.id1c}}]
+								{% endif %}
+								</br>
+								{{ d|getsumbonusallcards|floatdot:2 }} р.</a>
+							{% endif %}
+						{% endfor %}
+						{% endif %}
+						
+						<a href="#" class="btn btn-default" onclick="data1c.sendidto1cprint('{{ i.id1c }}');">Печать</a>
+						
+					</td>
+					{% comment %}
+					<td class="i_bonus">{% if d.bonus %}{{ d.bonus|floatdot }}{% endif %}</td>
+					{% endcomment %}
+					<td class="i_id">
+						<a href="{% url 'api1c:form_1c_editcard' i.id %}/?salt={{ salt }}&crc={{ crc }}" class="btn btn-success">Редактировать</a>
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
+			</div>
+			{% else %}
+				<p>Нет записей</p>
+			{% endif %}
+
+			
+			{% comment %}
+			<p>Поля отмеченные <sup class="required">*</sup> обязательные для заполнения</p>
+			{% endcomment %}
+
+				<form id="searchcardform" action="" method="get" enctype="multipart/form-data" role="form" novalidate>
+					{#{% csrf_token %}#}
+
+					
+					{% for hidden in form.hidden_fields %}
+						{{ hidden }}
+					{% endfor %}
+					
+					
+					{% if 'salt' in request.GET %}
+						<input type="hidden" name="salt" value="{{ request.GET.salt }}" />
+					{% endif %}
+					
+					{% if 'crc' in request.GET %}
+						<input type="hidden" name="crc" value="{{ request.GET.crc }}" />
+					{% endif %}
+					
+					
+					<fieldset>
+					{% for i in form.visible_fields %}
+
+						<div class="form-group">
+							{% if i.field.required %}<sup class="required">*</sup>{% endif %}
+							<label>{{ i.label }}</label>
+							{{ i }}
+							{% if i.errors %}
+							<p class="text-danger">{{ i.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ i.field.help_text  }}</p>
+						</div>
+
+					{% endfor %}
+					
+					<button type="submit" class="btn btn-primary">Найти карту</button>
+					
+					<a href="{% url 'api1c:form_1c_makecard' %}/?salt={{ salt }}&crc={{ crc }}" class="btn btn-success">Завести карту</a>
+					
+					</fieldset>
+					
+				</form>
+
+		</div>
+	</div>
+</div>
+
+</br>
+
+
+	
+{% endblock %}

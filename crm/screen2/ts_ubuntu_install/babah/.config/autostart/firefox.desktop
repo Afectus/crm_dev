@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=firefox http://crm.babah24.ru/screen2/ 
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Icon=firefox
+Categories=GNOME;GTK;Network;WebBrowser;
+StartupNotify=true
+
+

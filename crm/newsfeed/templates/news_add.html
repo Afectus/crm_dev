@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+{% include "_form2.html" %}
+
+<script type="text/javascript">
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	$(document).ready(function () {
+		try {
+			
+			CKEDITOR.replace('text', { height: '380px', startupFocus: true });
+
+		} catch (err) {
+		}
+		//$('form[name="fulltext"]').focus(function() {
+		//CKEDITOR.replace('fulltext', {height: '380px', startupFocus: true});
+		//	})
+	})
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-list-alt" aria-hidden="true"></i> </span>
+					<h2>Проект {{ object.name }} #{{ object.id }}</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+					
+					
+						<div class="row">
+							<div class="col-md-6">
+					
+					
+								<table class="table">
+									<tr><th>Название</th><th>{{ object.name }}</th></tr>
+									<tr><th>Статус</th>
+										<th>
+											{% if object.status == 'created' %}
+												<span class="label label-primary">{{ object.get_status_display }}</span>
+											{% elif object.status == 'archived' %}
+												<span class="label label-default">{{ object.get_status_display }}</span>
+											{% else %}
+												<span class="label label-success">{{ object.get_status_display }}</span>
+											{% endif %}
+										</th>
+									</tr>
+									<tr><th>Исполнители</th><th>{% for e in object.executor.all %}{{ e }} {% endfor %}</th></tr>
+									<tr><th>Бюджет проекта</th><th>{{ object.plansum | floatformat:2 }}  <i class="fa fa-rub" aria-hidden="true"></i></th></tr>
+									<tr><th>Создатель проекта (id user)</th><th>({{ object.user|who }})</th></tr>
+									<tr><th>Картинки проекта
+										{% if object.user == request.user %}
+											<div class="form-group">
+												<a class="btn btn-success" href="{% url 'project:project_pict_add' object.id  %}"><i class="fa fa-plus" aria-hidden="true"></i> картинку</a> 
+											</div>
+										{% endif %}
+										</th>
+										<th>
+											{% for picture in object.pict.all %}
+												<div style="float: left; margin: 0px 15px 10px 0px; border: 1px dotted gray; border-radius: 3px">
+													<div align="right" style="position: relative;">
+														<a class="btn btn-danger btn-xs" href="{% url 'project:project_pict_del' picture.id %}"><i class="fa fa-remove"></i></a> 
+													</div>
+													<center><a href="{{ picture.pict.url }}" target="_blank"><img src="{{ picture.pict40.url }}"><br>{{ picture.desc }}</a></center>
+												</div>
+											{% endfor %}
+										</th>
+									</tr>
+									<tr>
+										<th>Файлы проекта
+											{% if object.user == request.user %}
+												<div class="form-group">
+													<a class="btn btn-success" href="{% url 'project:project_file_add' object.id %}"><i class="fa fa-plus" aria-hidden="true"></i> файл</a> 
+												</div>
+											{% endif %}
+										</th>
+										<th>
+											{% for file in object.file.all %}
+												<div style="float: left; margin: 0px 15px 10px 0px; border: 1px dotted gray; border-radius: 3px">
+													<div align="right" style="position: relative;">
+														<a class="btn btn-danger btn-xs" color="gray" href="{% url 'project:project_file_del' file.id %}"><i class="fa fa-remove"></i></a> 
+													</div>
+													<center>
+													<a href="{{ file.sourcefile.url }}" target="_blank" download="{{ file.desc }}"><i class="fa fa-paperclip fa-2x" style="" aria-hidden="true"></i><br>{{ file.desc }}</a>
+													</center>
+												</div>
+												
+											{% endfor %}
+										</th>
+									</tr>
+								</table>
+							</div>
+							
+							<div class="col-md-6">
+								<p>
+									<b>Описание:</b></br>
+									{{ object.desc }}
+								</p>
+								
+								
+								{% if object.pict.all %}
+									</br>
+									<table class="table">
+										<thead>
+											<tr>
+												<th colspan="3">Изображения проекта</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for picture in object.pict.all %}
+											<tr>
+												<td>
+													<a href="{{ picture.pict.url }}" target="_blank">
+														<img src="{{ picture.pict40.url }}" class="img-responsive" /></a>
+												</td>
+												<td>
+													{{ picture.desc }}
+												</td>
+												<td>
+													<a class="btn btn-danger btn-xs" href="{% url 'project:project_pict_del' picture.id %}"><i class="fa fa-remove"></i></a> 
+												</td>
+											</tr>
+										{% endfor %}
+											{% if object.user == request.user %}
+											<tr>
+												<td colspan="3">
+												
+													<div class="form-group">
+														<a class="btn btn-success" href="{% url 'project:project_pict_add' object.id  %}"><i class="fa fa-plus" aria-hidden="true"></i> картинку</a> 
+													</div>
+												</td>
+											</tr>
+											{% endif %}
+										</tbody>
+								
+									</table>
+								
+								
+								{% endif %}
+
+							</div>
+						</div>
+							
+					</div>
+					<!-- end widget content -->
+				</div>
+				<!-- end widget div-->
+
+			</div>
+			<!-- end widget -->
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Список этапов</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>		
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+					<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+						
+					<!-- widget content -->
+					<div class="widget-body">
+						{% if object.user == request.user %}
+						<div class="form-group">
+							<a class="btn btn-success" href="{% url 'project:projectstep_add' object.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Добавить этап</a>
+						</div>
+						{% endif %}
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>id</th>
+									<th>Создатель этапа</th>
+									<th>Исполнители</th>
+									<th>Название этапа</th>
+									<th>Дедлайн</th>
+									<th>Действие</th>
+								</tr>
+							</thead>
+							{% for s in object.projectstep_set.all|dictsort:"id"  %} 
+								<tr>
+									<th>{{s.id}}</th>
+									<th>{{s.project.user}}</th>
+									<th>{%for e in s.executor.all %}{{e}}<br> {% endfor %}</th>
+									<th>{{s.name}}</th>
+									<th>{{s.edate}}</th>
+									<th>
+										{% if object.user == request.user %}
+										<div class="form-group">
+											<a class="btn btn-success" href="{% url 'project:projectstep_edit' s.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Редактировать</a>
+										</div>
+										{% endif %}
+										<div class="form-group">
+											<a class="btn btn-success" href="{% url 'project:projectstep_detail' s.id %}"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Подробнее</a>
+										</div>
+									</th>
+								</tr>
+							{% endfor %}
+				
+						</table>
+					
+					</div>
+					<!-- end widget content -->
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-2" data-widget-editbutton="false">
+				<header>
+					<span class="widget-icon"> <i class="fa fa-commenting-o" aria-hidden="true"></i> </span>
+					<h2>Комментарии</h2>
+				</header>
+				<!-- widget div -->
+				<div>
+								
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+					<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+
+					{% if object.projectcomment.all %}
+						
+						{% for c in object.projectcomment.all %}
+						
+							<div class="row">
+								<div class="col-md-1">
+									<div class="thumbnail">
+										{% getprofileuser c.user.id as profileuser %}
+										{% if profileuser.photo %}
+										<img class="img-responsive user-photo" src="{{ profileuser.photosmall.url }}">
+										{% else %}
+											<img class="img-responsive user-photo" src="/static/img/nophoto.png">
+										{% endif %}
+									</div>
+								</div>
+								<div class="col-md-11">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+										<strong>{{ c.user.first_name }} {{ c.user.last_name }}</strong> {% comment %} <span class="text-muted">{{ c.ctime|date:"SHORT_DATETIME_FORMAT" }}</span> {% endcomment %}
+											{% if c.user == request.user %}
+											<div style="float: right">
+												<a class="btn btn-success btn-xs" href="{% url 'project:projectcomment_edit' c.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+												<a class="btn btn-success btn-xs" href="{% url 'project:projectcomment_pict_add' c.id %}"><i class="fa fa-plus" aria-hidden="true"></i> картинку</a>
+												<a class="btn btn-success btn-xs" href="{% url 'project:projectcomment_file_add' c.id %}"><i class="fa fa-plus" aria-hidden="true"></i> файл</a>
+												<a class="btn btn-danger btn-xs" href="{% url 'project:projectcomment_del' c.id %}"><i class="fa fa-remove"></i></a>	
+											</div>
+											{% endif %}
+										</div>
+										<div class="panel-body">
+										{{ c.value|safe }}
+										
+										{% if c.pict %}
+											<br><br>
+											{% for picture in c.pict.all %}
+												<div style="float: left; margin: -10px 15px -10px 0px; border: 1px dotted gray; border-radius: 3px">
+													<div align="right" style="position: relative;">
+														<a class="btn btn-danger btn-xs" href="{% url 'project:projectcomment_pict_del' picture.id %}"><i class="fa fa-remove"></i></a>
+													</div>
+													<center><a href="{{ picture.pict.url }}" target="_blank"><img src="{{ picture.pict40.url }}"><br>{{ picture.desc }}</a></center>
+												</div>
+											{% endfor %}
+										{% endif %}
+										
+										{% if c.file != None %}	
+											<div style="float: left; width: 100%;">
+											<br><br>
+											{% for file in c.file.all %}
+												<div style="float: left; margin: -10px 20px 0px 0px;  border: 1px dotted gray; border-radius: 3px">
+													<div align="right" style="position: relative;">
+														<a class="btn btn-danger btn-xs" color="gray" href="{% url 'project:projectcomment_file_del' file.id %}"><i class="fa fa-remove"></i></a> 
+													</div>
+													<center><a href="{{ file.sourcefile.url }}" target="_blank"><i class="fa fa-paperclip fa-2x" style="" aria-hidden="true"></i><br>{{ file.desc }}</a></center>
+												</div>
+											{% endfor %}
+											</div>
+										{% endif%}
+
+										</div>
+									</div>
+								</div>
+							</div>
+						
+						{% endfor %}
+					{% endif %}
+					
+					<h4>Оставить комментарий</h4>
+					<form action="" method="post" enctype="multipart/form-data" role="form">
+						{% csrf_token %}
+
+						
+						{% for hidden in form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+						
+						<fieldset>
+						{% for i in form.visible_fields %}
+							<div class="form-group">
+								{{ i }}
+								{% if i.errors %}
+								<p class="text-danger">{{ i.errors|striptags }}</p>
+								{% endif %}
+								<p class="help-block">{{ i.field.help_text  }}</p>
+							</div>
+						{% endfor %}
+						
+						<button type="submit" class="btn btn-primary" onclick="sendtoprintbarcode(); return false;">Отправить</button>
+						
+						</fieldset>
+						
+					</form>
+					</br>
+				</div>
+				<!-- end widget div -->
+				
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+	<!-- END ROW -->
+</section>
+
+
+
+
+
+
+{% endblock %}
+

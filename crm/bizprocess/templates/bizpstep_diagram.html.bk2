@@ -1,0 +1,11 @@
+{% extends "bizprocess_base.html" %}
+{% block title %}Список{% endblock %}
+{% block description %}Список{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% include "bizpstep_diagram_include.html" %}
+
+{% endblock %}

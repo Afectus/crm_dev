@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	
+	<!-- START ROW -->
+	<div class="row">
+		
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-newspaper-o"></i> </span>
+					<h2>{{ object.name }}</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+					
+					
+							<div class="row">
+								<div class="col-md-8">
+									<table class="table">
+										<tr><th>Автор</th><td>{{ object.user.user|who }}</tr>
+										<tr><th>Дата</th><td>{{ object.cdate }}</td></tr>
+										<tr><th>Текст</th><td>{{ object.text|safe }}</td></tr>
+									</table>
+									{% if object.user.user == request.user %}
+									<div class="form-group">
+										<a class="btn btn-success" href="{% url 'newsfeed:news_edit' object.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Редактировать</a>
+										<a class="btn btn-danger"  href="{% url 'newsfeed:news_del' object.id %}"><i class="fa fa-remove"></i> Удалить</a> 
+									</div>
+									{% endif %}
+	
+									<br>
+									
+									
+							
+								</div>
+								<div class="col-md-4">
+									{% if object.newspicture_set.all %}
+										</br>
+										<table class="table">
+											<thead>
+												<tr>
+													<th colspan="3">Изображения новости</th>
+												</tr>
+											</thead>
+											<tbody>
+												{% for picture in object.newspicture_set.all %}
+												<tr>
+													<td>
+														<a href="{{ picture.pict.url }}" target="_blank">
+															<img src="{{ picture.pict40.url }}" class="img-responsive" /></a>
+													</td>
+													<td>
+														{{ picture.desc }}
+													</td>
+													<td>
+														<a class="btn btn-danger btn-xs" href="{% url 'newsfeed:news_pict_del' picture.id %}"><i class="fa fa-remove"></i></a> 
+													</td>
+												</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									{% endif %}
+									{% if object.user.user == request.user %}
+										<div class="form-group">
+											<a class="btn btn-success" href="{% url 'newsfeed:news_pict_add' object.id  %}"><i class="fa fa-plus" aria-hidden="true"></i> картинку</a> 
+										</div>
+									{% endif %}
+									
+								
+								
+	
+								</div>
+							</div>
+								
+						</div>
+						<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+<script type="text/javascript">
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	$(document).ready(function () {
+		try {
+			CKEDITOR.replace('text', { height: '380px', startupFocus: true });
+		} catch (err) {
+		}
+		//$('form[name="fulltext"]').focus(function() {
+		//CKEDITOR.replace('fulltext', {height: '380px', startupFocus: true});
+		//	})
+	})
+</script>
+
+
+
+{% endblock %}
+

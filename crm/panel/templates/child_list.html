@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<h2>Фильтр </h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+
+					
+						<form class="smart-form" id="form_filter" action="/child/list/1/" method="get" role="form">
+						{# {% csrf_token %} #}
+
+						{% for hidden in form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+						
+						{# {% for i in form.visible_fields %} #}
+						{# {% endfor %} #}
+
+							<header>
+								<h3>Список покупателей <small>клиентов</small></h3>
+							</header>
+
+							<fieldset>
+
+										<label class="label">{{ form.q.label }}</label>
+										<label class="input">
+											{{ form.q }}
+										</label>
+										{% if form.q.errors %}
+										<p class="text-danger">{{ form.q.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.q.field.help_text  }}</div>
+
+							</fieldset>	
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-4">
+										<label>{{ form.bdstart.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.bdstart }}
+										</label>
+										{% if form.bdstart.errors %}
+										<p class="text-danger">{{ form.bdstart.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.bdstart.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										<label>{{ form.bdend.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.bdend }}
+										</label>
+										{% if form.bdend.errors %}
+										<p class="text-danger">{{ form.bdend.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.bdend.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										
+										<label class="checkbox">
+											{{ form.dm }}
+											<i></i>
+											{{ form.dm.label }}
+										</label>	
+										<div class="note">{{ form.dm.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-4">
+										<label class="label">{{ form.agestart.label }}</label>
+										<label class="input">
+											{{ form.agestart }}
+										</label>
+										{% if form.agestart.errors %}
+										<p class="text-danger">{{ form.agestart.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.agestart.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										<label class="label">{{ form.ageend.label }}</label>
+										<label class="input">
+											{{ form.ageend }}
+										</label>
+										{% if form.ageend.errors %}
+										<p class="text-danger">{{ form.ageend.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.ageend.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										<label class="label">{{ form.adv.label }}</label>
+										<label class="input">
+											{{ form.adv }}
+										</label>
+										{% if form.adv.errors %}
+										<p class="text-danger">{{ form.adv.errors|striptags }}</p>
+										{% endif %}										
+										<div class="note">{{ form.adv.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							<footer>
+								<div class="pull-left"><h4>Найдено: {{ count }}</h4></div>
+								<button type="submit" class="btn btn-primary">Применить</button>
+								<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+								<a href="/child/list" class="btn btn-default">Сбросить</a>
+								
+							</footer>
+						</form>
+
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+			
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>СПИСОК</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+
+						<div class="table-responsive">
+								
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id/id1c</th>
+										<th>Имя</th>
+										<th>Д.Рождения</th>
+										<th>Родитель</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+								{% for i in object_list %}
+									<tr>
+										<td><a href="#">{{ i.id }}</a> {{ i.id1c }}</td>
+										<td>{{ i.name }}</td>
+										<td>{{ i.bday }}</td>
+										<td>
+											{{ i.buyer.f }} {{ i.buyer.i }} {{ i.buyer.o }}</br>
+											{% if i.buyer.male %}
+											пол: {{ i.buyer.male }}
+											{% endif %}
+											</br>
+											Согласие на рассылку: {{ i.buyer.adv|mybool }}
+											</br>
+											<span class="getphone{{ i.buyer.id }}">
+											<a href="#" onclick="getphone(this, {{ i.buyer.id }}); return false;">{{ i.buyer.phone|hidephone }}</a>
+											</span>
+										</td>
+										
+										<td>
+											<div class="form-group">
+												<a href="/childbook/add/{{ i.id }}/" class="btn btn-primary" onclick="childbooksend(this, {{ i.id }}); return false;">В список</a></br>
+											</div>
+											</br>
+											{% if i.buyer.adv %}
+											<div class="form-group">
+												<div class="smsqsendajaxspinner{{ i.buyer.id }} hidden">
+												<img src="/static/img/spinner.gif" />
+												</div>
+												<a href="/smsqsend/add/{{ i.buyer.id }}/{% if i.name %}?childid={{ i.id }}{% endif %}" class="btn btn-primary btn-xs smsqsendajax smsqsendajaxcontrol{{ i.buyer.id }}" onclick="smsqsend(this, {{i.buyer.id }}); return false;">В очередь смс рассылки</a></br>
+											</div>
+											{% endif %}
+										</td>
+										
+									</tr>
+								{% endfor %}
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+			
+			
+			
+			
+			
+			
+			
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+
+
+
+
+	
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Найдено: {{ count }}</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+
+	
+		
+		
+			<ul class="pagination">
+				{% if object_list.has_previous %}
+					<li><a href="/child/list/{{ object_list.paginator.page_range|first }}?{{ req }}"><i class="icon-double-angle-left"></i>Первая</a></li>
+				{% endif %}
+
+				{% if object_list.has_previous %}
+					<li><a href="/child/list/{{ object_list.previous_page_number }}?{{ req }}"><i class="icon-angle-left"></i>Предыдущая</a></li>
+				{% endif %}
+				
+				{% for p in object_list.paginator.page_range|mypaginatorslice:object_list.number %}
+					{% if p == object_list.number %}
+						<li class="active"><a href="" onclick="return false;">{{ object_list.number }}</a></li>
+						{% else %}
+							<li><a href="/child/list/{{ p }}?{{ req }}">{{ p }}</a></li>
+						{% endif %}
+				{% endfor %}
+					
+				{% if object_list.has_next %}
+					<li><a href="/child/list/{{ object_list.next_page_number }}?{{ req }}">Следующая<i class="icon-angle-right"></i></a></li>
+				{% endif %}
+
+				{% if object_list.has_next %}
+					<li><a href="/child/list/{{ object_list.paginator.page_range|last }}?{{ req }}">Последняя<i class="icon-double-angle-right"></i></a></li>
+				{% endif %}
+			</ul>
+
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+{% comment %}
+{% include "paginator.html" %}
+{% endcomment %}
+	
+
+
+{% endblock %}
+

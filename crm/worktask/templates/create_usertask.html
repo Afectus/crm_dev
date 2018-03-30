@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+<script>
+$(document).ready(function() {
+	$("#id_executor").chosen({
+		placeholder_text_multiple: " Поиск исполнителя",
+		no_results_text: "не найдено",
+		search_contains: true,
+	});
+});
+</script>
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Создать задание</h3>
+			
+			{% if request.GET.success == 'true' %}
+				<div class="alert alert-success alert-dismissable" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">?</button>
+					<i class="fa fa-check"></i> 
+					Задание создано
+				</div>
+			{%endif%}
+			
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+		
+				<p>Поля отмеченные <sup class="required">*</sup> обязательные для заполнения</p>
+				
+				<form action="" method="post" enctype="multipart/form-data" role="form">
+				{% csrf_token %}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+
+				<div class="form-group">
+				{% if form.name.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.name.label }}</label>
+				{{ form.name }}
+				{% if form.name.errors %}
+				<p class="text-danger">{{ form.name.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.name.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+
+				<div class="form-group">
+				{% if form.message.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.message.label }}</label>
+				{{ form.message }}
+				{% if form.message.errors %}
+				<p class="text-danger">{{ form.message.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.message.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+
+				<div class="form-group"> 
+				{% if form.priority.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.priority.label }}</label>
+				{{ form.priority }}
+				{% if form.priority.errors %}
+				<p class="text-danger">{{ form.priority.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.priority.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+				
+				
+				<div class="form-group">
+				{% if form.etime.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.etime.label }}</label>
+				
+				<div class="input-group date mydatepicker">
+					{{ form.etime }}
+					<div class="input-group-addon">
+					<span class="glyphicon glyphicon-th"></span>
+					</div>
+				</div>
+				
+				{% if form.etime.errors %}
+				<p class="text-danger">{{ form.etime.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.etime.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+	
+
+				
+				<div class="form-group">
+				{% if form.executor.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.executor.label }}</label>
+				{{ form.executor }}
+				{% if form.executor.errors %}
+				<p class="text-danger">{{ form.executor.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.executor.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+
+				
+				{% comment %}
+				<div class="">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+							{% if form.pict1.field.required %}<sup class="required">*</sup>{% endif %}
+							<label>{{ form.pict1.label }}</label>
+							{{ form.pict1 }}
+							{% if form.pict1.errors %}
+							<p class="text-danger">{{ form.pict1.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.pict1.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+							{% if form.pict2.field.required %}<sup class="required">*</sup>{% endif %}
+							<label>{{ form.pict2.label }}</label>
+							{{ form.pict2 }}
+							{% if form.pict2.errors %}
+							<p class="text-danger">{{ form.pict2.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.pict2.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+							{% if form.pict3.field.required %}<sup class="required">*</sup>{% endif %}
+							<label>{{ form.pict3.label }}</label>
+							{{ form.pict3 }}
+							{% if form.pict3.errors %}
+							<p class="text-danger">{{ form.pict3.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.pict3.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				{% endcomment %}
+				</br>
+
+
+				<div class="form-group"> 
+					<button type="submit" class="btn btn-success">Готово</button>
+					</span>
+				</div>
+
+				
+			</form>
+			
+		</div>
+	</div>
+</div>
+
+	</br>
+
+{% endblock %}
+

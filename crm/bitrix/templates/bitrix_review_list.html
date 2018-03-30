@@ -1,0 +1,23 @@
+
+{% load nodetag %}
+
+{% for i in object_list %}
+
+<div class="reviewitem">
+    <blockquote>
+        <h4>			
+			<i class="fa fa-user" aria-hidden="true"></i> {{ i.uname }} <span class="reviewctime">{{ i.ctime|date:"SHORT_DATE_FORMAT" }}</span> 
+		</h4>
+        <p class="text-justify">{{ i.message }}</p>
+		
+		<blockquote>
+			<h5><i class="fa fa-quote-left" aria-hidden="true"></i> Команда Бабах24</h5>
+			<p class="text-justify"><i class="fa fa-commenting-o" aria-hidden="true"></i> {{ i.comment }} </p>
+		</blockquote>
+    </blockquote>
+	
+
+<hr>
+</div>
+
+{% endfor %}

@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+<!-- 	<div class="well">
+	</div> -->
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-shopping-cart" aria-hidden="true"></i> </span>
+					<h2>id: {{ object.id }}</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+
+						<div class="row">
+							<div class="col-md-6">
+								<b>#{{ object.id }}</b>
+								{{ object.ctime|date:"SHORT_DATETIME_FORMAT"}}
+	
+									<span class="label label-{% if object.route == 'external' %}primary{% endif %}{% if object.route == 'internal' %}success{% endif %}">{{ object.get_route_display }}</span>
+		
+
+								<h3>{{ object.phone }}</h3>
+
+								<b>Входящий номер</b>: {{ object.incoming_number }}
+							</div>
+							<div class="col-md-6">
+							</div>
+							
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<h3>Данные в базе о клиенте:</h3>
+								{% if buyer %}
+								<div class="table-responsive">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>Имя</th>
+											<th>Дата рождения</th>
+											<th>Телефон</th>
+										</tr>
+									</thead>
+									{% for b in buyer %}
+									<tr>
+										<td>{{ b.f }} {{ b.i }} {{ b.o }}</td>
+										<td>{{ b.bday|date:"SHORT_DATE_FORMAT"}}</td>
+										<td>{{ b.phone }}</td>
+										{% comment %}
+										<td>
+											<div class="form-group">
+												<a href="{% url 'order:order_event_detail' oe.id %}" target="_blank">Подробнее</a>
+											</div>
+										</td>
+										{% endcomment %}
+									</tr>
+									{% endfor %}
+								</table>
+								</div>
+								{% else %}
+									Отсутствуют
+								{% endif %}
+							</div>
+							<div class="col-md-6">
+								<h3>Заказы клиента:</h3>
+								{% if check %}	
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead>
+											<tr>
+												<th>id</th>
+												<th>Товар</th>
+												<th>Дата</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+										{% for c in check %}
+											<tr>
+												<td>{{ c.id }}</td>
+												<td>
+													{% for ci in c.checkitem_set.all %}
+														<a href="/goods/detail/{{ ci.goods.id }}">{{ ci.goods.name }}</a> {{ ci.price }} р. X {{ ci.col }} {{ ci.unit.value }} = {{ ci.sum }} р.
+														
+														
+														{% if ci.checkd_set.all %}
+														<div class="bg-warning">
+															{% for cd in ci.checkd_set.all %}
+																скидка: {{ cd.discount }} р. <a href="/discount/edit/{{ cd.discounts.id }}">{{ cd.discounts.name }}</a>
+															</br>
+															{% endfor %}
+														</div>
+														{% endif %}
+													{% endfor %}
+												</td>
+												<td>{{ c.time }}</td>
+												<td>{{ c.shop.name }}</td>
+											</tr>
+										{% endfor %}
+										</tbody>
+									</table>
+								</div>
+								<p>Всего: {{ check.count }}</p>
+								{% else %}
+									Отсутствуют
+								{% endif %}
+							</div>
+						</div>
+
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+{% endblock %}
+

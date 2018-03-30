@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	
+	<div class="well">
+		<div class="form-group">
+			<a class="btn btn-success" href="{% url 'materialvalue:materialvalue_cell_add' object.id %}">
+				<i class="fa fa-plus" aria-hidden="true"></i> Добавить ячейку</a>
+		</div>
+	</div>
+
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+		<!-- Widget ID (each widget will need unique ID)-->
+		<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-list-alt" aria-hidden="true"></i> </span>
+					<h2>Ячейки для хранения материальных ценностей</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget content -->
+					<div class="widget-body\">
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Название</th>
+										<th>Контейнер</th>
+										<th>Действия</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list%}
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>{{ i.name }}</td>
+										<td>{{ i.container }}</td>
+										<td>
+											<div class="btn-group">
+												<a class="btn btn-success" href="{% url 'materialvalue:materialvalue_cell_edit' i.id %}">
+													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+												</a>
+												<a class="btn btn-danger" color="gray" href="{% url 'materialvalue:materialvalue_cell_del' i.id %}">
+													<i class="fa fa-remove"></i>
+												</a>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+					
+					</div>
+					<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		
+
+			
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+{% include "paginator.html" %}
+
+{% endblock %}
+

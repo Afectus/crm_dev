@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Смс событие <small>обзвон клиента {{ object.buyer.id1c }}: {{ object.buyer.f }} {{ object.buyer.i }} {{ object.buyer.o }}, тел: {{ object.buyer.phone|hidephone }}</small></h3>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+	
+			<p>
+				<b>Дата:</b>{{ object.cdate|date:"SHORT_DATETIME_FORMAT" }}</br>	
+				<b>Работает:</b> {{ object.status|mybool }}</br>
+				<b>Отправлено:</b> {{ object.send|myboolicon }}</br>
+				<b>Переход клиента:</b> {{ object.back|myboolicon }}</br>
+				<b>Покупатель:</b> {{ object.buyer.phone|hidephone }}</br>
+				{{ object.buyer.f }} {{ object.buyer.i }} {{ object.buyer.o }}</br>
+				{% if object.buyer.male %}
+				пол: {{ object.buyer.male }}
+				{% endif %}
+				</br></br>
+				<b>Сообщение:</b> {{ object.message }}</br></br>
+				
+				{% if not object.result %}
+				<b>Результат:</b> {{ object.result }}</br>
+				{% endif %}
+				
+				<div class="form-group">
+					{% if not object.send %}
+						<div class="form-group">
+						<a href="/smsqsend/edit/{{ object.id }}" class="btn btn-primary btn-sm">изменить</a>
+						</br></br>
+						<a href="/smsqsend/del/{{ object.id }}" class="btn btn-warning btn-sm">Удалить</a>
+								</div>
+					{% endif %}
+				</div>
+							
+							
+			</p>
+			
+		</div>
+	</div>
+</div>
+	
+	
+	
+	</br>
+
+{% endblock %}
+

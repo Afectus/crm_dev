@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load useridea2tag %}
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<div class="well">
+		<div class="form-group">
+			<a class="btn btn-success" href="{% url 'useridea2:ideasection_add' %}"><i class="fa fa-plus" aria-hidden="true"></i> Добавить новый раздел</a>
+			<a class="btn btn-success" href="{% url 'useridea2:useridea_add' %}"><i class="fa fa-plus" aria-hidden="true"></i> Предложить идею</a>
+		</div>
+	</div>
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+		
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-lightbulb-o"></i> </span>
+					<h2>Биржа идей</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						
+						<div id="example_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+							<table id="example" class="display ideasections-table table table-striped table-hover dataTable no-footer" cellspacing="0"
+								width="100%" role="grid" aria-describedby="example_info" style="width: 100%;">
+								{% comment %} <thead>
+									<tr role="row">
+										<th class="details-control sorting_disabled" rowspan="1" colspan="1" aria-label=""></th>
+										<th tabindex="0" aria-controls="example" rowspan="1" colspan="1">Название</th>
+										<th></th>
+									</tr>
+								</thead> {% endcomment %}
+								<tbody>
+									{% for i in object_list %}
+									<tr role="row" class="odd" id="id_ideasection_{{i.id}}_show_detail_row">
+										<td id="id_ideasection_{{i.id}}_show_detail_button" class="details-control"></td>
+										<td class="sorting_1">{{ i.name }}</td>
+										<td align="right">
+											<div class="btn-group">
+												<a class="btn btn-success" href="{% url 'useridea2:ideasection_edit' i.id %}">
+													<i class="fa fa-pencil-square-o" aria-hidden="true"></i> Редактировать</a>
+												<a class="btn btn-danger" color="gray" href="{% url 'useridea2:ideasection_del' i.id %}">
+													<i class="fa fa-remove"></i> Удалить</a>
+											</div>
+										</td>
+									</tr>
+
+									<tr id="id_ideasection_{{i.id}}_first">
+										<td colspan="9">
+											<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-condensed">
+												<tbody>
+													{% for idea in i.useridea_set.all|slice:"0:3"  %}
+														{% if idea  %}
+															<tr>
+																<td width="2%">{{idea.id}}</td>
+																<td width="35%"><a href="{% url 'useridea2:useridea_detail' idea.id %}">{{idea.name}}</a>
+																</td>
+																<td width="10%">
+																	<div class="project-members">
+																	{% comment %} {{idea.user.user|who}} {% endcomment %}
+																	{% if idea.user.photo %}
+																		<a href="javascript:void(0)" title="{{ idea.user.user.first_name }} {{ idea.user.user.last_name }}"><img src="{{ idea.user.photosmall.url }}" class="away" /></a>
+																	{% else %}
+																		<a href="javascript:void(0)" title="{{ idea.user.user.first_name }} {{ idea.user.user.last_name }}"><img src="/static/img/nophoto.png" class="away" /></a>
+																	{% endif %}
+																	</div>
+																</td>
+																<td width="10%">{{idea.rating}} <i class="fa fa-star" aria-hidden="true" style="color:gold"></i></td>
+																<td width="10%">
+																	
+																	{% if idea.status == 'under_consideration' %}
+																		<span class="label label-primary">{{idea.get_status_display}}</span>
+																	{% elif idea.status == 'adopted' %}
+																		<span class="label label-success">{{idea.get_status_display}}</span>
+																	{% elif idea.status == 'rejected' %}
+																		<span class="label label-danger">{{idea.get_status_display}}</span>
+																	{% endif %}
+																		
+																	
+																	
+																</td>
+																<td width="10%" align="right">{{ idea.ctime|time:"H:i" }} {{ idea.ctime|date:"d.m.Y" }}</td>
+																<td align="right">
+																	<div class="btn-group">
+																		<a class="btn btn-success btn-xs" href="{% url 'useridea2:useridea_detail' idea.id %}">
+																			<i class="fa fa-folder-open-o" aria-hidden="true"></i> Подробнее</a>
+																		{% comment %} <a class="btn btn-danger" color="gray" href="{% url 'useridea2:ideasection_del' i.id %}">
+																			<i class="fa fa-remove"></i> Удалить</a> {% endcomment %}
+																	</div>
+
+																</td>
+															</tr>
+														{% endif %}
+													{% endfor %}
+												</tbody>
+											</table>
+										</td>
+									</tr>
+
+									<tr id="id_ideasection_{{i.id}}_all" hidden>
+										<td colspan="9">
+												<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-condensed" id="the_first_numbers_of_ideas">
+													<tbody>
+														{% for idea in i.useridea_set.all  %}
+															{% if idea  %}
+																<tr>
+																		<td width="2%">{{idea.id}}</td>
+																		<td width="35%">{{idea.name}}</td>
+																		<td width="10%">
+																			<div class="project-members">
+																			{% comment %} {{idea.user.user|who}} {% endcomment %}
+																			{% if idea.user.photo %}
+																				<a href="javascript:void(0)" title="{{ idea.user.user.first_name }} {{ idea.user.user.last_name }}"><img src="{{ idea.user.photosmall.url }}" class="away" /></a>
+																			{% else %}
+																				<a href="javascript:void(0)" title="{{ idea.user.user.first_name }} {{ idea.user.user.last_name }}"><img src="/static/img/nophoto.png" class="away" /></a>
+																			{% endif %}
+																			</div>
+																		</td>
+																		<td width="10%">{{idea.rating}} <i class="fa fa-star" aria-hidden="true" style="color:gold"></i></td>
+																		<td width="10%">
+																			{% if idea.status == 'under_consideration' %}
+																				<span class="label label-primary">{{idea.get_status_display}}</span>
+																			{% elif idea.status == 'adopted' %}
+																				<span class="label label-success">{{idea.get_status_display}}</span>
+																			{% elif idea.status == 'rejected' %}
+																				<span class="label label-danger">{{idea.get_status_display}}</span>
+																			{% endif %}
+																		</td>
+																		<td width="10%" align="right">{{ idea.ctime|time:"H:i" }} {{ idea.ctime|date:"d.m.Y" }}</td>
+																		<td align="right">
+																			<div class="btn-group">
+																				<a class="btn btn-success btn-xs" href="{% url 'useridea2:useridea_detail' idea.id %}">
+																					<i class="fa fa-folder-open-o" aria-hidden="true"></i> Подробнее</a>
+																				{% comment %} <a class="btn btn-danger" color="gray" href="{% url 'useridea2:ideasection_del' i.id %}">
+																					<i class="fa fa-remove"></i> Удалить</a> {% endcomment %}
+																			</div>
+		
+																		</td>
+																</tr>
+															{% endif %}
+														{% endfor %}
+													</tbody>
+												</table>
+											</td>
+										</tr>
+									<script>
+											$('#id_ideasection_{{i.id}}_show_detail_button').on('click', () => {
+												$('#id_ideasection_{{i.id}}_first').toggle();
+												$('#id_ideasection_{{i.id}}_all').toggle();
+												$('#id_ideasection_{{i.id}}_show_detail_row').toggleClass('shown');
+											});
+									</script>
+									{% endfor %}
+								</tbody>
+							</table>
+
+						</div>
+
+					</div>
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-thumbs-up"></i> </span>
+					<h2>Топ</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+						
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+					{% thebestofthebest as count_ideas %}
+					<div class="col-md-4">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Генератор идей</th>
+									<th>Количество идей</th>
+								</tr>
+							</thead>
+								<tbody>
+									{% for user in count_ideas.0  %}
+										{% if user.1 != 0 %}
+											<tr>
+												<td>
+													{{user.0.user|who}}
+												</td>
+												<td>
+													{{user.1}}
+												</td>
+											</tr>
+										{% endif %}
+									{% endfor %}
+									
+								</tbody>
+						</table>
+						
+					</div>
+					
+					<div class="col-md-4">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Лучший критик</th>
+									<th>Количество оценок</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for user in count_ideas.1 %}
+									{% if user.1 != 0 %}
+										<tr>
+											<td>
+												{{user.0.user|who}}
+											</td>
+											<td>
+												{{user.1}}
+											</td>
+										</tr>
+									{% endif %}
+								{% endfor %}
+						
+							</tbody>
+						</table>
+					</div>	
+					
+					<div class="col-md-4">
+							<table class="table">
+									<thead>
+										<tr>
+											<th>Генератор реализованных идей</th>
+											<th>Количество реализованных идей</th>
+										</tr>
+									</thead>
+										<tbody>
+											{% for user in count_ideas.2  %}
+												{% if user.1 != 0 %}
+													<tr>
+														<td>
+															{{user.0.user|who}}
+														</td>
+														<td>
+															{{user.1}}
+														</td>
+													</tr>	
+												{% endif %}
+											{% endfor %}
+											
+										</tbody>
+								</table>
+					</div>
+					
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+{% endblock %}
+

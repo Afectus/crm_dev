@@ -1,0 +1,296 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+	<div class="well">
+	
+		<div class="form-group">
+			<a href="/personal/list/" class="btn btn-success btn-xs btn-block">СПИСОК СОТРУДНИКОВ</a>
+		</div>
+	
+	</div>
+
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-user-circle-o" aria-hidden="true"></i> </span>
+					<h2>Карточка сотрудника</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+						
+
+						<div class="row">
+							<div class="col-md-3">
+								{% if object.photo %}
+									</br>
+									<img class="img-responsive user-photo" src="{{ object.photosmall.url }}">
+								{% else %}
+									</br>
+									<img class="img-responsive user-photo" src="/static/img/nophoto.png">
+								{% endif %}
+								</br>
+								<div class="form-group">
+									<a href="/personal/edit/{{ object.id }}" class="btn btn-success">Редактировать профиль</a>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<h3>{{ object.user.first_name }} {{ object.user.last_name }} <small>{{ object.get_role_display }}, тел. {{ object.phone }}</small></h3>
+								
+								<div class="table-responsive">
+								<table class="table table-bordered table-striped">
+									<tbody>
+										<tr>
+											<td>Статус сотрудника</td>
+											<td>{{ object.get_status_display }}</td>
+										</tr>
+										{% if object.bday %}
+										<tr>
+											<td>День рождения</td>
+											<td>{{ object.bday|date:"SHORT_DATE_FORMAT" }}</td>
+										</tr>
+										{% endif %}
+										{% if object.position %}
+										<tr>
+											<td>Отдел</td>
+											<td>{{ object.position }}</td>
+										</tr>
+										{% endif %}
+										{% if object.phone %}
+										<tr>
+											<td>Мобильный телефон</td>
+											<td>{{ object.phone }}</td>
+										</tr>
+										{% endif %}
+										{% if object.phonework %}
+										<tr>
+											<td>Рабочий телефон</td>
+											<td>{{ object.phonework }}</td>
+										</tr>
+										{% endif %}
+										{% if object.email %}
+										<tr>
+											<td>Электронная почта</td>
+											<td>{{ object.email }}</td>
+										</tr>
+										{% endif %}
+									</tbody>
+								</table>
+								</div>
+							</div>
+						</div>
+						
+						
+						
+						<div class="row">
+							<div class="col-md-12">
+								<div class="table-responsive">
+								<table class="table table-bordered table-striped">
+									<tbody>
+										{% if object.shop.all %}
+										<tr>
+											<td>Магазины</td>
+											<td>
+												{% for s in object.shop.all %}
+													{{ s.name }}
+												{% endfor %}
+											</td>
+										</tr>
+										{% endif %}
+										
+										<tr>
+											<td>
+												Дети
+											</td>
+											<td>
+												{% for pc in object.personalchild_set.all %}
+													{{ pc.name }} {{ pc.bday|date:"SHORT_DATE_FORMAT" }}
+													
+													<a href="/personal/edit/child/{{ pc.id }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+													
+													<a href="/personal/remove/child/{{ pc.id }}"><i class="fa fa-times" aria-hidden="true"></i></a>
+													</br>
+												{% empty %}
+													Нет
+												{% endfor %}
+												<a href="/personal/add/child/{{ object.id }}">Добавить</a>
+											</td>
+										</tr>
+										
+
+										<tr>
+											<td>
+												Подвиги
+											</td>
+											<td>
+												{% for pf in object.personalfeat_set.all %}
+													<a href="{% url 'personal:detail_feat' pf.id %}">{{ pf.name }} {{ pf.ctime|date:"SHORT_DATE_FORMAT" }}</a>
+													
+													<a href="/personal/edit/feat/{{ pf.id }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+													
+													<a href="/personal/remove/feat/{{ pf.id }}"><i class="fa fa-times" aria-hidden="true"></i></a>
+													</br>
+												{% empty %}
+													Нет
+												{% endfor %}
+												<a href="/personal/add/feat/{{ object.id }}">Добавить</a>
+											</td>
+										</tr>
+										
+										<tr>
+											<td>Подпись письма</td>
+											<td>
+												<div class="form-group">
+													<a href="/personal/signature/{{ object.user.id }}" target="_blank">показать подпись</a>
+												</div>
+											</td>
+										</tr>
+										
+										<tr>
+											<td>Персональные данные</td>
+											<td>
+												<div class="form-group">
+													<a href="{% url 'personal:personaldata_edit' object.id %}">[редактировать персональные данные]</a>
+												</div>
+											</td>
+										</tr>
+										
+										<tr>
+											<td>Образование</td>
+											<td>
+												{{ object.get_edu_display }}
+											</td>
+										</tr>
+										
+										{% if object.diplom %}
+										<tr>
+											<td>Диплом об образовании</td>
+											<td>
+												{{ object.diplom }}
+											</td>
+										</tr>
+										{% endif %}
+										
+										<tr>
+											<td>Общая информация</td>
+											<td>
+												{{ object.message }}
+											</td>
+										</tr>
+
+									</tbody>
+								</table>
+								</div>
+							</div>
+						</div>
+						
+						{% comment %}
+						<div class="row">
+							<div class="col-md-12">
+								<h3>Анкетные данные</h3>
+								{% if object.personalanketa_set.get %}
+									
+									<div class="form-group">
+										<a class="btn btn-xs btn-primary" href="{% url 'personal:personalanketa_edit' object.personalanketa_set.get.id %}">Редактировать</a>
+									</div>
+									
+									<p>
+									
+										{% if object.personalanketa_set.get.pict %}
+											<img class="img-responsive user-photo" src="{{ i.pict200.url }}">
+										{% endif %}
+									
+										<b>Статус:</b> {{ object.personalanketa_set.get.get_status_display }}
+										</br>
+										
+										{% if object.personalanketa_set.get.name %}
+										<b>Имя:</b> {{ object.personalanketa_set.get.name }}
+										</br>
+										{% endif %}
+										
+										{% if object.personalanketa_set.get.bday %}
+										<b>День рождения:</b> {{ object.personalanketa_set.get.bday }}
+										</br>
+										{% endif %}
+										
+										{% if object.personalanketa_set.get.phone %}
+										<b>Телефон:</b> {{ object.personalanketa_set.get.phone }}
+										</br>
+										{% endif %}
+										
+										{% if object.personalanketa_set.get.message %}
+										<b>Информация:</b> {{ object.personalanketa_set.get.message }}
+										</br>
+										{% endif %}
+										
+									</p>
+								{% else %}
+									<div class="form-group">
+										<a href="{% url 'personal:personalanketa_add'  object.id %}" class="btn btn-success">Добавить анкету</a>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+						{% endcomment %}
+						
+						
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+{% endblock %}
+

@@ -1,0 +1,5 @@
+#migrate from mysql to postgresql
+apt-get install php5-pgsql
+git clone https://github.com/AnatolyUss/FromMySqlToPostgreSql
+#config sample_config.json
+php /home/disc/FromMySqlToPostgreSql/index.php /home/disc/FromMySqlToPostgreSql/sample_config.json

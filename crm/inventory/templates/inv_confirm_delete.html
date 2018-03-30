@@ -1,0 +1,45 @@
+{% extends "invbase.html" %}
+
+{% load i18n %}
+
+{% block title %}Подтверждение действий{% endblock %}
+{% block description %}{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Панель управления <small>Подтверждение действий</small></h3>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+		<form action="" method="post" enctype="multipart/form-data" role="form">{% csrf_token %}
+		
+			<h4>{{ msg }} "{{ object.goods.name }}" {{ object.barcode }} ?</h4>
+
+			
+			<div class="form-group">
+				<button type="submit" class="btn btn-success">Удалить?</button>
+				<a href="{{ back_url }}">Отмена</a>
+			</div>
+		</form>
+			
+		</br>
+			
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+

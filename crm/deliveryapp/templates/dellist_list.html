@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<!-- START ROW -->
+	<div class="row">
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+					<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+				<header>
+					<h2>Фильтр </h2>
+				</header>
+				<!-- widget div-->
+				<div>
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+					<!-- widget content -->
+					<div class="widget-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<a href="{% url 'dellist_add' %}" class="btn btn-success">Создать доставку</a>
+									<a href="{% url 'dellist_mylist' %}" class="btn btn-success">Мои доставки</a>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<form class="smart-form" id="form_filter" action="" method="get" role="form">
+									<fieldset>
+										<label class="label">{{ form.sort.label }}</label>
+										<label class="input">
+											{{ form.sort }}
+										</label>
+										{% if form.sort.errors %}
+										<p class="text-danger">{{ form.sort.errors|striptags }}</p>
+										{% endif %}										
+										<div class="note">{{ form.sort.field.help_text  }}</div>
+									</fieldset>	
+									<footer>
+										<div class="pull-left"><h4>Найдено: {{ object_list.count }}</h4></div>
+										<button type="submit" class="btn btn-primary">Применить</button>
+										<a href="{% url 'dellist_list' %}" class="btn btn-default">Сбросить</a>
+									</footer>
+								</form>
+							</div>
+						</div>
+					<!-- end widget content -->
+					</div>
+				<!-- end widget div -->
+				</div>
+			<!-- end widget -->
+			</div>
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Список доставок</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Инфо</th>
+										<th>Адрес</th>
+										<th>Район</th>
+										<th>Комментарий</th>
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{{object_list.0.status}}
+								{% for i in object_list %}
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>
+												Доставка была созданна: {{ i.ctime|date:"SHORT_DATETIME_FORMAT"}}
+											    <br>
+											    Последние обновления были: {{ i.utime|date:"SHORT_DATETIME_FORMAT"}}
+											    </br>
+												<b>Статус:</b>
+												</br>
+												{% if i.status == 'wait' %}
+												<font color="red">{{i.get_status_display}}</font>
+												{% endif %}
+												{% if i.status == 'cancel' %}
+												<font color="red">{{i.get_status_display}}</font>
+												{% endif %}
+												{% if i.status == 'accept' %}
+												<font color="DarkOliveGreen">{{i.get_status_display}}</font>
+												{% endif %}
+												{% if i.status == 'success' %}
+												<font color="DarkGreen">{{i.get_status_display}}</font>
+												{% endif %}
+										</td>
+										<td>
+											{{i.addr}}
+										</td>
+										<td>{{ i.get_area_display }}</td>
+										<td>{{ i.comment }}</td>
+										<td>
+											<div class="form-group">
+												<a href="{% url 'dellist_detail' i.id %}" class="btn btn-success" target="_blank">Подробнее</a>
+											</div>
+										</td>
+										<td>
+											<div class="form-group">
+												<a href="{% url 'dellist_edit' i.id %}" class="btn btn-success" target="_blank">Редактировать</a>
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- END COL -->
+	</div>
+	<!-- END ROW -->
+</section>
+
+{% include "paginator.html" %}
+{% endblock %}

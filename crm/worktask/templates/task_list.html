@@ -1,0 +1,430 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load tasktag %}
+
+
+{% unreadtask as myunreadtask %}
+{% if myunreadtask.exists %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Не прочитанных (новых) заданий: {{ myunreadtask.count }}</h4>
+		</div>
+	</div>
+</div>
+{% endif %}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<caption><h3>Список моих задач</h3></caption>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Сроки</th>
+						<th>Статус</th>
+						<th>Тип задания</th>
+						<th>Создатель</th>
+						<th>Заголовок</th>
+						<th>Описание</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for i in task_reglamentfree %}
+						{% newtask i as new %}
+						<tr>
+							<td>
+								<a href="/worktask/detail/{{ i.id }}">{{ i.id }}</a>
+							</td>
+							<td>
+								{{ i.ctime|date:"SHORT_DATETIME_FORMAT" }} 
+								</br>-</br>
+								{{ i.etime|date:"SHORT_DATETIME_FORMAT" }}
+							</td>
+							<td>
+								<span class="label label-{% if i.status == 'open' %}primary{% else %}default{% endif %}">
+								{{ i.get_status_display }}
+								</span>
+																
+								{% if not new %}
+									<span class="label label-warning">НЕ ПРОЧИТАНО</span>
+								{% endif %}
+							</td>
+							<td>
+								Приоритет {{ i.get_priority_display }}
+								</br>
+								<span class="text-muted">{{ i.get_type_display }}</span>
+							</td>
+							<td>
+								{{ i.user.first_name }} {{ i.user.last_name }}
+							</td>
+							<td><a href="/worktask/detail/{{ i.id }}">{{ i.name }}</a></td>
+							<td>
+								{{ i.message|truncatechars:100 }}
+								
+								{% if i.filetask_set.all %}
+									</br>
+									<span class="text-muted">файлов в задании: {{ i.filetask_set.all.count }}</span>
+								{% endif %}
+								
+								{% if i.liketask_set.all %}
+									<div>
+									<span class="text-muted">Пользователи оценили задание ({{ i.liketask_set.all.count }} голоса(ов))</span>
+									<table class="table table-condensed">
+										<thead>
+										  <tr>
+											<th></th>
+											<th></th>
+										  </tr>
+										</thead>
+										<tbody>
+											{% for lt in i.liketask_set.all %}
+												<tr>
+													<td>{{ lt.user.first_name }} {{ lt.user.last_name }}</td>
+													<td>{{ lt.value|ratingstar }} </td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+									</div>
+								{% endif%}
+
+								{% if i.commenttask_set.all %}
+									<div class="thumbnail">
+										<i class="fa fa-user" aria-hidden="true"></i> {{ i.commenttask_set.all.last.user.first_name }} {{ i.commenttask_set.all.last.user.last_name }} <small class="text-muted">последний комментарий {{ i.commenttask_set.all.last.ctime|date:"SHORT_DATETIME_FORMAT" }}</small>
+										</br>
+										<i class="fa fa-commenting-o" aria-hidden="true"></i> {{ i.commenttask_set.all.last.message|safe|truncatechars:"40" }}
+										</br>
+										<a href="/worktask/detail/{{ i.id }}">смотреть все комментарии: {{ i.commenttask_set.all.count }}</a>
+									</div>
+								{% endif %}
+							</td>
+							<td>
+								<div class="form-group">
+									<a href="/worktask/detail/{{ i.id }}" class="btn btn-success btn-xs">подробнее</a>
+								</div>
+							</td>
+						</tr>
+					{% empty %}
+						<tr><td colspan="100%">нет записей</td></tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<caption><h3>Созданные задачи</h3></caption>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Сроки</th>
+						<th>Статус</th>
+						<th>Тип задания</th>
+						<th>Создатель</th>
+						<th>Заголовок</th>
+						<th>Описание</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for i in task_create %}
+						<tr>
+							<td>
+								<a href="/worktask/detail/{{ i.id }}">{{ i.id }}</a>
+								
+							</td>
+							<td>
+								{{ i.ctime|date:"SHORT_DATETIME_FORMAT" }} 
+								</br>-</br>
+								{{ i.etime|date:"SHORT_DATETIME_FORMAT" }}
+							</td>
+							<td>
+								<span class="label label-{% if i.status == 'open' %}primary{% else %}default{% endif %}">
+								{{ i.get_status_display }}
+								</span>
+							</td>
+							<td>
+								Приоритет {{ i.get_priority_display }}
+								</br>
+								<span class="text-muted">{{ i.get_type_display }}</span>
+							</td>
+							<td>
+								{{ i.user.first_name }} {{ i.user.last_name }}
+							</td>
+							<td><a href="/worktask/detail/{{ i.id }}">{{ i.name }}</a></td>
+							<td>
+								{{ i.message|truncatechars:100 }}
+								
+								{% if i.filetask_set.all %}
+									</br>
+									<span class="text-muted">файлов в задании: {{ i.filetask_set.all.count }}</span>
+								{% endif %}
+								
+								{% if i.liketask_set.all %}
+									<div>
+									<span class="text-muted">Пользователи оценили задание ({{ i.liketask_set.all.count }} голоса(ов))</span>
+									<table class="table table-condensed">
+										<thead>
+										  <tr>
+											<th></th>
+											<th></th>
+										  </tr>
+										</thead>
+										<tbody>
+											{% for lt in i.liketask_set.all %}
+												<tr>
+													<td>{{ lt.user.first_name }} {{ lt.user.last_name }}</td>
+													<td>{{ lt.value|ratingstar }} </td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+									</div>
+								{% endif%}
+
+								{% if i.commenttask_set.all %}
+									<div class="thumbnail">
+										<i class="fa fa-user" aria-hidden="true"></i> {{ i.commenttask_set.all.last.user.first_name }} {{ i.commenttask_set.all.last.user.last_name }} <small class="text-muted">последний комментарий {{ i.commenttask_set.all.last.ctime|date:"SHORT_DATETIME_FORMAT" }}</small>
+										</br>
+										<i class="fa fa-commenting-o" aria-hidden="true"></i> {{ i.commenttask_set.all.last.message|safe|truncatechars:"40" }}
+										</br>
+										<a href="/worktask/detail/{{ i.id }}">смотреть все комментарии: {{ i.commenttask_set.all.count }}</a>
+									</div>
+								{% endif %}
+							</td>
+							<td>
+								<div class="form-group">
+									<a href="/worktask/detail/{{ i.id }}" class="btn btn-success btn-xs">подробнее</a>
+								</div>
+							</td>
+						</tr>
+					{% empty %}
+						<tr><td colspan="100%">нет записей</td></tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<caption><h3>Свободные задания</h3></caption>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Сроки</th>
+						<th>Статус</th>
+						<th>Тип задания</th>
+						<th>Создатель</th>
+						<th>Заголовок</th>
+						<th>Описание</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for i in task_free %}
+						<tr>
+							<td>
+								<a href="/worktask/detail/{{ i.id }}">{{ i.id }}</a>
+							</td>
+							<td>
+								{{ i.ctime|date:"SHORT_DATETIME_FORMAT" }} 
+								</br>-</br>
+								{{ i.etime|date:"SHORT_DATETIME_FORMAT" }}
+							</td>
+							<td>
+								<span class="label label-{% if i.status == 'open' %}primary{% else %}default{% endif %}">
+								{{ i.get_status_display }}
+								</span>
+							</td>
+							<td>
+								Приоритет {{ i.get_priority_display }}
+								</br>
+								<span class="text-muted">{{ i.get_type_display }}</span>
+							</td>
+							<td>
+								{{ i.user.first_name }} {{ i.user.last_name }}
+							</td>
+							<td><a href="/worktask/detail/{{ i.id }}">{{ i.name }}</a></td>
+							<td>
+								{{ i.message|truncatechars:100 }}
+								
+								{% if i.filetask_set.all %}
+									</br>
+									<span class="text-muted">файлов в задании: {{ i.filetask_set.all.count }}</span>
+								{% endif %}
+								
+								{% if i.liketask_set.all %}
+									<div>
+									<span class="text-muted">Пользователи оценили задание ({{ i.liketask_set.all.count }} голоса(ов))</span>
+									<table class="table table-condensed">
+										<thead>
+										  <tr>
+											<th></th>
+											<th></th>
+										  </tr>
+										</thead>
+										<tbody>
+											{% for lt in i.liketask_set.all %}
+												<tr>
+													<td>{{ lt.user.first_name }} {{ lt.user.last_name }}</td>
+													<td>{{ lt.value|ratingstar }} </td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+									</div>
+								{% endif%}
+
+								{% if i.commenttask_set.all %}
+									<div class="thumbnail">
+										<i class="fa fa-user" aria-hidden="true"></i> {{ i.commenttask_set.all.last.user.first_name }} {{ i.commenttask_set.all.last.user.last_name }} <small class="text-muted">последний комментарий {{ i.commenttask_set.all.last.ctime|date:"SHORT_DATETIME_FORMAT" }}</small>
+										</br>
+										<i class="fa fa-commenting-o" aria-hidden="true"></i> {{ i.commenttask_set.all.last.message|safe|truncatechars:"40" }}
+										</br>
+										<a href="/worktask/detail/{{ i.id }}">смотреть все комментарии: {{ i.commenttask_set.all.count }}</a>
+									</div>
+								{% endif %}
+							</td>
+							<td>
+								<div class="form-group">
+									<a href="/worktask/detail/{{ i.id }}" class="btn btn-success btn-xs">подробнее</a>
+								</div>
+							</td>
+						</tr>
+					{% empty %}
+						<tr><td colspan="100%">нет записей</td></tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<caption><h3>Закрытые задания</h3></caption>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Сроки</th>
+						<th>Статус</th>
+						<th>Тип задания</th>
+						<th>Создатель</th>
+						<th>Заголовок</th>
+						<th>Описание</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>
+								<a href="/worktask/detail/{{ i.id }}">{{ i.id }}</a>
+							</td>
+							<td>
+								{{ i.ctime|date:"SHORT_DATETIME_FORMAT" }} 
+								</br>-</br>
+								{{ i.etime|date:"SHORT_DATETIME_FORMAT" }}
+							</td>
+							<td>
+								<span class="label label-{% if i.status == 'open' %}primary{% else %}default{% endif %}">
+								{{ i.get_status_display }}
+								</span>
+							</td>
+							<td>
+								Приоритет {{ i.get_priority_display }}
+								</br>
+								<span class="text-muted">{{ i.get_type_display }}</span>
+							</td>
+							<td>
+								{{ i.user.first_name }} {{ i.user.last_name }}
+							</td>
+							<td><a href="/worktask/detail/{{ i.id }}">{{ i.name }}</a></td>
+							<td>
+								{{ i.message|truncatechars:100 }}
+								
+								{% if i.filetask_set.all %}
+									</br>
+									<span class="text-muted">файлов в задании: {{ i.filetask_set.all.count }}</span>
+								{% endif %}
+								
+								{% if i.liketask_set.all %}
+									<div>
+									<span class="text-muted">Пользователи оценили задание ({{ i.liketask_set.all.count }} голоса(ов))</span>
+									<table class="table table-condensed">
+										<thead>
+										  <tr>
+											<th></th>
+											<th></th>
+										  </tr>
+										</thead>
+										<tbody>
+											{% for lt in i.liketask_set.all %}
+												<tr>
+													<td>{{ lt.user.first_name }} {{ lt.user.last_name }}</td>
+													<td>{{ lt.value|ratingstar }} </td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+									</div>
+								{% endif%}
+
+								{% if i.commenttask_set.all %}
+									<div class="thumbnail">
+										<i class="fa fa-user" aria-hidden="true"></i> {{ i.commenttask_set.all.last.user.first_name }} {{ i.commenttask_set.all.last.user.last_name }} <small class="text-muted">последний комментарий {{ i.commenttask_set.all.last.ctime|date:"SHORT_DATETIME_FORMAT" }}</small>
+										</br>
+										<i class="fa fa-commenting-o" aria-hidden="true"></i> {{ i.commenttask_set.all.last.message|safe|truncatechars:"40" }}
+										</br>
+										<a href="/worktask/detail/{{ i.id }}">смотреть все комментарии: {{ i.commenttask_set.all.count }}</a>
+									</div>
+								{% endif %}
+							</td>
+							<td>
+								<div class="form-group">
+									<a href="/worktask/detail/{{ i.id }}" class="btn btn-success btn-xs">подробнее</a>
+								</div>
+							</td>
+						</tr>
+					{% empty %}
+						<tr><td colspan="100%">нет записей</td></tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+{% include "paginator.html" %}
+
+	
+	
+	
+	</br>
+
+{% endblock %}
+

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+<script>
+function closewindow()
+{
+	window.close();
+}
+
+$(document).ready(function() {
+	window.close();
+});
+</script>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Автоматическое перенаправление</h4>
+		</div>
+	</div>
+</div>
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+		<div class="form-group">
+			<a href="#" class="btn btn-success" onclick="closewindow();">Закрыть</a>
+		</div>
+			
+		</div>
+	</div>
+</div>
+	
+
+	</br>
+
+{% endblock %}
+

@@ -1,0 +1,571 @@
+{% extends "base.html" %}
+{% block title %}Панель управления - список покупателей{% endblock %}
+{% block description %}Панель управления - список покупателей{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+{% load buyertag %}
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<h2>Фильтр </h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+
+					
+						<form class="smart-form" id="form_filter" action="/buyer/list/" method="get" role="form">
+						{# {% csrf_token %} #}
+
+						{% for hidden in form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+						
+						{# {% for i in form.visible_fields %} #}
+						{# {% endfor %} #}
+
+							<header>
+								<h3>Список покупателей <small>клиентов</small></h3>
+							</header>
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label class="label">{{ form.q.label }}</label>
+										<label class="input">
+											{{ form.q }}
+										</label>
+										{% if form.q.errors %}
+										<p class="text-danger">{{ form.q.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.q.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label class="label">{{ form.dcard.label }}</label>
+										<label class="input">
+											{{ form.dcard }}
+										</label>
+										{% if form.dcard.errors %}
+										<p class="text-danger">{{ form.dcard.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.dcard.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-4">
+										<label>{{ form.bdstart.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.bdstart }}
+										</label>
+										{% if form.bdstart.errors %}
+										<p class="text-danger">{{ form.bdstart.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.bdstart.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										<label>{{ form.bdend.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.bdend }}
+										</label>
+										{% if form.bdend.errors %}
+										<p class="text-danger">{{ form.bdend.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.bdend.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										
+										<label class="checkbox">
+											{{ form.dm }}
+											<i></i>
+											{{ form.dm.label }}
+										</label>	
+										<div class="note">{{ form.dm.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label>{{ form.checkdatestart.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.checkdatestart }}
+										</label>
+										{% if form.checkdatestart.errors %}
+										<p class="text-danger">{{ form.checkdatestart.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.checkdatestart.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label>{{ form.checkdateend.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.checkdateend }}
+										</label>
+										{% if form.checkdateend.errors %}
+										<p class="text-danger">{{ form.checkdateend.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.checkdateend.field.help_text  }}</div>
+									</section>
+									{% comment %}
+									<section class="col col-4">
+										
+										<label class="checkbox">
+											{{ form.checkdatedm }}
+											<i></i>
+											{{ form.checkdatedm.label }}
+										</label>	
+										<div class="note">{{ form.checkdatedm.field.help_text  }}</div>
+									</section>
+									{% endcomment %}
+								</div>
+							</fieldset>	
+							
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label>{{ form.nocheckdatestart.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.nocheckdatestart }}
+										</label>
+										{% if form.nocheckdatestart.errors %}
+										<p class="text-danger">{{ form.nocheckdatestart.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.nocheckdatestart.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label>{{ form.nocheckdateend.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.nocheckdateend }}
+										</label>
+										{% if form.nocheckdateend.errors %}
+										<p class="text-danger">{{ form.nocheckdateend.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.nocheckdateend.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label class="label">{{ form.sumfrom.label }}</label>
+										<label class="input">
+											{{ form.sumfrom }}
+										</label>
+										{% if form.sumfrom.errors %}
+										<p class="text-danger">{{ form.sumfrom.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.sumfrom.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label class="label">{{ form.sumto.label }}</label>
+										<label class="input">
+											{{ form.sumto }}
+										</label>
+										{% if form.sumto.errors %}
+										<p class="text-danger">{{ form.sumto.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.sumto.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-2">
+										<label class="label">{{ form.bonusfrom.label }}</label>
+										<label class="input">
+											{{ form.bonusfrom }}
+										</label>
+										{% if form.bonusfrom.errors %}
+										<p class="text-danger">{{ form.bonusfrom.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.bonusfrom.field.help_text  }}</div>
+									</section>
+									<section class="col col-2">
+										<label class="label">{{ form.bonusto.label }}</label>
+										<label class="input">
+											{{ form.bonusto }}
+										</label>
+										{% if form.bonusto.errors %}
+										<p class="text-danger">{{ form.bonusto.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.bonusto.field.help_text  }}</div>
+									</section>
+									<section class="col col-2">
+										<label class="label">{{ form.sort.label }}</label>
+										<label class="input">
+											{{ form.sort }}
+										</label>
+										{% if form.sort.errors %}
+										<p class="text-danger">{{ form.sort.errors|striptags }}</p>
+										{% endif %}										
+										<div class="note">{{ form.sort.field.help_text  }}</div>
+									</section>
+									<section class="col col-3">
+										<label class="label">{{ form.adv.label }}</label>
+										<label class="input">
+											{{ form.adv }}
+										</label>
+										{% if form.adv.errors %}
+										<p class="text-danger">{{ form.adv.errors|striptags }}</p>
+										{% endif %}											
+										<div class="note">{{ form.adv.field.help_text  }}</div>
+									</section>
+									<section class="col col-3">
+										<label class="label">{{ form.anketa.label }}</label>
+										<label class="input">
+											{{ form.anketa }}
+										</label>	
+										{% if form.anketa.errors %}
+										<p class="text-danger">{{ form.anketa.errors|striptags }}</p>
+										{% endif %}		
+										<div class="note">{{ form.anketa.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							<fieldset>
+								<div class="row">
+									<section class="col col-4">
+										<label class="checkbox">
+											{{ form.withphone }}
+											<i></i>
+											{{ form.withphone.label }}
+										</label>	
+										<div class="note">{{ form.withphone.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+									</section>
+									<section class="col col-4">
+
+									</section>
+								</div>
+							</fieldset>	
+							
+							<footer>
+								<div class="pull-left">
+								
+									<h4>Найдено: {{ count }}</h4>
+									<h4>Сумма: {{ totalsum }}</h4>
+								</div>
+														
+								<script>
+								function exportjson(e) {
+									dataurl = $('#form_filter').serialize();
+									dataurl = 'http://crm.babah24.ru/buyer/list/{% now "iHdmy" %}.json?'+dataurl+'&exportjson=on';
+									console.log(dataurl);
+									$(e).attr('href', dataurl);
+									$(e).addClass('disabled');
+									return true;
+								}
+
+								</script>
+								<a href="#" class="btn btn-default" onclick="exportjson(this);" target="_blank" download>Экспорт в json</a>
+								
+								
+								<button type="submit" class="btn btn-primary">Применить</button>
+								<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+								<a href="/buyer/list" class="btn btn-default">Сбросить</a>
+								
+							</footer>
+						</form>
+
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+			
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>СПИСОК</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+
+						<div class="table-responsive">
+								
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id/id1c</th>
+										<th>Телефон</th>
+										<th>Данные</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+									<tr>
+										<td><a href="/buyer/detail/{{ i.id }}">{{ i.id }}</a> {{ i.id1c }}</td>
+										<td>
+											{% if i.phone %}
+												{{ i.phone|hidephone }}
+												</br>
+												<span class="callresult">
+												<a href="#" onclick="makecall(this, {{ i.id }}); return false;">Позвонить</a>
+												</span>
+											{% endif %}
+
+
+											{% buyer__discountcard__all i.id as list %}
+											{% if list %}
+												</br>
+												<span>Диск. карта:</span> </br>
+												{% for iter in list %}
+													<span>{{ iter.name }}</span> </br>
+												{% endfor %}
+											{% endif %}
+											
+											
+											</br>
+											Бонус: {{ i.bonussum }} ({{ i.id|buyersumbonus }})
+											</br>
+											Согласие на рассылку: {{ i.adv|mybool }}
+											{% if i.anketa %}
+												</br>
+												<a href="/media/{{ i.anketa }}" target="_blank">Анкета</a>
+											{% endif %}
+										</td>
+										<td>
+											{{ i.f }} {{ i.i }} {{ i.o }}</br>
+											{% if i.sex %}
+												пол: 
+												{% if i.sex == 'male' %}
+													Мужской
+												{% endif %}
+												{% if i.sex == 'female' %}
+													Женский
+												{% endif %}
+											{% endif %}
+											
+											{% if i.bday %}
+												</br>
+												д.р. {{ i.bday }}
+											{% endif %}
+											
+										</td>
+										<td>
+											<a href="/event/add/call/{{ i.id }}">Обзвон клиента</a>
+											
+											</br>
+											
+											<a href="/sendsms2b/{{ i.id }}">Отправить sms</a></br>
+											
+											
+											{% if i.adv %}
+											<div class="form-group">
+												<div class="smsqsendajaxspinner{{ i.id }} hidden">
+												<img src="/static/img/spinner.gif" />
+												</div>
+												<a href="/smsqsend/add/{{ i.id }}/" class="btn btn-primary btn-xs smsqsendajax smsqsendajaxcontrol{{ i.id }}" onclick="smsqsend(this, {{i.id }}); return false;">В очередь смс рассылки</a></br>
+											</div>
+											{% endif %}
+											
+											
+											
+											{% buyer__eventcall__all i.id as list %}
+											{% if list %}
+												<div>
+												<span>Обзвон:</span> </br>
+												{% for iter in list %}
+													<a href="/event/edit/call/{{ iter.id }}">
+													{{ iter.ctime }}
+												</a>
+												{% endfor %}
+												</div>
+											{% endif %}
+											
+			
+											{% buyer__smsqsend__all i.id as list %}
+											{% if list %}
+												<div>
+												<span>Смс:</span></br>
+												{% for iter in list %}
+												<a href="/smsqsend/detail/{{ iter.id }}">
+													{{ iter.cdate }}
+												</a>
+												<br>
+												{% endfor %}
+												</div>
+											{% endif %}
+											
+											
+											</br>
+											<b>Сумма чеков фильтр {{ i.checkitemsum }} руб.</b>
+											</br>
+											<b>Сумма чеков всего {{ i.checkitemtotalsum }} руб.</b>
+											</br>
+											<b>Количество чеков {{ i.checkcount }} </b></br>
+	
+	
+
+											checkcountzero={{ i.checkcountzero }}
+											</br>
+	
+	
+											{% buyer__check__all i.id as list %}
+											{% if list %}
+												{% for iter in list %}
+												<table class="table table-bordered table-striped">
+													<thead>
+														<tr>
+															<th>Чек - #{{ iter.id }} / {{ iter.time }} / {{ iter.get_process_display }}</th>
+														</tr>
+													</thead>
+													<tbody>
+														{% for ci in iter.checkitem_set.all %}
+														<tr>
+															<td>
+																{{ ci.id }} <a href="/goods/detail/{{ ci.goods.id }}" target="_blank">{{ ci.goods.name }}</a> {{ ci.col }} * {{ ci.price }} = {{ ci.sum|floatdot:2 }}</br>
+
+																{% for cid in ci.checkd_set.all %}
+																	скидка: {{ cid.discounts.name }} {{ cid.descdiscount.name }} {{ cid.discount|floatdot:2 }}</br>
+																{% endfor %}
+															</td>
+														</tr>
+														{% endfor %}
+													</tbody>
+												</table>
+												{% endfor %}
+											{% endif %}
+											
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+			
+			
+			
+			
+			
+			
+			
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+
+
+
+
+	
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Найдено: {{ count }}</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+
+		
+		{% include "xpaginator.html" %}
+		
+		
+		</div>
+	</div>
+</div>
+
+
+	
+	
+	
+	</br>
+
+{% endblock %}
+

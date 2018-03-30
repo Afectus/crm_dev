@@ -1,0 +1,312 @@
+{% load nodetag %}
+{% load devtag %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Демонстрация видео</title>
+		
+
+		<link href="/static/bootstrap4/css/bootstrap.min.css" rel="stylesheet">
+		<script src="/static/js/jquery.min.js"></script>
+		<script src="/static/bootstrap4/js/bootstrap.min.js"></script>
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+		
+		<!-- Custom Fonts -->
+		<link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		
+		<link href="/static/device/showvideo.css" rel="stylesheet">
+		
+		<script src="/static/device/main.js"></script>
+	
+	</head>
+	<body>
+
+		<div class="modal fade" id="modalmsg" >
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Сообщение</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p id="msgmodal"></p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script language="javascript" type="text/javascript">
+		var screenip=null;
+		var websocket=null;
+		var count = null;
+		
+		function waitsconn(){
+			count = count - 1;
+			var msg = "Ожидания готовности экрана..."+count;
+			$('#msgmodal').html(msg);
+			setTimeout(
+				function () {
+					if (websocket.readyState === 1) {
+						console.log("socket connect")
+						$('#modalmsg').modal('hide');
+						return;
+					} 
+					else
+					{
+						if (count <= 0)
+						{
+							console.log("socket is error");
+							$('#msgmodal').html('Экран недоступен');
+							return;
+						}
+						else
+						{
+							
+							console.log("wait socket connect..."+count);
+							$('#msgmodal').html(msg);
+							waitsconn(websocket);
+						}
+					}
+				}, 1000);
+		}
+
+		function wsconnect()
+		{
+			count = 10;
+			//if (websocket != null) {websocket.close();}
+			console.log('socket wsconnect()')
+			res = new WebSocket('ws://'+screenip+':8080/');
+			waitsconn();
+			$('#modalmsg').modal('show');
+			return res;
+		}
+		function ws_close()
+		{
+			websocket.close();
+			return websocket;
+		}
+		function SendRequest(id, message_text)
+		{
+			if(screenip != null)
+			{
+				if(websocket != null)
+				{
+					if(websocket.readyState == websocket.OPEN)
+					{
+						console.log('socket open, websocket.send')
+						websocket.send(message_text);
+						showvideocount(id);
+					} else 
+					{
+						console.log('socket close, new socket')
+						websocket = wsconnect();
+					}
+				}
+				else
+				{
+					console.log('socket null, new socket')
+					websocket = wsconnect();
+				}
+			}
+			else
+			{
+				console.log('select media');
+				$('.select-media-error').removeClass('invisible');
+				document.getElementById('screenlist').style.display='block';
+				//$('#msgmodal').html('Выберите экран');
+				//var x = $('.screenlist').html();
+				//$('#msgmodal').html(x);
+				//$('#modalselectmedia').modal('show');
+			}
+			return false;
+		}
+		function openscreenlist(){
+			var elid = 'screenlist';
+			display = document.getElementById(elid).style.display;
+			if(display=='none') {document.getElementById(elid).style.display='block';}
+			else {document.getElementById(elid).style.display='none';}
+		}
+		function selectmedia(ip, name){
+			screenip=ip;
+			document.getElementById('screenname').innerHTML=name;
+			openscreenlist();
+			websocket = wsconnect();
+			$('.select-media-error').addClass('invisible');
+		 }
+		</script>
+
+		
+		
+		<nav class="navbar navbar-toggleable-md navbar-light bg-faded fixed-top">
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+			
+			<a class="navbar-brand" href="/dev/showvideo">@</a>
+
+			<div class="collapse show navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+	<!-- 			<li class="nav-item active">
+				<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+				</li> -->
+				<div>
+					<a class="btn btn-warning" id="screenname" href="#" onclick="openscreenlist(); return false;">Не выбран</a> 
+					
+					<span class="select-media-error invisible" style="color: red; font-size: 16px; font-weight: bold;">
+						Выберите экран
+					</span>
+					
+					<div id="screenlist">
+						{% for i in monitorlist %}						
+							<h5>{{ i.shop.name }} ({{ i.id }})</h5>
+								{% devicelistpromovideo i.id as devlist %}
+								{% for d in devlist %}
+								<div class="form-group">
+									<a class="btn btn-success" href="#" onclick="selectmedia('{{ d.ip }}','{{ d.name }}'); return false;"><i class="fa fa-television" aria-hidden="true"></i> {{ d.name }}</a>
+								</div>
+							{% endfor %}
+						{% endfor %}
+					</div>
+				</div>
+				</ul>
+			</div>
+		</nav>
+		
+		
+		
+		
+	<!-- 	<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="header">
+						<h4 class="text-center">Демонстрация видео</h4>
+						
+						<div>
+							Монитор:
+							<a class="btn btn-success" id="monitor_name" href="javascript:openbox('monitor_list');">Не выбран</a>
+								
+							<div id="monitor_list">
+								{% for i in monitorlist %}
+																		
+									<h5>{{ i.shop.name }}</h5>
+									
+									{% for d in i.device_set.all %}
+
+										<a class="btn btn-success" href="javascript:select_media('{{ d.id }}','{{ d.ip }}','{{ d.name }}');">{{ d.name }} ({{ d.ip }})</a>
+										</br></br>
+										
+									{% endfor %}
+										
+								{% endfor %}
+							</div>
+
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div> -->
+
+		</br></br></br></br>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+
+				<table class="table">
+					<tr>
+						<th>
+							<a href="{{ sortname }}">Наименование</a>
+						</th>
+						<th class="hidden-xs">
+							Артикул
+						</th>
+						<th width="200px" class="hidden-xs">
+							Характеристики
+						</th>
+						<th class="hidden-xs">
+							<a href="{{ sortprice }}">Цена</a>
+						</th>
+						<th>
+							Видео
+						</th>
+						
+						{% for i in object_list %}
+
+						<tr>
+							<td>							
+								<b>{{ i.name }}</b>
+								</br>
+								{{ i.bname }}
+								<div class="hidden-sm hidden-md hidden-lg">
+								<small>цена: <strong>{{ i.price|floatdot:2 }}</strong></small>
+								</div>
+								<div class="hidden-sm hidden-md hidden-lg">
+								<small>id: <strong>{{ i.id }}</strong></small>
+								</div>
+								
+								{% if i.video %}
+									<input class="video btn btn-warning" value="Видео" type="button" onclick="SendRequest('{{ i.id }}', 'master_video;0;{{ i.video }};local');"></input>
+								{% else %}
+									Нет видео
+								{% endif %}
+								
+								
+							</td>
+							<td class="hidden-xs">
+								
+							</td>
+							<td class="hidden-xs">
+								{% proplist i.id as prop %}
+								{% for p in prop %}
+								<div>
+									<span class="pname">{{ p.name }}:</span>
+									<span class="pvalue">
+								
+									{% if p.multiple %}
+										{% for pv in p.value %}
+											<b>{{ pv }}</b>
+										{% endfor %}
+									{% else %}
+										<b>{{ p.value }}</b>
+									{% endif %}
+									<b>{{ p.baseunit }}</b>
+									</span>
+								</div>
+								{% endfor  %}
+							</td>
+							<td class="hidden-xs">
+								{{ i.price|floatdot:2}}
+							</td>
+							<td>
+								{% if i.video %}
+									<input class="video btn btn-warning" value="Видео" type="button" onclick="SendRequest('{{ i.id }}', 'master_video;0;{{ i.video }};local');"></input>
+								{% else %}
+									Нет видео
+								{% endif %}
+							</td>
+						</tr>
+						{% endfor %}
+
+				</table>
+
+				</div>
+			</div>
+		</div>
+		
+	</body>
+</html>

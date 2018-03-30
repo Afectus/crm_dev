@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Панель управления - список событий{% endblock %}
+{% block description %}Панель управления - список событий{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Список событий <small>обзвон клиентов</small></h3>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			
+			
+				
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>ID</th>
+					<th>Дата</th>
+					<th>Клиент</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>{{ i.id }}</td>
+							<td>{{ i.ctime }}</td>
+							<td>{{ i.buyer.f }} {{ i.buyer.i}} {{ i.buyer.o }}</td>
+							<td>{{ i.comment }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+				
+{% include "paginator.html" %}
+			
+		</div>
+	</div>
+</div>
+
+	
+	
+	</br>
+
+{% endblock %}
+

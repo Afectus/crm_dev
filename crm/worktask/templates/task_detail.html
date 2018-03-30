@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load tasktag %}
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Задание #{{ object.id }} "{{ object.name }}" <a href="{% url 'worktask:admin_task_edit' object.id %}">[...]</a></h3>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-4">
+		
+			<div>
+			<span class="text-muted">Статус: </span>
+			<span class="label label-{% if object.status == 'open' %}primary{% else %}default{% endif %}">
+				{{ object.get_status_display }}
+			</span>
+			
+			</div>
+		
+			<div>
+			<span class="text-muted">Время создания: </span> {{ object.ctime|date:"SHORT_DATETIME_FORMAT" }}
+			{% if object.etime %}
+			</br>
+			<span class="text-muted">Время окончания: </span> {{ object.etime|date:"SHORT_DATETIME_FORMAT" }}
+			{% endif %}
+			</div>
+			
+			
+			<div>
+			<span class="text-muted">Создатель: </span> {{ object.user.first_name }} {{ object.user.last_name }} </br>
+			</div>
+			
+			<div>
+			<span class="text-muted">Приоритет: </span> {{ object.get_priority_display }}
+			</div>
+			
+
+			
+		</div>
+		<div class="col-md-8">
+		
+			<div class="thumbnail">
+				{% if object.executor.all %}
+				<div>
+				<span>Исполнители: </span>
+				{% for i in object.executor.all %}
+					<span class="label {% if i.user == request.user %}label-success{% else %}label-default{% endif %}">
+						{{ i.user.first_name }} {{ i.user.last_name }}
+					</span>&nbsp;
+				{% endfor %}
+				</div>
+				{% endif %}
+				
+				
+				{% if taken %}
+				</br>
+				<div class="form-group"> 
+					<a href="#" class="btn btn-default disabled" role="button">Вы участвуете в задании</a>
+				</div>
+				{% else %}
+				</br>
+				<div class="form-group"> 
+					<a href="/worktask/take/task/{{ object.id }}/" class="btn btn-warning">Участвовать в задании</a> 
+				</div>
+				{% endif %}
+			</div>
+		
+			{% if object.type == 'free' %}
+				{% if object.liketask_set.all %}
+					<div>
+					<span class="text-muted">Пользователи оценили задание ({{ object.liketask_set.all.count }} голоса(ов))</span>
+					<table class="table">
+						<thead>
+						  <tr>
+							<th></th>
+							<th></th>
+						  </tr>
+						</thead>
+						<tbody>
+							{% for lt in object.liketask_set.all %}
+								<tr>
+									<td>{{ lt.user.first_name }} {{ lt.user.last_name }}</td>
+									<td>{{ lt.value|ratingstar }} </td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					</div>
+				{% endif%}
+			
+				{% if not liked %}
+				<div>
+					<span class="text-muted">Оцените задание<span></br>
+					<span class="rating">
+						<a href="/worktask/like/task/{{ object.id }}/5/" class="star filled"></a>
+						<a href="/worktask/like/task/{{ object.id }}/4/" class="star filled"></a>
+						<a href="/worktask/like/task/{{ object.id }}/3/" class="star"></a>
+						<a href="/worktask/like/task/{{ object.id }}/2/" class="star"></a>
+						<a href="/worktask/like/task/{{ object.id }}/1/" class="star"></a>
+					</span>
+				</div>
+				{% endif %}
+			{% endif %}
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-md-12">
+	
+			<h4>Текст задание</h4>
+			<p>
+			{{ object.message }}
+			</p>
+			
+	
+			{% if image %}
+			<div style="border: 1px silver solid; padding: 20px;">
+			<div class="row">
+				{% for f in image %}
+					<div class="col-md-3">
+						<a href="{{ f.pict.url }}"><img src="{{ f.pict1.url }}" />	
+						</a>
+						</br>
+						{% if f.name %}<b>{{ f.name }}</b>{% else %}<b>Картинка</b>{% endif %}
+						&nbsp;&nbsp;
+						{% if object.user == request.user %}
+						<a href="/worktask/del/file/{{ f.id }}/"><i class="fa fa-times text-danger" aria-hidden="true"></i></a>
+						{% endif %}
+					</div>
+				{% endfor %}
+			</div>
+			</div>
+			{% endif %}
+			
+			{% if file %}
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>Файл</th>
+					<th>Размер</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for f in file %}
+						<tr>
+							<td>
+								<a href="{{ f.sourcefile.url }}">
+									Скачать
+									{% if f.name %}{{ f.name }}{% endif %}
+								</a>
+							</td>
+							<td>
+								{{ f.sourcefile.size|filesizeformat }}
+
+								{% if object.user == request.user %}
+								<a href="/worktask/del/file/{{ f.id }}/"><i class="fa fa-times text-danger" aria-hidden="true"></i></a>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% endif %}
+			
+			
+			</br>
+			
+			{% if object.user == request.user %}
+			<div class="form-group"> 
+				<a href="/worktask/edit/{{ object.id }}/" class="btn btn-primary">Изменить</a> 
+				<a href="/worktask/add/file/{{ object.id }}/?type=file" class="btn btn-success">Добавить файл</a>
+				<a href="/worktask/add/file/{{ object.id }}/?type=image" class="btn btn-success">Добавить картинку</a>
+			</div>
+			{% endif %}
+			
+			
+			
+			
+			
+		</div>
+	</div>
+</div>
+		
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			
+			
+			{% if object.commenttask_set.all %}
+				<hr>
+				<h3>Комментарии пользователей</h3>
+				{% for c in object.commenttask_set.all %}
+					
+						<div class="row">
+							<div class="col-md-1">
+								<div class="thumbnail">
+									{% getprofileuser c.user.id as profileuser %}
+									{% if profileuser.photo %}
+									<img class="img-responsive user-photo" src="{{ profileuser.photosmall.url }}">
+									{% else %}
+										<img class="img-responsive user-photo" src="/static/img/nophoto.png">
+									{% endif %}
+								</div>
+							</div>
+							<div class="col-md-11">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+									<strong>{{ c.user.first_name }} {{ c.user.last_name }}</strong> <span class="text-muted">{{ c.ctime|date:"SHORT_DATETIME_FORMAT" }}</span>
+									</div>
+									<div class="panel-body">
+									{{ c.message|safe }}
+									
+									{% if c.pict %}
+										</br></br>
+										<a href="{{ c.pict.url }}" class="fancybox"><img src="{{ c.pict1.url }}" class="img-responsive" />	
+										</a>
+									{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					
+				{% endfor %}
+			{% endif %}
+			
+			<hr>
+			<h4>Оставить комментарий</h4>
+			
+				<form action="" method="post" enctype="multipart/form-data" role="form">
+				{% csrf_token %}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+
+
+				<div class="form-group">
+				{% if form.message.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.message.label }}</label>
+				{{ form.message }}
+				{% if form.message.errors %}
+				<p class="text-danger">{{ form.message.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.message.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+				
+				
+				<div class="form-group">
+				{% if form.pict.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.pict.label }}</label>
+				{{ form.pict }}
+				{% if form.pict.errors %}
+				<p class="text-danger">{{ form.pict.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.pict.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+
+
+				</br>
+
+
+				<div class="form-group"> 
+					<button type="submit" class="btn btn-success">Отправить</button>
+					</span>
+				</div>
+
+				
+			</form>
+			
+			
+			
+			
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+

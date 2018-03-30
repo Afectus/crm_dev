@@ -1,0 +1,269 @@
+{% extends "video_base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load videotag %}
+
+{% block bodystyle %}{% endblock %}
+
+
+<div class="modal fade" id="modalmsg" >
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Сообщение</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p id="msgmodal"></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script language="javascript" type="text/javascript">
+var screenip='{{ screen.ip }}';
+var websocket=null;
+var count = null;
+
+function waitsconn(){
+	count = count - 1;
+	var msg = "Ожидания готовности экрана..."+count;
+	$('#msgmodal').html(msg);
+	setTimeout(
+		function () {
+			if (websocket.readyState === 1) {
+				console.log("socket connect")
+				$('#modalmsg').modal('hide');
+				
+				return;
+			} 
+			else
+			{
+				if (count <= 0)
+				{
+					console.log("socket is error");
+					$('#msgmodal').html('Экран недоступен');
+					return;
+				}
+				else
+				{
+					
+					console.log("wait socket connect..."+count);
+					$('#msgmodal').html(msg);
+					waitsconn(websocket);
+				}
+			}
+		}, 1000);
+}
+
+function wsconnect()
+{
+	count = 10;
+	//if (websocket != null) {websocket.close();}
+	console.log('socket wsconnect()')
+	res = new WebSocket('ws://'+screenip+':8080/');
+	waitsconn();
+	$('#modalmsg').modal('show');
+	return res;
+}
+function ws_close()
+{
+	websocket.close();
+	return websocket;
+}
+function SendRequest(id, message_text)
+{
+	console.log('SendRequest',id,message_text)
+	if(screenip != null)
+	{
+		if(websocket != null)
+		{
+			if(websocket.readyState == websocket.OPEN)
+			{
+				console.log('socket open, websocket.send')
+				websocket.send(message_text);
+				//showvideocount(id);
+			} else 
+			{
+				console.log('socket close, new socket')
+				websocket = wsconnect();
+			}
+		}
+		else
+		{
+			console.log('socket null, new socket')
+			websocket = wsconnect();
+		}
+	}
+	else
+	{
+		console.log('select media');
+		//$('#msgmodal').html('Выберите экран');
+		//var x = $('.screenlist').html();
+		//$('#msgmodal').html(x);
+		//$('#modalselectmedia').modal('show');
+	}
+	return false;
+}
+
+$(document).ready(function() {
+
+	websocket = wsconnect();
+
+});
+
+</script>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="form-group">
+				<a class="btn btn-success btn-block" href="{% url 'video:video_select_pc' %}?{{ request.GET.urlencode }}">{{ screen.name }}</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<form id="form_filter" action="" method="get" role="form">
+				{# {% csrf_token %} #}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+				{# {% for i in form.visible_fields %} #}
+				
+				<div class="">
+					<div class="row">
+						<div class="col-md-12">	
+							<div class="form-group"> 
+							<label>{{ form.q.label }}</label>
+							{{ form.q }}
+							{% if form.q.errors %}
+							<p class="text-danger">{{ form.q.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.q.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+
+				</br>
+
+				<div class="">
+					<div class="form-group"> 
+						<button type="submit" class="btn btn-success">Применить</button>
+						<a href="{% url 'video:video_show_pc' screen.id %}" class="btn btn-success">Сбросить</a>
+
+					</div>
+				</div>
+
+			</form>
+		</div>
+	</div>
+</div>	
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+		<table class="table">
+			<tr>
+				<th>
+					<a href="?{% if 'q' in request.GET %}q={{ request.GET.q }}&{% endif %}sort=bname">Наименование</a>
+				</th>
+				<th class="hidden-xs">
+					Артикул
+				</th>
+				<th width="200px" class="hidden-xs">
+					Характеристики
+				</th>
+				<th class="hidden-xs">
+					<a href="?{% if 'q' in request.GET %}q={{ request.GET.q }}&{% endif %}sort=price">Цена</a>
+				</th>
+				<th>
+					Видео
+				</th>
+				
+				{% for i in object_list %}
+
+				<tr>
+					<td>							
+						<b>{{ i.name }}</b>
+						</br>
+						{{ i.bname }}
+						<div class="hidden-sm hidden-md hidden-lg">
+						<small>цена: <strong>{{ i.price|floatdot:2 }}</strong></small>
+						</div>
+						<div class="hidden-sm hidden-md hidden-lg">
+						<small>id: <strong>{{ i.id }}</strong></small>
+						</div>
+					</td>
+					<td class="hidden-xs">
+						
+					</td>
+					<td class="hidden-xs">
+						{% proplist i.id as prop %}
+						{% for p in prop %}
+						<div>
+							<span class="pname">{{ p.name }}:</span>
+							<span class="pvalue">
+						
+							{% if p.multiple %}
+								{% for pv in p.value %}
+									<b>{{ pv }}</b>
+								{% endfor %}
+							{% else %}
+								<b>{{ p.value }}</b>
+							{% endif %}
+							<b>{{ p.baseunit }}</b>
+							</span>
+						</div>
+						{% endfor  %}
+					</td>
+					<td class="hidden-xs">
+						{{ i.price|floatdot:2}}
+					</td>
+					<td>
+						{% if i.videomp4 %}
+							<input class="video btn btn-warning btn-block" value="Видео mp4" type="button" onclick="SendRequest('{{ i.id }}', 'master_video;0;{{ i.videomp4 }};local');"></input>
+						{% endif %}
+						{% if i.video %}
+							</br>
+							<input class="video btn btn-default btn-block btn-xs" value="Видео wmv/avi" type="button" onclick="SendRequest('{{ i.id }}', 'master_video;0;{{ i.video }};local');"></input>
+						{% endif %}
+						
+					</td>
+				</tr>
+				{% endfor %}
+
+		</table>
+
+		</div>
+	</div>
+</div>
+
+
+
+
+
+{% endblock %}
+

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load devtag %}
+
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<div class="well">
+		<div class="form-group">
+			<a class="btn btn-success" href="{% url 'opt:optprice_list' %}">Список</a>
+		</div>
+	</div>
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Прайс #{{ object.id }}</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+							
+						<div class="row">
+							<div class="col-md-6">
+								<dl class="dl-horizontal">
+									<dt>id</dt><dd>{{ object.id }}</dd>
+									<dt>Статус</dt><dd>{{ object.get_status_display }}</dd>
+									<dt>Инфо</dt>
+									<dd>
+										<p>Создан: {{ object.ctime|date:"SHORT_DATE_FORMAT" }}</p>
+										{{ i.name }}
+										{% if i.email %}
+											<p>E-mail: {{ i.email }}</p>
+										{% endif %}
+										{% if i.comment %}
+											<p>{{ i.comment }}</p>
+										{% endif %}
+									</dd>
+									<dt>priceid</dt><dd>{{ object.url }}</dd>
+								</dl>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<a href="http://out.babah24.ru/major/price/{{ object.url }}" class="btn btn-success" target="_blank">Прайс</a>
+											
+									<a href="http://out.babah24.ru/major/cart/{{ object.url }}" class="btn btn-success" target="_blank">Корзина ({{ object.optpricecart_set.count }})</a>
+								</div>
+								
+								
+								<div class="form-group">	
+									<a href="{% url 'opt:optprice_contract' object.id %}" class="btn btn-success" target="_blank">Текст договора</a>
+									
+									<a href="{% url 'opt:optprice_contract' object.id %}?type=exportpdf" class="btn btn-success" target="_blank">Сформировать договор</a>
+									
+									{% if object.contract %}
+									<a href="http://out.babah24.ru/major/contract/{{ object.url }}" class="btn btn-success" target="_blank">Договор (ссылка для клиента)</a>
+									{% else %}
+									Договор не сформирован
+									{% endif %}
+								</div>
+								
+								<div class="form-group">
+									<a class="btn btn-success" href="{% url 'opt:optprice_edit' object.id %}">Редактировать</a>
+
+									<a class="btn btn-warning" href="{% url 'opt:optprice_del' object.id %}">Удалить</a>
+								</div>
+							</div>
+						</div>
+						
+						<hr>
+						
+						<div class="row">
+							<div class="col-md-12">
+								<h4>Покупатель</h4>
+								<dl class="dl-horizontal">
+									<dt>id</dt><dd>{{ object.optbuyer.id }}</dd>
+									<dt>Название</dt><dd>{{ object.optbuyer.name }}</dd>
+									<dt>E-mail</dt><dd>{{ object.optbuyer.email }}</dd>
+									<dt>Полное наименование</dt><dd>{{ object.optbuyer.fullname }}</dd>
+									<dt>ФИО Директора</dt><dd>{{ object.optbuyer.namedir }}</dd>
+									<dt>На основании </br>чего действует</dt><dd>{{ object.optbuyer.org }}</dd>
+									<dt>ИНН/КПП</dt><dd>{{ object.optbuyer.inn }}</dd>
+									<dt>ОГРН</dt><dd>{{ object.optbuyer.ogrn }}</dd>
+									<dt>БИК</dt><dd>{{ object.optbuyer.bik }}</dd>
+									<dt>Наименование банка</dt><dd>{{ object.optbuyer.bankname }}</dd>
+									<dt>Юр. Адрес</dt><dd>{{ object.optbuyer.uraddr }}</dd>
+									<dt>Телефон</dt><dd>{{ object.optbuyer.phone }}</dd>
+									<dt></dt><dd><div class="form-group">
+									<a class="btn btn-success btn-xs" href="{% url 'opt:optbuyer_edit' object.optbuyer.id %}">Редактировать</a>
+								</div></dd>
+								</dl>
+								
+							</div>
+						</div>
+						
+						
+
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+{% endblock %}
+

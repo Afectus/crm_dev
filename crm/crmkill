@@ -1,0 +1,13 @@
+#!/bin/sh
+
+#kill -HUP `cat /var/run/crm_uwsgi.pid`
+uwsgi --reload /var/run/crm_uwsgi.pid
+
+
+#killall -9 uwsgi
+#killall -9 uwsgi
+
+#export LANG='ru_RU.UTF-8'
+#export LC_ALL='ru_RU.UTF-8'
+
+#/usr/local/bin/uwsgi --ini /etc/nginx/sp_uwsgi.ini

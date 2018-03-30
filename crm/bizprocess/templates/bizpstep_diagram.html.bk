@@ -1,0 +1,192 @@
+{% extends "bizprocess_base.html" %}
+{% block title %}Список{% endblock %}
+{% block description %}Список{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load bizp %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			
+			<h3>
+			{% if object.process %}
+			<a href="{% url 'bizprocess:bizplist_detail' object.process.id %}">{{ object.process.name }}</a>
+			{% endif %}
+			
+			{% if object.parent %}
+			<a href="{% url 'bizprocess:bizpstep_detail' object.parent.id %}">{{ object.parent.name }}</a>
+			{% endif %}
+			
+			{{ object.name }}
+			</h3>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+				
+			{% if object.head %}
+			<div><b>Отв:</b> {{ object.head }}</div>
+			{% endif %}
+			
+			{% if object.executor %}
+			<div><b>Исп:</b> {{ object.executor }}</div>
+			{% endif %}
+			
+			{% if object.desc %}
+			<p>{{ object.desc }}</p>
+			{% endif %}
+
+			</h3>
+		</div>
+	</div>
+</div>
+
+</br>
+
+<div class="container">
+	<div class="row">
+		{% for i in object_list %}
+		<div class="col-md-6">
+			
+			<div class="col-md-2">
+				{% if forloop.first %}
+					<i class="fa fa-circle-o fa-3x" aria-hidden="true"></i>
+				{% else %}
+					<i class="fa fa-long-arrow-right fa-3x"" aria-hidden="true"></i>
+				{% endif %}
+			</div>
+			
+			<div class="col-md-10 diagram-item">
+				<h4 class="text-center"><a href="{% url 'bizprocess:bizpstep_detail' i.id %}">{{ i.name }}</a></h4>
+				
+				<div class="diagram-item-info">
+				<div><b>Отв:</b> {{ i.head }}</div>
+				<div><b>Исп:</b> {{ i.executor }}</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-12">
+							{% getsteplevel2list i as steplevel2list %}
+							{% if steplevel2list %}
+								<div class="row">
+									{% for s in steplevel2list %}
+										<div class="col-md-6">
+											<div class="col-md-3">
+												{% if forloop.first %}
+													<i class="fa fa-circle-o" aria-hidden="true"></i>
+												{% else %}
+													<i class="fa fa-long-arrow-right"" aria-hidden="true"></i>
+												{% endif %}
+											</div>
+											<div class="col-md-9 diagram-item">
+												<a href="{% url 'bizprocess:bizpstep_detail' s.id %}">{{ s.name }}</a>
+											</div>
+									
+										</div>
+										{% if forloop.counter|divisibleby:"2" %}
+											</div> <!-- close row --> 
+											<div class="row"> <!-- open row --> 
+										{% endif %}
+									{% endfor %}
+									<div class="col-md-6">
+										
+										<div class="col-md-3">
+											<i class="fa fa-long-arrow-right"" aria-hidden="true"></i>
+										</div>
+										
+										<div class="col-md-9 diagram-item">
+											Конец
+										</div>
+							
+									</div>
+								</div>
+							{% endif %}
+					</div>
+				</div>
+			</div>
+		
+		</div>
+		
+				
+		{% if forloop.counter|divisibleby:"2" %}
+			</div> <!-- close row --> 
+			<div class="row"> <!-- open row --> 
+		{% endif %}
+		
+		{% endfor %}
+		
+
+		
+		
+		{% if object_list %}
+		<div class="col-md-6">
+			
+			<div class="col-md-2">
+				<i class="fa fa-long-arrow-right fa-3x"" aria-hidden="true"></i>
+			</div>
+			
+			<div class="col-md-10 diagram-item">
+				<h4 class="text-center">Конец</h4>
+				{% if nextstep %}
+				<h4 class="text-center"><a href="{% url 'bizprocess:bizpstep_detail' nextstep.id %}">след. {{ nextstep.name }}</a></h4>
+				{% endif %}
+			</div>
+		
+		</div>
+		{% endif %}
+	</div>
+</div>
+
+
+
+
+
+
+
+{% comment %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>Название</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+					<tr>
+						<td>{{ i.id }}</td>
+						<td>
+							<a href="{% url 'bizprocess:bizpstep_detail' i.id %}">{{ i.name }}</a>
+							
+							{% getsteplevel2list i as steplevel2list %}
+							{% if steplevel2list %}
+								</br>
+								{% for s in steplevel2list %}
+									- <a href="{% url 'bizprocess:bizpstep_detail' s.id %}">{{ s.name }}</a></br>
+								{% endfor %}
+							{% endif %}
+
+							
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endcomment %}
+
+{% endblock %}

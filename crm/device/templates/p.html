@@ -1,0 +1,35 @@
+{% load nodetag %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Магазин фейерверков «Бабах»</title>
+    <meta name="viewport" content="width=1920, initial-scale=1, user-scalable=no">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link href="/static/device/reset.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/static/device/style.css" type="text/css">
+    <link rel="stylesheet" href="/static/device/fonts.css" type="text/css" charset="utf-8">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/device/script.js"></script>
+</head>
+
+<body onload="initWebSocket();">
+    <div class="pageVideo">
+        <div class="bg"></div>
+        <div class="bg2"></div>
+        <div class="panel">
+            <div class="photo">
+                <img src="{{ object.pict640.url }}">
+            </div>
+            <h1>{{ object.bname }}</h1>
+            <div class="price">
+                <b>{{ object.price|floatdot:0 }} руб.</b>
+            </div>
+            <div class="article">Артикул: <span>{{ object.art }}</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

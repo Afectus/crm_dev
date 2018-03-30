@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+	<meta charset="utf-8">
+	<!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+	<!-- jQuery -->
+	<script src="/static/js/jquery.min.js"></script>
+
+	<!-- ################START THEM SMARTADMIN ################### -->
+	
+	<!-- FAVICONS -->
+	<link rel="shortcut icon" href="/static/smartadmin/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/static/smartadmin/img/favicon/favicon.ico" type="image/x-icon">
+	
+	<!-- Basic Styles -->
+	<link rel="stylesheet" type="text/css" media="screen" href="/static/smartadmin/css/bootstrap.min.css">
+	
+	<!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+	<link rel="stylesheet" type="text/css" media="screen" href="/static/smartadmin/css/smartadmin-production-plugins.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="/static/smartadmin/css/smartadmin-production.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="/static/smartadmin/css/smartadmin-skins.min.css">
+	
+	<!-- SmartAdmin RTL Support  -->
+	<link rel="stylesheet" type="text/css" media="screen" href="/static/smartadmin/css/smartadmin-rtl.min.css">
+	
+	<!-- fontawesome  -->
+	<link rel="stylesheet" type="text/css" media="screen" href="/static/fontawesome4/css/font-awesome.min.css">
+	{% comment %}
+	<link rel="stylesheet" type="text/css" media="screen" href="/static/fontawesome5/css/fontawesome-all.min.css">
+	{% endcomment %}
+	
+	<!-- GOOGLE FONT -->
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+	
+	<!-- Specifying a Webpage Icon for Web Clip 
+	Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+	<link rel="apple-touch-icon" href="/static/smartadmin/img/splash/sptouch-icon-iphone.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="{/static/smartadmin/img/splash/touch-icon-ipad.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/static/smartadmin/img/splash/touch-icon-iphone-retina.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/static/smartadmin/img/splash/touch-icon-ipad-retina.png">
+	
+	
+	<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<!-- Startup image for web apps -->
+	<link rel="apple-touch-startup-image" href="/static/smartadmin/img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+	<link rel="apple-touch-startup-image" href="/static/smartadmin/img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+	<link rel="apple-touch-startup-image" href="/static/smartadmin/img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+	
+
+	<!-- ################END THEM SMARTADMIN ################### -->
+
+	<!-- ################OLD THEM ################### -->
+	<!-- Bootstrap -->
+	<!-- <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+	<!-- <script src="/static/bootstrap/js/bootstrap.min.js"></script> -->
+	
+    <!-- Custom CSS -->
+    <!-- <link href="/static/sbadmin/css/sb-admin.css" rel="stylesheet"> -->
+	<!-- <link href="/static/css/mysbadmin.css" rel="stylesheet"> -->
+
+	<!-- 
+    <link href="/static/sbadmin/css/plugins/morris.css" rel="stylesheet">
+    <script src="/static/sbadmin/js/plugins/morris/raphael.min.js"></script>
+    <script src="/static/sbadmin/js/plugins/morris/morris.min.js"></script>
+    <script src="/static/sbadmin/js/plugins/morris/morris-data.js"></script>
+	-->
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+	
+	<!-- owl.carousel -->
+	<!-- <link rel="stylesheet" href="/static/owl.carousel/assets/owl.carousel.css"> -->
+	<!-- <script src="/static/owl.carousel/owl.carousel.min.js"></script> -->
+	
+	<!-- ################END OLD THEM ################### -->
+	
+	
+	<!--Fancybox -->
+	{% comment %}
+	<link href="/static/fancybox/jquery.fancybox.css" rel="stylesheet">
+	<script src="/static/fancybox/jquery.fancybox.js"></script>
+	{% endcomment %}
+	<link href="/static/fancybox/jquery.fancybox.min.css" rel="stylesheet">
+	<script src="/static/fancybox/jquery.fancybox.min.js"></script>
+
+	<!-- chosen --> 
+	<!-- <link rel="stylesheet" type="text/css" href="/static/chosen/chosen.min.css" /> -->
+	<link rel="stylesheet" type="text/css" href="/static/bootstrap-chosen/bootstrap-chosen.css" />
+	<script type="text/javascript" src="/static/chosen/chosen.jquery.js"></script>
+
+	<!-- ckeditor --> 
+	<!-- 
+	<script type="text/javascript" src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+	<script type="text/javascript" src="/static/ckeditor/ckeditor-init.js"></script>
+	 --> 
+	<script type="text/javascript" src="/static/smartadmin/js/plugin/ckeditor/ckeditor.js"></script>
+	<script type="text/javascript">
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	$(document).ready(function() {
+		try {
+			CKEDITOR.replace('fulltext', {height: '380px', startupFocus: true});
+		} catch (err) {
+		}
+		//$('form[name="fulltext"]').focus(function() {
+				//CKEDITOR.replace('fulltext', {height: '380px', startupFocus: true});
+		//	})
+		})
+	</script>
+	<link rel="stylesheet" href="/static/smartadmin/js/plugin/ckeditor/plugins/spoiler/css/spoiler.css" />
+	<script>
+		$(function() {
+			$('div.spoiler-title').click(function() {
+				$(this).children().first().toggleClass('show-icon').toggleClass('hide-icon');
+				$(this).parent().children().last().toggle();
+			});
+		});
+	</script>
+	<!-- end ckeditor --> 
+	
+	
+
+
+	
+	
+	<!-- bootstrap-datepicker -->
+	<link rel="stylesheet" type="text/css" href="/static/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
+	<script type="text/javascript" charset="utf8" src="/static/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+	<script src="/static/bootstrap-datepicker/locales/bootstrap-datepicker.ru.min.js" charset="UTF-8"></script>
+
+	<!-- connect to socket.io server via nodejs -->
+	<script src="http://crm.babah24.ru:3000/socket.io/socket.io.js"></script>
+	
+	
+	<!-- Custom CSS and JS -->
+	<link rel='stylesheet' href="/static/css/style.css" type='text/css' media='all' >
+	<script src="/static/js/main.js"></script>
+	{% block script %}{% endblock %}
+
+</head>
+
+<body>
+	{% load tasktag %}
+	{% getprofileuser request.user.id  as profileuser %} 
+	
+	<!-- HEADER -->
+	<header id="header">
+		<div id="logo-group">
+
+			<!-- PLACE YOUR LOGO HERE -->
+			<span id="logo">CRM</span>
+			<!-- END LOGO PLACEHOLDER -->
+
+			{% unreadtask as myunreadtask %}
+			<span id="activity" class="activity-dropdown"> <i class="fa fa-user"></i> <b class="badge">{% if myunreadtask.exists %}{{ myunreadtask.count }}{% else %}0{% endif %}</b> </span>
+			<div class="ajax-dropdown">
+<!-- 				<div class="btn-group btn-group-justified" data-toggle="buttons">
+					<label class="btn btn-default">
+						<input type="radio" name="activity" id="ajax/notify/mail.html">
+						Msgs (14) </label>
+					<label class="btn btn-default">
+						<input type="radio" name="activity" id="ajax/notify/notifications.html">
+						notify (3) </label>
+					<label class="btn btn-default">
+						<input type="radio" name="activity" id="ajax/notify/tasks.html">
+						Задания ({% if myunreadtask.exists %}{{ myunreadtask.count }}{% else %}0{% endif %}) </label>
+				</div> -->
+				<div class="ajax-notifications custom-scroll">
+					<div class="alert alert-transparent">
+						<h4>Управление заданиями</h4>
+						<ul>
+						<li>
+							<a href="/worktask/list/" title="Dashboard">Список заданий <span class="badge inbox-badge margin-right-13">{% if myunreadtask.exists %}{{ myunreadtask.count }}{% else %}0{% endif %}</span></a>
+						</li>
+						{% if perms.worktask.add_usertask %}
+						<li>
+							<a href="/worktask/add/usertask/">Создать задание (регламент)</a>
+						</li>
+						{% endif %}
+						<li>
+							<a href="/worktask/add/freetask/">Создать свободное задание</a>
+						</li>
+						<li>
+							<a href="/useridea2/ideasection/list">Идеи</a>
+						</li>
+					</ul>
+					</div>
+					<!-- <i class="fa fa-lock fa-4x fa-border"></i> -->
+				</div>
+<!-- 				<span> Last updated on: 12/12/2013 9:43AM
+					<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
+						<i class="fa fa-refresh"></i>
+					</button> 
+				</span> -->
+			</div>
+			<!-- END AJAX-DROPDOWN -->
+		</div>
+
+		<!-- projects dropdown -->
+ 		<div class="project-context hidden-xs">
+			<span class="label">Инструменты:</span>
+			<span class="project-selector dropdown-toggle" data-toggle="dropdown">Органайзер <i class="fa fa-angle-down"></i></span>
+			<ul class="dropdown-menu">
+				<li>
+					<a href="/organizer/calendar/">
+					Календарь событий
+					</a>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<a href="/organizer/list">
+					Список событий
+					</a>
+				</li>
+			</ul>
+		</div>
+		<!-- end projects dropdown -->
+
+		<!-- pulled right: nav area -->
+		<div class="pull-right">
+			
+			<!-- collapse menu button -->
+			<div id="hide-menu" class="btn-header pull-right">
+				<span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+			</div>
+			<!-- end collapse menu -->
+			
+			<!-- #MOBILE -->
+			<!-- Top menu profile link : this shows only when top menu is active -->
+			<ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">
+				<li class="">
+					<a href="#" class="dropdown-toggle no-margin userdropdown" data-toggle="dropdown"> 
+						<img src="{% if profileuser.photosmall %}{{ profileuser.photosmall.url }}{% else %}/static/img/nophoto.png{% endif %}" alt="{{ request.user.username }}" class="online" />  
+					</a>
+					<ul class="dropdown-menu pull-right">
+						<li class="divider"></li>
+						<li>
+							<a href="/user/profile" class="padding-10 padding-top-0 padding-bottom-0"> <i class="fa fa-user"></i> <u>П</u>рофиль</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="launchFullscreen"><i class="fa fa-arrows-alt"></i><u>Р</u>азвернуть</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="/user/logout" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-sign-out" aria-hidden="true"></i><strong><u>В</u>ыход</strong></a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+
+			<!-- logout button -->
+			<div id="logout" class="btn-header transparent pull-right">
+				<span> <a href="/user/logout" title="Выход" data-action="userLogout" data-logout-msg="Вы уверены, что хотите выйти?"><i class="fa fa-sign-out" aria-hidden="true"></i></a> </span>
+			</div>
+			<!-- end logout button -->
+
+			<!-- search mobile button (this is hidden till mobile view port) -->
+			<div id="search-mobile" class="btn-header transparent pull-right">
+				<span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>
+			</div>
+			<!-- end search mobile button -->
+
+			<!-- input: search field -->
+<!-- 			<form action="search.html" class="header-search pull-right">
+				<input id="search-fld"  type="text" name="param" placeholder="Find reports and more" data-autocomplete='[
+				"Scheme"]'>
+				<button type="submit">
+					<i class="fa fa-search"></i>
+				</button>
+				<a href="javascript:void(0);" id="cancel-search-js" title="Cancel Search"><i class="fa fa-times"></i></a>
+			</form> -->
+			<!-- end input: search field -->
+
+			<!-- fullscreen button -->
+			<div id="fullscreen" class="btn-header transparent pull-right">
+				<span> <a href="javascript:void(0);" data-action="launchFullscreen" title="Full Screen"><i class="fa fa-arrows-alt"></i></a> </span>
+			</div>
+			<!-- end fullscreen button -->
+			
+			<!-- #Voice Command: Start Speech -->
+<!-- 			<div id="speech-btn" class="btn-header transparent pull-right hidden-sm hidden-xs">
+				<div> 
+					<a href="javascript:void(0)" title="Voice Command" data-action="voiceCommand"><i class="fa fa-microphone"></i></a> 
+					<div class="popover bottom"><div class="arrow"></div>
+						<div class="popover-content">
+							<h4 class="vc-title">Voice command activated <br><small>Please speak clearly into the mic</small></h4>
+							<h4 class="vc-title-error text-center">
+								<i class="fa fa-microphone-slash"></i> Voice command failed
+								<br><small class="txt-color-red">Must <strong>"Allow"</strong> Microphone</small>
+								<br><small class="txt-color-red">Must have <strong>Internet Connection</strong></small>
+							</h4>
+							<a href="javascript:void(0);" class="btn btn-success" onclick="commands.help()">See Commands</a> 
+							<a href="javascript:void(0);" class="btn bg-color-purple txt-color-white" onclick="$('#speech-btn .popover').fadeOut(50);">Close Popup</a> 
+						</div>
+					</div>
+				</div>
+			</div> -->
+			<!-- end voice command -->
+
+			<!-- multiple lang dropdown : find all flags in the flags page -->
+<!-- 			<ul class="header-dropdown-list hidden-xs">
+				<li>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="img/blank.gif" class="flag flag-us" alt="United States"> <span> English (US) </span> <i class="fa fa-angle-down"></i> </a>
+					<ul class="dropdown-menu pull-right">
+						<li class="active">
+							<a href="javascript:void(0);"><img src="img/blank.gif" class="flag flag-us" alt="United States"> English (US)</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);"><img src="img/blank.gif" class="flag flag-ru" alt="Russia"> Русский язык</a>
+						</li>					
+						
+					</ul>
+				</li>
+			</ul> -->
+			<!-- end multiple lang -->
+
+		</div>
+		<!-- end pulled right: nav area -->
+
+	</header>
+	<!-- END HEADER -->
+	
+	<!-- Left panel : Navigation area -->
+	<!-- Note: This width of the aside area can be adjusted through LESS variables -->
+	<aside id="left-panel">
+
+		<!-- User info -->
+		<div class="login-info">
+			<span> <!-- User image size is adjusted inside CSS, it should stay as it --> 
+				<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
+					<img src="{% if profileuser.photosmall %}{{ profileuser.photosmall.url }}{% else %}/static/img/nophoto.png{% endif %}" alt="{{ request.user.username }}" alt="Я" class="online" /> 
+					<span>
+						{{ request.user.username }}
+					</span>
+					<i class="fa fa-angle-down"></i>
+				</a> 
+			
+			</span>
+		</div>
+		<!-- end user info -->
+
+		<!-- NAVIGATION : This navigation is also responsive-->
+		<nav>
+			<!-- 
+			NOTE: Notice the gaps after each icon usage <i></i>..
+			Please note that these links work a bit different than
+			traditional href="" links. See documentation for details.
+			-->
+
+		{% comment %}
+<!-- 			<ul>
+				<li>
+					<a href="/" title="Главная"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Главная</span></a>
+				</li>
+				<li class="active">
+					<a href="#" title="Кассир"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Кассир</span></a>
+					<ul>
+						<li class="active">
+							<a href="{% url 'kassir:kassir_buyer_list_redirect' %}" title="Список покупателей"><span class="menu-item-parent">Список покупателей</span></a>
+						</li>
+						<li class="">
+							<a href="#" title=""><span class="menu-item-parent">...</span></a>
+						</li>
+					</ul>	
+				</li>
+				<li class="top-menu-invisible">
+					<a href="#"><i class="fa fa-lg fa-fw fa-cube txt-color-blue"></i> <span class="menu-item-parent">Устройства</span></a>
+					<ul>
+						<li>
+							<a href="/dev/control/list" title="">Устройства</a>
+						</li>
+						<li>
+							<a href="/dev/showvideo" title="">Мониторы</a>
+						</li>
+					</ul>
+				</li>
+				{% if perms.worktask.add_usertask %}
+				<li>
+					<a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i> <span class="menu-item-parent">Отчеты</span></a>
+					<ul>
+						<li>
+							<a href="/report/sale/">Отчет чеки</a>
+						</li>
+						<li>
+							<a href="/report/visitor/">Отчет посетители</a>
+						</li>
+						<li>
+							<a href="/report/visitorperiod/">Отчет посетители период</a>
+						</li>
+						<li>
+							<a href="/report/salegoods/">Отчет по товарам</a>
+						</li>
+						<li>
+							<a href="/report/sumperiod/">Отчет сумма период</a>
+						</li>
+						<li>
+							<a href="/report/abcgoods/">ABC Анализ по товарам</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Номенклатура</span></a>
+					<ul>
+						<li>
+							<a href="/goods/list/1">Список товаров</a>
+						</li>
+						<li>
+							<a href="/distributor/list/">Поставщики</a>
+						</li>
+						<li>
+							<a href="{% url 'panel:goodscert_list' %}">Сертификаты</a>
+						</li>
+						<li>
+							<a href="/discount/list">Скидки</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#"><i class="fa fa-lg fa-fw fa-pencil-square-o"></i> <span class="menu-item-parent">Покупатели</span></a>
+					<ul>
+						<li>
+							<a href="/buyer/list/1">Список покупателей</a>
+						</li>
+						<li>
+							<a href="/event/call/list">Обзвон клиентов</a>
+						</li>
+						<li>
+							<a href="/buyerevent/list">События клиента</a>
+						</li>
+						<li>
+							<a href="/sendsms">Отправить SMS</a>
+						</li>
+						<li>
+							<a href="/ownsmsreport/list/">Отчет SMS</a>
+						</li>
+						<li>
+							<a href="/smstemplate/list/">Шаблоны SMS</a>
+						</li>
+						<li>
+							<a href="/smsqsend/list/">Очередь SMS</a>
+						</li>
+						<li>
+							<a href="/child/list">Дети</a>
+						</li>
+						<li>
+							<a href="/childbook/list">Список детей</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#"><i class="fa fa-lg fa-fw fa-pencil-square-o"></i> <span class="menu-item-parent">Сотрудники</span></a>
+					<ul>
+						<li>
+							<a href="/personal/list/">Список сотрудников</a>
+						</li>
+						<li>
+							<a href="{% url 'personal:personalanketa_list' %}">Внештатные сотрудники</a>
+						</li>
+						<li>
+							<a href="{% url 'holiday:list'%}">Отпуска</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#"><i class="fa fa-lg fa-fw fa-pencil-square-o"></i> <span class="menu-item-parent">Маркетинг</span></a>
+					<ul>
+						<li>
+							<a href="/marketing/report/list/">Отчеты</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="/printtask/list/">Задания печати</a>
+				</li>
+				<li>
+					<a href="/review/list">Отзывы</a>
+				</li>
+				<li>
+					<a href="{% url 'projects:list'%}">Проекты</a>
+				</li>
+				<li>
+					<a href="/panel/saleplanshop/list/">План продаж магазина</a>
+				</li>					
+				<li>
+					<a href="{% url 'inventory:invlist_list' %}">Инвентаризация</a>
+				</li>
+				<li>
+					<a href="/usermanual/list/">Документация</a>
+				</li>
+				<li>
+					<a href="/dev/countdebug/">Счетчик отладка</a>
+				</li>
+				<li>
+					<a href="{% url 'log:log_list' %}">Лог</a>
+				</li>
+				{% endif %}
+
+			</ul> -->
+		{% endcomment %}	
+			
+			{% panelmenulist %}
+			
+			
+			
+		</nav>
+		
+
+		<span class="minifyme" data-action="minifyMenu"> 
+			<i class="fa fa-arrow-circle-left hit"></i> 
+		</span>
+
+	</aside>
+	<!-- END NAVIGATION -->
+	
+	<div id="main" role="main">
+
+		<!-- RIBBON -->
+ 		<div id="ribbon">
+
+ 		<span class="ribbon-button-alignment"> 
+		<span id="refresh" class="btn btn-ribbon" data-action="resetWidgets" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true">
+		<i class="fa fa-refresh"></i>
+		</span> 
+		</span>
+
+		<!-- breadcrumb -->
+<!--  		<ol class="breadcrumb">
+		<li>Home</li><li>Dashboard</li>
+		</ol> -->
+		<!-- end breadcrumb -->
+
+		</div>
+		<!-- END RIBBON -->
+
+		<!-- MAIN CONTENT -->
+		<div id="content">
+
+			
+						{% block content %}
+						{% endblock %}
+			
+			
+		</div>
+		<!-- END MAIN CONTENT -->
+	</div>
+	<!-- END MAIN PANEL -->
+
+	<!-- PAGE FOOTER -->
+<!-- 	<div class="page-footer">
+		<div class="row">
+			<div class="col-xs-12 col-sm-6">
+				<span class="txt-color-white">crm babah</span>
+			</div>
+		</div>
+	</div> -->
+	<!-- END PAGE FOOTER -->
+
+	<!-- SHORTCUT AREA : With large tiles (activated via clicking user name tag)
+	Note: These tiles are completely responsive,
+	you can add as many as you like
+	-->
+	<div id="shortcut">
+		<ul>
+			<li>
+				<a href="/personal/signature/{{ request.user.id }}/" class="jarvismetro-tile big-cubes bg-color-blue"> <span class="iconbox"> <i class="fa fa-envelope fa-4x"></i> <span>Подпись письма</span> </span> </a>
+			</li>
+			<li>
+				<a href="/user/password" class="jarvismetro-tile big-cubes bg-color-greenLight"> <span class="iconbox"> <i class="fa fa-key fa-4x"></i> <span>Изменить пароль </span> </span> </a>
+			</li>
+			<li>
+				<a href="/user/profile" class="jarvismetro-tile big-cubes selected bg-color-pinkDark"> <span class="iconbox"> <i class="fa fa-user fa-4x"></i> <span>Профиль </span> </span> </a>
+			</li>
+		</ul>
+	</div>
+	<!-- END SHORTCUT AREA -->
+
+
+	
+	<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+	<script data-pace-options='{ "restartOnRequestAfter": true }' src="/static/smartadmin/js/plugin/pace/pace.min.js"></script>
+
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+	<!-- IMPORTANT: APP CONFIG -->
+	<script src="/static/smartadmin/js/app.config.js"></script>
+
+	<!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
+	<script src="/static/smartadmin/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> 
+
+	<!-- BOOTSTRAP JS -->
+	<script src="/static/smartadmin/js/bootstrap/bootstrap.min.js"></script>
+
+	<!-- CUSTOM NOTIFICATION -->
+	<script src="/static/smartadmin/js/notification/SmartNotification.min.js"></script>
+
+	<!-- JARVIS WIDGETS -->
+	<script src="/static/smartadmin/js/smartwidgets/jarvis.widget.min.js"></script>
+
+	<!-- EASY PIE CHARTS -->
+	<script src="/static/smartadmin/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+	<!-- SPARKLINES -->
+	<script src="/static/smartadmin/js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+	<!-- JQUERY VALIDATE -->
+	<script src="/static/smartadmin/js/plugin/jquery-validate/jquery.validate.min.js"></script>
+
+	<!-- JQUERY MASKED INPUT -->
+	<script src="/static/smartadmin/js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+	<!-- JQUERY SELECT2 INPUT -->
+	<script src="/static/smartadmin/js/plugin/select2/select2.min.js"></script>
+
+	<!-- JQUERY UI + Bootstrap Slider -->
+	<script src="/static/smartadmin/js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+	<!-- browser msie issue fix -->
+	<script src="/static/smartadmin/js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+	<!-- FastClick: For mobile devices -->
+	<script src="/static/smartadmin/js/plugin/fastclick/fastclick.min.js"></script>
+
+	<!--[if IE 8]>
+
+	<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+
+	<![endif]-->
+
+	<!-- MAIN APP JS FILE -->
+	<script src="/static/smartadmin/js/app.min.js"></script>
+
+	<!-- ENHANCEMENT PLUGINS : NOT A REQUIREMENT -->
+	<!-- Voice command : plugin -->
+	<script src="/static/smartadmin/js/speech/voicecommand.min.js"></script>
+
+	<!-- SmartChat UI : plugin -->
+	<script src="/static/smartadmin/js/smart-chat-ui/smart.chat.ui.min.js"></script>
+	<script src="/static/smartadmin/js/smart-chat-ui/smart.chat.manager.min.js"></script>
+	
+	<!-- PAGE RELATED PLUGIN(S) -->
+	
+	<!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
+	<script src="/static/smartadmin/js/plugin/flot/jquery.flot.cust.min.js"></script>
+	<script src="/static/smartadmin/js/plugin/flot/jquery.flot.resize.min.js"></script>
+	<script src="/static/smartadmin/js/plugin/flot/jquery.flot.time.min.js"></script>
+	<script src="/static/smartadmin/js/plugin/flot/jquery.flot.tooltip.min.js"></script>
+	
+	<!-- Vector Maps Plugin: Vectormap engine, Vectormap language -->
+	<script src="/static/smartadmin/js/plugin/vectormap/jquery-jvectormap-1.2.2.min.js"></script>
+	<script src="/static/smartadmin/js/plugin/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+	
+	{% comment %}
+	<script defer src="/static/fontawesome5/js/fa-v4-shims.min.js"></script>
+	<script defer src="/static/fontawesome/js/fontawesome-all.min.js"></script>
+	{% endcomment %}
+	
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			pageSetUp();
+		})
+	</script>
+	
+
+</body>
+
+</html>

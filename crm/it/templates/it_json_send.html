@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+{% block script %}{% endblock %}
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+<script>
+
+
+
+function formsend() {
+	
+	var url = $('input[name="url"]').val();
+	var jsonbody = $('textarea[name="jsonbody"]').val();
+	
+	//console.log(url, jsonbody);
+	
+	$.ajax({
+		type: 'POST',
+		url: url,
+		data: jsonbody,
+		dataType: 'json',
+		beforeSend: function(){},
+		success: function(data){
+			console.log(data);
+			$('.debug').text(data);
+		},
+		error: function(xhr, textStatus, errorThrown){
+			console.log(errorThrown);
+		}
+	});
+	
+	return false;
+}
+
+
+</script>
+
+
+
+
+	<!-- widget grid -->
+	<section id="widget-grid" class="">
+		<div class="well">
+		
+			<h4>JSON online send</h4>
+			
+			<p class="debug">
+			</p>
+
+		</div>
+		<!-- row -->
+		<div class="row">
+	
+			<!-- NEW WIDGET START -->
+			<article class="col-sm-12 col-md-12 col-lg-12">					
+
+			<!-- Widget ID (each widget will need unique ID)-->
+				<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false">
+					<!-- widget options:
+					usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+	
+					data-widget-colorbutton="false"
+					data-widget-editbutton="false"
+					data-widget-togglebutton="false"
+					data-widget-deletebutton="false"
+					data-widget-fullscreenbutton="false"
+					data-widget-custombutton="false"
+					data-widget-collapsed="true"
+					data-widget-sortable="false"
+	
+					-->
+					<header>
+						<h2>JSON online send</h2>
+					</header>
+	
+					<!-- widget div-->
+					<div>
+	
+						<!-- widget edit box -->
+						<div class="jarviswidget-editbox">
+							<!-- This area used as dropdown edit box -->
+	
+						</div>
+						<!-- end widget edit box -->
+	
+						<!-- widget content -->
+						<div class="widget-body">
+						
+						<p>Поля отмеченные <sup class="required">*</sup> обязательные для заполнения</p>
+	
+							<form action="" method="post" enctype="multipart/form-data" role="form">
+								{% csrf_token %}
+
+								
+								{% for hidden in form.hidden_fields %}
+									{{ hidden }}
+								{% endfor %}
+								
+								<fieldset>
+								{% for i in form.visible_fields %}
+
+									<div class="form-group">
+										{% if i.field.required %}<sup class="required">*</sup>{% endif %}
+										<label>{{ i.label }}</label>
+										{{ i }}
+										{% if i.errors %}
+										<p class="text-danger">{{ i.errors|striptags }}</p>
+										{% endif %}
+										<p class="help-block">{{ i.field.help_text  }}</p>
+									</div>
+
+								{% endfor %}
+								
+								<button type="submit" class="btn btn-primary" onclick="formsend(); return false;">отправить</button>
+								
+								</fieldset>
+								
+							</form>
+						</div>
+						<!-- end widget content -->
+	
+					</div>
+					<!-- end widget div -->
+	
+				</div>
+				<!-- end widget -->
+			</article>
+		</div>
+	</section>
+
+{% endblock %}
+

@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load librarytag %}
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+<!-- 	<div class="well">
+		<div class="form-group">
+				<a class="btn btn-success" href="{% url 'library:library_book_add' %}">Добавить Книгу</a>
+		</div>
+	</div> -->
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-book" aria-hidden="true"></i> </span>
+					<h2>Книга "{{ object.name }}"</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+
+					
+						<div class="row">
+							<div class="col-md-4">
+								<h3 class="text-muted">Создатель: <small>{{ object.user.first_name }} {{ object.user.last_name }}</small></h3>
+
+							</div>
+							<div class="col-md-8">
+								{% if object.librarybooklike_set.all %}
+									<div>
+									<h3 class="text-muted">Пользователи оценили книгу ({{ object.librarybooklike_set.all.count }} голоса(ов))</h3>
+									<div class="table-responsive">
+										<table class="table table-bordered table-striped">
+											<tbody>
+												{% for lt in object.librarybooklike_set.all %}
+													<tr>
+														<td>{{ lt.user.first_name }} {{ lt.user.last_name }}</td>
+														<td>{{ lt.value|ratingstar }} </td>
+													</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
+									</div>
+								{% endif%}
+							
+								{% if not liked %}
+								<div>
+									<h3 class="text-muted">Оцените книгу</h3>
+									<span class="rating">
+										<a href="/library/book/like/{{ object.id }}/5/" class="star filled"></a>
+										<a href="/library/book/like/{{ object.id }}/4/" class="star filled"></a>
+										<a href="/library/book/like/{{ object.id }}/3/" class="star"></a>
+										<a href="/library/book/like/{{ object.id }}/2/" class="star"></a>
+										<a href="/library/book/like/{{ object.id }}/1/" class="star"></a>
+									</span>
+								</div>
+								{% endif %}
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-4">
+								{% if object.pict %}<img src="{{ object.pict200.url }}" />{% endif %}
+							</div>
+							<div class="col-md-8">
+								<h4>Описание</h4>
+								<p class="text-justify">
+								{{ object.desc }}
+								</p>
+								
+								<p>
+								<a href="{% url 'library:download_book' object.id %}" class="btn btn-success">Скачать книгу</a>
+								</p>
+
+								</br>
+								
+								{% if object.user == request.user %}
+								<div class="form-group"> 
+									<a href="{% url 'library:library_book_edit' object.id %}" class="btn btn-primary">Изменить</a> 
+								</div>
+								{% endif %}
+								
+
+							</div>
+						</div>
+					
+					
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+			
+			
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"><i class="fa fa-comment-o" aria-hidden="true"></i> </span>
+					<h2>Комментарии</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+
+					
+		
+						{% if object.librarybookcomment_set.all %}
+							<h3>Комментарии пользователей</h3>
+							{% for c in object.librarybookcomment_set.all %}
+								
+									<div class="row">
+										<div class="col-md-1">
+											<div class="thumbnail">
+												{% getprofileuser c.user.id as profileuser %}
+												{% if profileuser.photo %}
+												<img class="img-responsive user-photo" src="{{ profileuser.photosmall.url }}">
+												{% else %}
+													<img class="img-responsive user-photo" src="/static/img/nophoto.png">
+												{% endif %}
+											</div>
+										</div>
+										<div class="col-md-11">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+												<strong>{{ c.user.first_name }} {{ c.user.last_name }}</strong> <span class="text-muted">{{ c.ctime|date:"SHORT_DATETIME_FORMAT" }}</span>
+												</div>
+												<div class="panel-body">
+												{{ c.message|safe }}
+												
+												{% if c.pict %}
+													</br></br>
+													<a href="{{ c.pict.url }}" class="fancybox"><img src="{{ c.pict1.url }}" class="img-responsive" />	
+													</a>
+												{% endif %}
+												</div>
+											</div>
+										</div>
+									</div>
+								
+							{% endfor %}
+						{% endif %}
+
+						<h4>Оставить комментарий</h4>
+						
+							<form action="" method="post" enctype="multipart/form-data" role="form">
+							{% csrf_token %}
+
+							{% for hidden in form.hidden_fields %}
+								{{ hidden }}
+							{% endfor %}
+							
+
+
+							<div class="form-group">
+							{% if form.message.field.required %}<sup class="required">*</sup>{% endif %}
+							<label>{{ form.message.label }}</label>
+							{{ form.message }}
+							{% if form.message.errors %}
+							<p class="text-danger">{{ form.message.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.message.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+							
+							
+							<div class="form-group">
+							{% if form.pict.field.required %}<sup class="required">*</sup>{% endif %}
+							<label>{{ form.pict.label }}</label>
+							{{ form.pict }}
+							{% if form.pict.errors %}
+							<p class="text-danger">{{ form.pict.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.pict.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+
+
+							</br>
+
+
+							<div class="form-group"> 
+								<button type="submit" class="btn btn-success">Отправить</button>
+								</span>
+							</div>
+
+							
+						</form>
+						
+
+					
+					
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+{% endblock %}
+

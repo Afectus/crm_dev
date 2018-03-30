@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	
+	<div class="well">
+		<div class="form-group">
+			<a class="btn btn-success" href="{% url 'corpmail:corpmail_add' %}"><i class="fa fa-envelope" aria-hidden="true"></i> Написать письмо</a>
+			<a class="btn btn-success" href="{% url 'corpmail:corpmail_list' %}/?type=recieved"><i class="fa fa-arrow-down" aria-hidden="true"></i> Входящие</a>
+			<a class="btn btn-success" href="{% url 'corpmail:corpmail_list' %}/?type=sent"><i class="fa fa-arrow-up" aria-hidden="true"></i> Отправленные</a>
+		</div>
+	</div>
+	
+
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+		
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Список 
+						{% if request.GET.type == 'sent' %}
+							отправленных
+						{% else %}
+							входящих
+						{% endif %}
+						писем</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>
+											{% if request.GET.type == 'sent' %}
+												Кому
+											{% else %}
+												От кого
+											{% endif %}
+										</th>
+										<th>Тема</th>
+										<th>Дата</th>
+										<th width="25%"></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>
+											{% if request.GET.type == 'sent' %}
+												{% for a in i.addressee.all %}
+													{{ a.user|who }}<br>
+												{% endfor %}
+											{% else %}
+												{{ i.user.user|who }}
+											{% endif %}
+										</td>
+										<td>{{ i.name }}</td>
+										<td>{{ i.cdate }}</td>
+										<td>
+											<div align="left" style="position: relative;">
+												{% if request.GET.type == 'sent' %}
+													<a class="btn btn-success" href="{% url 'corpmail:corpmail_detailsent' i.id %}"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Подробнее</a>
+												{% else %}
+													<a class="btn btn-success" href="{% url 'corpmail:corpmail_detail' i.id %}"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Подробнее</a>
+												{% endif %}
+												{% comment %} <a class="btn btn-success" href="{% url 'corpmail:corpmail_edit' i.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Редактировать</a> {% endcomment %}
+												{% comment %} <a class="btn btn-success" color="gray" href="{% url 'corpmail:corpmail_reply' i.id %}"><i class="fa fa-reply" aria-hidden="true"></i> Ответить</a>  {% endcomment %}
+												{% comment %} <a class="btn btn-warning" color="gray" href="{% url 'corpmail:corpmail_toarchive' i.id %}"><i class="fa fa-archive" aria-hidden="true"></i> Архивировать</a>  {% endcomment %}
+											</div>					
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+			{% if is_paginated %}
+			<nav>
+			  <ul class="pagination">
+				{% if page_obj.has_previous %}
+				  <li>
+					<a href="?page={{ page_obj.previous_page_number }}">
+					  <span>Previous</span>
+					</a>
+				  </li>
+				{% else %}
+				  <li class="disabled">
+					<a href="#">
+					  <span>Previous</span>
+					</a>
+				  </li>
+				{% endif %}
+		  
+				{% for page in paginator.page_range %}
+				  <li {% if page == page_obj.number %}class="active"{% endif %}>
+					<a href="?page={{ page }}">{{ page }}</a>
+				  </li>
+				{% endfor %}
+		  
+				{% if page_obj.has_next %}
+				  <li>
+					<a href="?page={{ page_obj.next_page_number }}">
+					  <span>Next</span>
+					</a>
+				  </li>
+				{% else %}
+				  <li {% if not page_obj.has_next %}class="disabled"{% endif %}>
+					<a href="#">
+					  <span>Next</span>
+					</a>
+				  </li>
+				{% endif %}
+			  </ul>
+			</nav>
+		  {% endif %}
+		  
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+{% endblock %}
+

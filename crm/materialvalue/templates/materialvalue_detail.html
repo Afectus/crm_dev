@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+{% block script %}<script src="/static/js/print.js"></script>{% endblock %}
+
+{% block content %}
+
+{% load nodetag %}
+
+<script>
+//одна копия
+var itembarcode = [];
+itembarcode.push({ name: '{{ object.name }}', copies: 1, barcode: '{{ object.barcode }}' });
+console.log(itembarcode);
+
+//две копии
+var itembarcode2 = [];
+itembarcode2.push({ name: '{{ object.name }}', copies: 2, barcode: '{{ object.barcode }}' });
+console.log(itembarcode2);
+
+function sendtoprinttext() {
+	var itemtext = [];
+	var value = '{{ object.name }}';
+	console.log(value);
+	itemtext.push({copies: 1, value: value });
+	console.log(itemtext);
+	socketa.emit('print', { 'clientid': clientid, 'name': 'ttp225text', 'items': itemtext });	
+	return false;
+}
+
+function sendtoprintbarcode() {
+	//socketa.emit('print', { 'clientid': clientid, 'name': 'barcodelist', 'items': itembarcode });
+	socketa.emit('print', { 'clientid': clientid, 'name': 'ttp225barcode', 'items': itembarcode });
+	return false;
+}
+function sendtoprintbarcode2() {
+	//socketa.emit('print', { 'clientid': clientid, 'name': 'barcodelist', 'items': itembarcode });
+	socketa.emit('print', { 'clientid': clientid, 'name': 'ttp225barcode', 'items': itembarcode2 });
+	return false;
+}
+</script>
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+		<!-- Widget ID (each widget will need unique ID)-->
+		<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-list-alt" aria-hidden="true"></i> </span>
+					<h2>Материальная ценность {{ object.name }} #{{ object.id }}</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+					
+					
+						<div class="row">
+							<div class="col-md-6">
+							
+									<div class="form-group">
+										<a href="{% url 'materialvalue:materialvalue_list' %}" class="btn btn-default">Список ценностей</a>
+									
+										{% if request.session.req %}
+										<a href="{% url 'materialvalue:materialvalue_list' %}?{{ request.session.req}}" class="btn btn-default">Назад</a>
+										{% endif %}
+									</div>
+									
+							
+									<table class="table">
+											<tr>
+												<th>Название</th>
+												<td>
+													{{ object.name }}
+													<div class="form-group">
+														<a href="#" class="btn btn-success btn-xs btn-block" onclick="sendtoprinttext(); return false;">Печать</a>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<th>Штрихкод</th>
+												<td>
+													{{ object.barcode }}
+													<div class="form-group">
+														<a href="#" class="btn btn-success btn-xs btn-block" onclick="sendtoprintbarcode(); return false;">Печать</a>
+													</div>
+													<div class="form-group">
+														<a href="#" class="btn btn-success btn-xs btn-block" onclick="sendtoprintbarcode2(); return false;">Печать (2 шт.)</a>
+													</div>
+												</td>
+											</tr>
+											<tr><th>Категория</th><td>{{ object.get_category_display }}</td></tr>
+											<tr><th>Статус</th><td>{{ object.get_status_display }}</td></tr>
+											<tr><th>Модель</th><td>{{ object.model }}</td></tr>
+											<tr><th>Серийный номер</th><td>{{ object.serial }}</td></tr>
+											<tr><th>Количество</th><td>{{ object.amount }}</td></tr>
+											<tr><th>Оценочная стоимость</th><td>{{ object.assessed_value }} <i class="fa fa-rub" aria-hidden="true"></i></td></tr>
+											<tr><th>Связана с ценностью</th><td>{{ object.parent|default_if_none:"" }}</td></tr>
+										</table>
+								<div class="form-group">
+										<a class="btn btn-success" href="{% url 'materialvalue:materialvalue_edit' object.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Редактировать</a><br><br>
+										
+										<a class="btn btn-success" href="{% url 'materialvalue:materialvalue_addphoto' object.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Редактировать фото</a><br><br>
+										
+										<a class="btn btn-success" href="{% url 'materialvalue:mvfile_add' object.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Добавить файлы</a><br><br>
+
+										<a class="btn btn-success" href="{% url 'materialvalue:materialvalue_addmorephoto' object.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Добавить ещё фото</a>
+										
+										<a class="btn btn-default" href="{% url 'materialvalue:materialvalue_detail_print' object.id %}" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> Печать</a>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+										<table class="table">
+												{% if object.pictdesc %}
+												<tr><th>Изображение описания</th><td><a href="{{ object.pictdesc.url }}" target="_blank"><img src="{{ object.pictdesc200.url }}" class="img-responsive" /></a></td></tr>
+												{% endif %}
+												{% if object.photo %}
+												<tr><th>Фотографии</th><td><a href="{{ object.photo.url }}" target="_blank"><img src="{{ object.photo200.url }}" class="img-responsive" /></a></td></tr>
+												{% endif %}
+												{% if object.mvfile_set.all %}
+												<tr><th>Файлы</th>
+													<td>
+														<div align="left">
+														{% for file in object.mvfile_set.all %}
+															<div style="display: inline-block">
+																<tr>
+																	<td>
+																		<a href="{{ file.sourcefile.url }}" target="_blank" download="{{ file.desc }}">
+																			<i class="fa fa-paperclip fa-2x" style="" aria-hidden="true"></i>
+																		</a>
+																	</td>
+																	<td>
+																		{{ file.desc }}
+																	</td>
+																	<td>
+																		<a class="btn btn-danger btn-xs" href="{% url 'materialvalue:mvfile_del' file.id %}">
+																			<i class="fa fa-remove"></i>
+																		</a>
+																	</td>
+																</tr>
+															</div>
+														{% endfor %}
+														</div>
+													</td>
+												</tr>
+												{% endif %}
+												
+												{% if object.additionalphoto_set.all %}
+												<tr><th>Дополнительные<br>фотографии</th>
+													<td>
+														<div align="left">
+														{% for p in object.additionalphoto_set.all %}
+															<div style="display: inline-block">
+																<a href="{{p.photo.url}}" target="_blank"><img src="{{ p.photo50.url }}" class="img-responsive"/></a>
+																<a class="btn btn-danger btn-xs" href="{% url 'materialvalue:materialvalue_delmorephoto' p.id %}">
+																	<i class="fa fa-remove"></i>
+																</a>
+															</div>
+														{% endfor %}
+														</div>
+													</td>
+												</tr>
+												{% endif %}
+												
+										</table>
+								
+							</div>
+							
+						</div>
+						{% if object.desc %}
+						<div class="row">
+							<div class="col-md-12">
+								<b>Описание:</b></br>
+								{{ object.desc }}
+							</div>
+						</div>
+						{% endif %}
+					</div>
+					<!-- end widget content -->
+				</div>
+				<!-- end widget div-->
+
+			</div>
+			<!-- end widget -->
+
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Движение материальной ценности "{{ object.name }}"</h2>
+				</header>
+
+		
+				<div class="well">
+					<div class="form-group">
+						<a class="btn btn-success" href="{% url 'materialvalue:materialvaluemove_toshopstock' object.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Движение в магазин/склад</a>
+					</div>
+				</div>
+			
+				<!-- widget div-->
+				<div>
+
+					<!-- widget content -->
+					<div class="widget-body\">
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Дата</th>
+										<th>Магазин/склад</th>
+										<th>Контейнер/ячейка</th>
+										<th>Комментарий</th>
+										<th>Действие</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object.mvmove_set.all|dictsort:"id"  %} 
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>{{ i.mdate }}</td>
+										<td>{{ i.shopstock|default_if_none:""}}</td>
+										<td>{{ i.mvcell|default_if_none:""}}</td>
+										<td>{{ i.note }}</td>
+										<td>
+											<div class="form-group">
+												<a class="btn btn-success" href="{% url 'materialvalue:materialvalue_movetocell' i.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Разместить в ячейке</a>
+											</div>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+{% include "paginator.html" %}
+
+{% endblock %}
+

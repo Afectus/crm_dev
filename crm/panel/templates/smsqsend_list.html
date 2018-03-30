@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+{% block title %}Панель управления - список покупателей{% endblock %}
+{% block description %}Панель управления - список покупателей{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<h2>Фильтр </h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+
+					
+						<form class="smart-form" id="form_filter" action="{% url 'panel:smsqsend_list' %}" method="get" role="form">
+						{# {% csrf_token %} #}
+
+						{% for hidden in form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+						
+						{# {% for i in form.visible_fields %} #}
+						{# {% endfor %} #}
+
+							<header>
+								<h3>SMS очередь <small>рассылка</small></h3>
+							</header>
+
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-12">
+										<label class="label">{{ form.send.label }}</label>
+										<label class="input">
+											{{ form.send }}
+										</label>
+										{% if form.send.errors %}
+										<p class="text-danger">{{ form.send.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.send.field.help_text  }}</div>
+									</section>
+									
+									{% comment %}
+									<section class="col col-12">
+										
+										<label class="checkbox">
+											{{ form.send }}
+											<i></i>
+											{{ form.send.label }}
+										</label>	
+										<div class="note">{{ form.send.field.help_text  }}</div>
+									</section>
+									{% endcomment %}
+								</div>
+							</fieldset>	
+
+
+							<footer>
+								<div class="pull-left">
+									<h4>Найдено: {{ count }}</h4>
+								</div>
+										
+										
+								{% comment %}
+								<div class="form-group">
+									<a href="/smsqsend/clear" class="btn btn-warning jqueryconfirm">Очистить</a>
+								</div>
+								{% endcomment %}
+										
+								<button type="submit" class="btn btn-primary">Применить</button>
+								<a href="{% url 'panel:smsqsend_list' %}" class="btn btn-default">Сбросить</a>
+								
+							</footer>
+						</form>
+
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+			
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>SMS Очередь</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+
+						<div class="table-responsive">
+								
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Рабо-</br>тает</th>
+										<th>Отпра-</br>влено</th>
+										<th>Переход</br>клиента</th>
+										<th>Покупатель</th>
+										<th>Сообщение</th>
+										<th>Результат</th>
+										<th>Изменить</th>
+									</tr>
+								</thead>
+								<tbody>
+								{% for i in object_list %}
+									<tr>
+										<td>{{ i.id }}</br>
+											{{ i.cdate|date:"SHORT_DATETIME_FORMAT" }}
+										</td>
+										<td>{{ i.status|mybool }}</td>
+										<td>{{ i.send|myboolicon }}</td>
+										<td>{{ i.back|myboolicon }}</td>
+										<td>{{ i.buyer.phone|hidephone }}
+											</br>
+											{{ i.buyer.f }} {{ i.buyer.i }} {{ i.buyer.o }}</br>
+											{% if i.buyer.male %}
+											пол: {{ i.buyer.male }}
+											{% endif %}
+										</td>
+										<td>{{ i.message }}</td>
+										<td>{{ i.result }}</td>
+										<td>
+											{% if not i.send %}
+											<div class="form-group">
+												<a href="/smsqsend/edit/{{ i.id }}/?next=/smsqsend/list/?xpage={{ request.GET.page }}" class="btn btn-primary btn-sm" target="_blank">изменить</a>
+												</br></br>
+												<a href="/smsqsend/del/{{ i.id }}" class="btn btn-warning btn-sm">Удалить</a>
+											</div>
+											{% endif %}
+										</td>
+									</tr>
+								{% endfor %}
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+			
+			
+			
+			
+			
+			
+			
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+
+
+
+
+	
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+
+		{% include "xpaginator.html" %}
+		
+		</div>
+	</div>
+</div>
+
+
+	
+	
+	
+	</br>
+
+{% endblock %}
+

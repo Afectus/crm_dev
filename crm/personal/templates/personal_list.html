@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+	<div class="well">
+		<div class="row">
+			<section class="col-md-6">
+				<ul class="btn-list list-unstyled">
+					{% for i in status %}
+						<li>
+							<a href="{% url 'personal:personal_list' %}?status={{ i.0 }}" class="btn btn-{% if currentstatus == i.0 %}primary{% else %}default{% endif %}">{{ i.1 }}</a>
+						</li>
+					{% endfor %}
+					<li>
+						<a href="{% url 'personal:personal_list' %}" class="btn btn-info">
+							<i class="fa fa-times" aria-hidden="true"></i>
+						</a>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</div>
+
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Список сотрудников</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th></th>
+										<th></th>
+										<th>Магазин</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+										<tr>
+											<td>{{ i.id }}</td>
+											<td>
+												{% if i.photo %}
+													<a href="{% url 'personal:personal_detail' i.id %}"><img class="img-responsive user-photo" src="{{ i.photosmall.url }}"></a>
+												{% else %}
+													<a href="{% url 'personal:personal_detail' i.id %}"><img class="img-responsive user-photo" src="/static/img/nophoto.png"></a>
+												{% endif %}
+											</td>
+											<td>
+												{{ i.user|who }}
+												
+												{% comment %}
+												{% if i.personalanketa_set.get %}
+												(<a href="{% url 'personal:personalanketa_detail' i.personalanketa_set.get.id %}">анкета</a>)
+												{% endif %}
+												{% endcomment %}
+												
+												
+												</br>
+												{{ i.position }}</br>
+												{{ i.get_role_display }}</br>
+												{{ i.get_status_display }}</br>
+												{% if i.bday %}
+													Д. Рождения: {{ i.bday }}
+												{% endif %}
+											</td>
+											<td>
+												{% for s in i.shop.all %}
+													{{ s.name }}</br>
+												{% endfor %}
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+
+
+
+{% include "paginator.html" %}
+
+
+
+
+{% endblock %}
+

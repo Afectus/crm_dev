@@ -1,0 +1,179 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+	
+	
+	<link href="http://vjs.zencdn.net/6.2.8/video-js.css" rel="stylesheet">
+
+	<!-- If you'd like to support IE8 -->
+	<script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+	
+	
+	<!-- <script src="data.js"></script> -->
+
+	
+<style>
+
+video::-webkit-media-controls {display: none;}
+video::-moz-media-controls {display: none;}
+video::-o-media-controls {display: none;}
+video::-ms-media-controls {display: none;}
+
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls-timeline, 
+video::-webkit-media-controls-current-time-display, 
+video::-webkit-media-controls-time-remaining-display, 
+video::-webkit-media-controls-mute-button, 
+video::-webkit-media-controls-toggle-closed-captions-button, 
+video::-webkit-media-controls-volume-slider,
+video::-webkit-media-controls-fullscreen-button
+{display: none;}
+
+video::-moz-media-controls-play-button,
+video::-moz-media-controls-timeline, 
+video::-moz-media-controls-current-time-display, 
+video::-moz-media-controls-time-remaining-display, 
+video::-moz-media-controls-mute-button, 
+video::-moz-media-controls-toggle-closed-captions-button, 
+video::-moz-media-controls-volume-slider 
+{display: none;}
+
+#data a {
+    margin: 5px;
+}
+
+</style>	
+	
+	
+	
+</head>
+<body>
+
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-11">
+				<div class="form-group">
+					<a href="/dev" class="btn btn-warning btn-block btn-lg"><i class="fa fa-home" aria-hidden="true"></i> На главную</a>
+				</div>
+				<div id="data"></div>
+			</div>
+			<div class="col-md-1">
+				<div id="player"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+<script>
+
+var data = [
+{% for i in object_list %}
+	'{{ i.video }}',
+{% endfor %}
+];
+
+console.log(data);
+
+
+
+console.log(data);
+
+
+function videoclose(e)
+{
+	$('#player').html('');
+	return false;
+}
+
+
+function videoclick(e)
+{
+	console.log('video click from onclick');
+	$('#player').html('');
+	return false;
+}
+
+
+function rvideo(e)
+{
+
+	var vid = $(e).attr('vid');
+
+	$('#player').html(
+	'<video id="mainvideo" width="800" height="600" onclick="videoclose(this);"><source class="rvideo" src="http://192.168.0.39/video/'+vid+'" type="video/mp4"></video>'
+	)
+
+	var video = $('#player video');
+	//console.log($(e).attr('vid'));
+	
+	//$('.rvideo').attr('src', vid);
+	
+	video[0].load();
+	video[0].play();
+	
+	
+	video[0].onended = function(e) {
+		videoclose();
+		console.log('video end');
+    };
+	
+	<!-- for opera  -->
+	//var videoElement = document.getElementById('mainvideo');    
+	//videoElement.webkitRequestFullScreen();
+	
+	<!-- for firefox  -->
+	//firefox hide fullscreen message
+	//about:config
+	//full-screen-api.warning.delay;0
+	//full-screen-api.warning.timeout;0
+	var elem = document.getElementById('mainvideo');
+	if (elem.requestFullscreen) {
+	elem.requestFullscreen();
+	} else if (elem.mozRequestFullScreen) {
+	elem.mozRequestFullScreen();
+	} else if (elem.webkitRequestFullscreen) {
+	elem.webkitRequestFullscreen();
+	}
+
+	
+	
+	return false;
+}
+
+
+$(document).ready(function() {
+
+	$.each(data, function(key, value) {
+		$('#data').append(
+		'<a href="#" class="btn btn-success" vid="'+value+'" onclick="rvideo(this); return false;">'+value+'</a>'
+		);
+	});
+	
+/*	$('body').click(function(e, callback) {
+		console.log('click');
+	});
+	
+	$('#mainvideo').click(function(e, callback) {
+		console.log('click video');
+	});
+	
+	$('#mainvideo').live('click', function(){
+		console.log('click live video');
+	})
+*/
+
+});
+
+
+</script>

@@ -1,0 +1,17 @@
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow user	command
+*/3 * 	* * *	root	/usr/bin/python3 /home/babah/ping.py > /dev/null
+*/59 *	* * *	babah	rsync --delete-after -av 192.168.0.250::babah_media /home/babah/FTP
+#*/59 *	* * *	babah	rsync --delete-after --port=8738 -av 188.246.226.42::babah_media /home/babah/FTP
+#@reboot		babah	sleep 20s && python3 /home/babah/mediascript/client_gigabyte
+#@reboot		babah	sleep 20s && /home/babah/mediascript/start.sh
+#@reboot		root	sleep 50s &&  /home/babah_24/calibration.sh
+#

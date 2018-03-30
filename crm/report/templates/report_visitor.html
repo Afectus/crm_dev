@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load reporttag %}
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Счетчик посетителей</h3>
+			
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<form id="form_filter" action="/report/visitor/1/" method="get" role="form">
+				{# {% csrf_token %} #}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+				{# {% for i in form.visible_fields %} #}
+				
+
+
+				<div class="bg-info myfilterblock">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group"> 
+							<label>{{ form.timestart.label }}</label>
+							{{ form.timestart }}
+							{% if form.timestart.errors %}
+							<p class="text-danger">{{ form.timestart.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.timestart.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group"> 
+							<label>{{ form.timeend.label }}</label>
+							{{ form.timeend }}
+							{% if form.timeend.errors %}
+							<p class="text-danger">{{ form.timeend.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.timeend.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+
+				
+				<div class="bg-success myfilterblock">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group"> 
+							<label>{{ form.shop.label }}</label>
+							{{ form.shop }}
+							{% if form.shop.errors %}
+							<p class="text-danger">{{ form.shop.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.shop.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group"> 
+							<label>{{ form.event.label }}</label>
+							{{ form.event }}
+							{% if form.event.errors %}
+							<p class="text-danger">{{ form.event.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.event.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+
+				</br>
+
+				<div class="myfilterblock">
+					<div class="form-group"> 
+						<button type="submit" class="btn btn-success">Применить</button>
+						<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+						<a href="/report/visitor" class="btn btn-success">Сбросить</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>	
+	
+	
+	
+	
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+				<table class="table">
+					<caption><h4>Отчет</h4></caption>
+					<thead>
+						<tr>
+							<th>id</th>
+							<th>Дата</th>
+							<th>Магазин</th>
+							<th>Устройство</th>
+							<th>Событие</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for i in object_list %}
+						<tr class="bg-success">
+							<td>{{ i.id }}</td>
+							<td>{{ i.counttime|date:"SHORT_DATETIME_FORMAT" }}</td>
+							<td>{{ i.shop.name }}</td>
+							<td>{{ i.name }}</td>
+							<td>{{ i.get_event_display }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Найдено: {{ total }}</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+
+			<ul class="pagination">
+				{% if object_list.has_previous %}
+					<li><a href="/report/visitor/{{ object_list.paginator.page_range|first }}?{{ req }}"><i class="icon-double-angle-left"></i>Первая</a></li>
+				{% endif %}
+
+				{% if object_list.has_previous %}
+					<li><a href="/report/visitor/{{ object_list.previous_page_number }}?{{ req }}"><i class="icon-angle-left"></i>Предыдущая</a></li>
+				{% endif %}
+				
+				{% for p in object_list.paginator.page_range|mypaginatorslice:object_list.number %}
+					{% if p != 0 %}
+						{% if p == object_list.number %}
+								<li class="active"><a href="" onclick="return false;">{{ object_list.number }}</a></li>
+							{% else %}
+								<li><a href="/report/visitor/{{ p }}?{{ req }}">{{ p }}</a></li>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+					
+				{% if object_list.has_next %}
+					<li><a href="/report/visitor/{{ object_list.next_page_number }}?{{ req }}">Следующая<i class="icon-angle-right"></i></a></li>
+				{% endif %}
+
+				{% if object_list.has_next %}
+					<li><a href="/report/visitor/{{ object_list.paginator.page_range|last }}?{{ req }}">Последняя<i class="icon-double-angle-right"></i></a></li>
+				{% endif %}
+			</ul>
+
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+

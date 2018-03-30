@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+{% include "_form2.html" %}
+
+<script>
+$("#id_optbuyer").chosen({
+	placeholder_text_multiple: " Покупатель",
+	no_results_text: "не найдено",
+	search_contains: true,
+});
+</script>
+	
+	
+{% endblock %}

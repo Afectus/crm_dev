@@ -1,0 +1,365 @@
+{% extends "majorbase.html" %}
+{% block title %}Панель управления - список товаров{% endblock %}
+{% block description %}Панель управления - список товаров{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+	
+{% block script %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load opttag %}
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<form id="form_filter" action="" method="get" role="form">
+				{# {% csrf_token %} #}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+				{# {% for i in form.visible_fields %} #}
+				
+				<div class="bg-success myfilterblock">
+				
+					<div class="form-group"> 
+					<label>{{ form.q.label }}</label>
+					{{ form.q }}
+					{% if form.q.errors %}
+					<p class="text-danger">{{ form.q.errors|striptags }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.q.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+					
+					
+					<div class="form-group"> 
+					<label>{{ form.tax.label }}</label>
+					{{ form.tax}}
+					{% if form.tax.errors %}
+					<p class="text-danger">{{ form.tax.errors|striptags }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.tax.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			
+				
+				
+				<div class="bg-success myfilterblock">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.pricefrom.label }}</label>
+							{{ form.pricefrom }}
+							{% if form.pricefrom.errors %}
+							<p class="text-danger">{{ form.pricefrom.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.pricefrom.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.priceto.label }}</label>
+							{{ form.priceto }}
+							{% if form.priceto.errors %}
+							<p class="text-danger">{{ form.priceto.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.priceto.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.sort.label }}</label>
+							{{ form.sort }}
+							{% if form.sort.errors %}
+							<p class="text-danger">{{ form.sort.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.sort.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				
+				
+	
+
+				</br>
+				
+<!-- 				<div class="bg-success myfilterblock">
+				
+					<div class="form-group"> 
+					<label>{{ form.sort.label }}</label>
+					{{ form.sort }}
+					{% if form.sort.errors %}
+					<p class="text-danger">{{ form.sort.errors|striptags }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.sort.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+				
+				</div> -->
+
+				{# {% endfor %} #}
+				
+
+				<div class="myfilterblock">
+					<div class="pull-left">
+						<div class="form-group"> 
+							<button type="submit" class="btn btn-success">Применить</button>
+							<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+							<a href="{{ urlpage }}" class="btn btn-success">Сбросить</a>
+							&nbsp;&nbsp;
+							<label>{{ form.paging.label }}</label> {{ form.paging }}
+						</div>
+					</div>
+					<div class="pull-right">
+						<h4>Товаров: {{ count }} &nbsp;&nbsp; Количество: {{ sum.s }}</h4>
+						<div class="form-group">
+							<a href="{% url 'opt:majorcart' priceid %}" class="btn btn-success">Корзина</a>
+						</div>
+					</div>
+
+				</div>
+			</form>
+		
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table id="goods_list" class="table">
+				<thead>
+				  <tr>
+					<th></th>
+					<th>Название</th>
+					<th>Описание</th>
+					<th>Цена</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>
+								{% if i.pict %}
+								<a href="{{ i.pict500.url }}" target="_blank"><img src="{{ i.pict120.url}}" /></a>
+								{% endif %}
+							</td>
+							<td>
+								{{ i.name }}
+								<p>
+								<div style="font-size: 12px;">
+									<span>ID: {{ i.id }}</span></br>
+								
+									{% comment %}
+									{% if i.id1c %}
+									<span>1C ID: <b>{{ i.id1c }}</b></span></br>
+									{% endif %}
+									{% endcomment %}
+									
+									{% if i.art %}
+									<span>Артикул: <b>{{ i.art }}</b></span></br>
+									{% endif %}
+									
+									{% comment %}
+									{% if i.base %}
+									<span>База: <b>{{ i.base.name }}</b></span></br>
+									{% endif %}
+									{% endcomment %}
+									
+									{% if i.idbitrix %}
+									<span><a href="http://babah24.ru/katalog/detail.php?ELEMENT_ID={{ i.idbitrix }}" class="btn btn-success btn-xs" target="_blank">Посмотреть на сайте</a></span></br>
+									{% endif %}
+	
+								</div>
+								</p>
+							</td>
+							<td>
+								{{ i.bname }}
+								
+								<p>
+								{% propget i.id 'YOUTUBE' as YOUTUBE %}
+								{% if YOUTUBE %}
+								<a href="http://www.youtube.com/watch?v={{ YOUTUBE.value }}" class="btn btn-success btn-xs fancybox-media" title="Видео {{ i.bname }}">Смотреть видео</a>
+								{% endif %}
+								</p>
+								
+
+								<p>
+								{% proplist i.id as prop %}
+								{% for p in prop %}
+								<div style="font-size: 12px;">
+									<span>{{ p.name }}:</span>
+									<span>
+									{% if p.multiple %}
+										{% for pv in p.value %}
+											<b>{{ pv }}</b>
+										{% endfor %}
+									{% else %}
+										<b>{{ p.value }}</b>
+									{% endif %}
+									<b>{{ p.baseunit }}</b>
+									</span>
+								</div>
+								{% endfor  %}
+								</p>
+
+								
+								{% if i.tax.all %}
+								<p>
+								<span>Категории:</span></br>
+								{% for t in i.tax.all %}
+									<small>{{ t.name }}</small>
+								{% endfor  %}
+								</p>
+								{% endif %}
+								
+								
+								
+							</td>
+							<td>
+								<form name="addtostore{{ i.id }}">	
+								
+								<input name="id" type="hidden" value="{{ i.id }}" />
+								<input name="priceid" type="hidden" value="{{ priceid }}" />
+								
+								<!-- {{ i.startprice|floatdot }} руб. -->
+								{{ i.manualstartprice|floatdot }} руб.
+								
+								{% comment %}
+								{% if i.goodsinstock %}
+									</br>
+									{% for q in i.goodsinstock.all %}
+										<small class="text-muted">{{ q.stock.name }} {{ q.value }}</small></br>
+									{% endfor %}
+								{% endif %}
+								{% endcomment %}
+								
+								<small class="text-muted">На складе: {{ i|getgoodsinstockvalue }}</small></br>
+								</br>
+
+								<div class="row">
+									<div class="col-md-5">
+										<div class="input-group">
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-default btn-number" data-type="minus" data-field="quant{{ i.id }}">
+												-
+												</button>
+											</span>
+
+											<input type="text" fname="quant{{ i.id }}" name="quant" class="form-control input-number" value="1" min="1" max="{{ i|getgoodsinstockvalue }}">
+
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant{{ i.id }}">
+												+
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								</br>
+
+								<a href="#" class="btn btn-warning" onclick="addtostore({{ i.id }}); return false;" title="{{ i.name }} - купить">
+									<div class="addtostorenospinner{{ i.id }}">
+										<i class="fa fa-shopping-cart" aria-hidden="true"></i> В корзину
+									</div>
+									<div class="addtostoreajaxspinner{{ i.id }} addtostoreajaxspinner-style" style="display: none;"></div>
+								</a>
+								
+								
+								
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+			
+
+			
+			
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Найдено: {{ count }}</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+
+	
+		
+		
+			<ul class="pagination">
+				{% if object_list.has_previous %}
+					<li><a href="{{ urlpage }}/?xpage={{ object_list.paginator.page_range|first }}&{{ req }}"><i class="icon-double-angle-left"></i>Первая</a></li>
+				{% endif %}
+
+				{% if object_list.has_previous %}
+					<li><a href="{{ urlpage }}/?xpage={{ object_list.previous_page_number }}&{{ req }}"><i class="icon-angle-left"></i>Предыдущая</a></li>
+				{% endif %}
+				
+				{% for p in object_list.paginator.page_range|mypaginatorslice:object_list.number %}
+					{% if p == object_list.number %}
+						<li class="active"><a href="" onclick="return false;">{{ object_list.number }}</a></li>
+						{% else %}
+							<li><a href="{{ urlpage }}/?xpage={{ p }}&{{ req }}">{{ p }}</a></li>
+						{% endif %}
+				{% endfor %}
+					
+				{% if object_list.has_next %}
+					<li><a href="{{ urlpage }}/?xpage={{ object_list.next_page_number }}&{{ req }}">Следующая<i class="icon-angle-right"></i></a></li>
+				{% endif %}
+
+				{% if object_list.has_next %}
+					<li><a href="{{ urlpage }}/?xpage={{ object_list.paginator.page_range|last }}&{{ req }}">Последняя<i class="icon-double-angle-right"></i></a></li>
+				{% endif %}
+			</ul>
+
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+{% comment %}
+{% include "paginator.html" %}
+{% endcomment %}
+	
+	
+	
+	</br>
+
+{% endblock %}
+

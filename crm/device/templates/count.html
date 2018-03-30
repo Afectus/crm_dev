@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+{% block script %}{% endblock %}
+
+{% block content %}
+
+{% load nodetag %}
+
+<script>
+
+var soundin = new Audio("/static/sound/beep-07.wav");
+var soundout = new Audio("/static/sound/beep-09.wav");
+
+function makeid()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+var socketa = false; //если отвалился nodejs что бы остальной javascript не отваливался
+
+var clientid = makeid();
+
+$(document).ready(function(){
+
+	try {socketa = io.connect('http://crm.babah24.ru:3005');}
+	catch(e) {console.log(e);}
+		
+	if(socketa) //если сокет подключен то выполняем код
+		{
+			socketa.on('connect', function(){
+				console.log("connect to server socket.io");
+				$('.nodejsdebugger').html('connect to server socket.io');
+				socketa.emit('myauth', { 'name': clientid });
+			});
+			socketa.on('disconnect', function (){
+				console.log("disconnect from server socket.io");
+				$('.nodejsdebugger').html('disconnect from server socket.io');
+			});
+			//получаем сообщение от сервера
+			socketa.on('message', function(data){
+				//console.log(data);
+			});
+
+			socketa.on('myauth', function (data){
+				console.log(data);
+			});
+			
+			socketa.on('res', function (data){
+				console.log(data);
+				if(data['type'] == 'info')
+				{
+					$('.nodejsdebugger').html(data['data'])
+				}
+				if(data['type'] == 'count')
+				{
+					if(data['data'] == 'in')
+					{
+						$('.nodejsdebugger').html(data['data'])
+						soundin.play();
+					}
+					if(data['data'] == 'out')
+					{
+						$('.nodejsdebugger').html(data['data'])
+						soundout.play();
+					}
+				}
+			});
+		};
+		
+		
+	socketa.emit('command', { 'clientid': clientid, 'name': 'all', 'command': 'getlistdevice'});
+	
+
+});
+
+
+
+</script>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Счетчик посетителей</h3>
+			</br>
+			
+			<p>Отладочная информация</p>
+			<pre class="nodejsdebugger">
+			</pre>
+
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
+

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Панель управления - список покупателей{% endblock %}
+{% block description %}Панель управления - список покупателей{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+<br><br><br><br><br><br><br><br><br>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Инвентаризация<small></small></h3>
+			<div class="form-group">
+				<a href="{% url 'inventory:invlist_add' %}" class="btn btn-success">Добавить</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+			<table class="table">
+				<thead>
+				  <tr>
+					<th></th>
+					<th>Название</th>
+					<th>Дата</th>
+					<th></th>
+					<th></th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td><a href="{% url 'inventory:invlist_edit' i.id %}">{{ i.id }}</a> </td>
+							<td><a href="{% url 'inventory:invitem_process' i.id %}">{{ i.name }}</a></td>
+							<td>{{ i.cdate|date:"SHORT_DATE_FORMAT" }}</td>
+							<td>
+								<a href="{% url 'inventory:invitem_csv' i.id %}">csv</a>
+							</td>
+							<td>
+								<div class="form-group">
+									<a href="{% url 'inventory:invlist_edit' i.id %}" class="btn btn-success">Изменить</a>
+								</div>
+							</td>
+
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+
+		</div>
+	</div>
+</div>
+
+
+
+{% comment %}
+{% include "paginator.html" %}
+{% endcomment %}
+	
+	
+	
+	</br>
+
+{% endblock %}
+

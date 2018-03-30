@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="form-group">
+				<a href="/personal/list/" class="btn btn-success btn-xs btn-block">СПИСОК СОТРУДНИКОВ</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-3">
+			{% if object.photo %}
+				</br>
+				<img class="img-responsive user-photo" src="{{ object.photosmall.url }}">
+			{% else %}
+				</br>
+				<img class="img-responsive user-photo" src="/static/img/nophoto.png">
+			{% endif %}
+			<div class="form-group">
+				<a href="/personal/edit/{{ object.id }}" class="btn btn-success">Редактировать профиль</a>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<h3>{{ object.user.first_name }} {{ object.user.last_name }} <small>{{ object.get_role_display }}, тел. {{ object.phone }}</small></h3>
+			
+			<table class="table">
+				<thead>
+				  <tr>
+					<th></th>
+					<th></th>
+				  </tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Статус сотрудника</td>
+						<td>{{ object.get_status_display }}</td>
+					</tr>
+					{% if object.bday %}
+					<tr>
+						<td>День рождения</td>
+						<td>{{ object.bday|date:"SHORT_DATE_FORMAT" }}</td>
+					</tr>
+					{% endif %}
+					{% if object.position %}
+					<tr>
+						<td>Отдел</td>
+						<td>{{ object.position }}</td>
+					</tr>
+					{% endif %}
+					{% if object.phonemobile %}
+					<tr>
+						<td>Мобильный телефон</td>
+						<td>{{ object.phonemobile }}</td>
+					</tr>
+					{% endif %}
+					{% if object.phonework %}
+					<tr>
+						<td>Рабочий телефон</td>
+						<td>{{ object.phonework }}</td>
+					</tr>
+					{% endif %}
+				</tbody>
+			</table>
+			
+			
+			
+		</div>
+	</div>
+</div>
+
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<thead>
+				  <tr>
+					<th></th>
+					<th></th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% if object.shop.all %}
+					<tr>
+						<td>Магазины</td>
+						<td>
+							{% for s in object.shop.all %}
+								{{ s.name }}
+							{% endfor %}
+						</td>
+					</tr>
+					{% endif %}
+					
+					<tr>
+						<td>
+							Дети
+						</td>
+						<td>
+							{% for pc in object.personalchild_set.all %}
+								{{ pc.name }} {{ pc.bday|date:"SHORT_DATE_FORMAT" }}
+								
+								<a href="/personal/edit/child/{{ pc.id }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+								
+								<a href="/personal/remove/child/{{ pc.id }}"><i class="fa fa-times" aria-hidden="true"></i></a>
+								</br>
+							{% empty %}
+								Нет
+							{% endfor %}
+							<a href="/personal/add/child/{{ object.id }}">Добавить</a>
+						</td>
+					</tr>
+					
+
+					<tr>
+						<td>
+							Подвиги
+						</td>
+						<td>
+							{% for pf in object.personalfeat_set.all %}
+								<a href="{% url 'personal:detail_feat' pf.id %}">{{ pf.name }} {{ pf.ctime|date:"SHORT_DATE_FORMAT" }}</a>
+								
+								<a href="/personal/edit/feat/{{ pf.id }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+								
+								<a href="/personal/remove/feat/{{ pf.id }}"><i class="fa fa-times" aria-hidden="true"></i></a>
+								</br>
+							{% empty %}
+								Нет
+							{% endfor %}
+							<a href="/personal/add/feat/{{ object.id }}">Добавить</a>
+						</td>
+					</tr>
+					
+					
+					
+					
+					<tr>
+						<td>Подпись письма</td>
+						<td>
+							<div class="form-group">
+								<a href="/personal/signature/{{ object.user.id }}">показать подпись</a>
+							</div>
+						</td>
+					</tr>
+					
+					
+					
+
+					
+					
+					
+					
+					
+				</tbody>
+			</table>
+			
+		</div>
+	</div>
+</div>
+
+
+</br>
+
+{% endblock %}
+

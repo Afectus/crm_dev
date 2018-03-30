@@ -1,0 +1,741 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load reporttag %}
+
+
+<script>
+$(document).ready(function() {
+	$("#id_goods").chosen({
+		placeholder_text_multiple: "Поиск",
+		no_results_text: "не найдено",
+		search_contains: true,
+	});
+});
+</script>
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<h2>Фильтр </h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+
+					
+						<form class="smart-form" id="form_filter" action="/report/sale/1/" method="get" role="form">
+						{# {% csrf_token %} #}
+
+						{% for hidden in form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+						
+						{# {% for i in form.visible_fields %} #}
+						{# {% endfor %} #}
+
+							<header>
+								<h3>Список покупателей <small>клиентов</small></h3>
+							</header>
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-12">
+										<label class="label">{{ form.q.label }}</label>
+										<label class="input">
+											{{ form.q }}
+										</label>
+										{% if form.q.errors %}
+										<p class="text-danger">{{ form.q.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.q.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label class="label">{{ form.ncheck.label }}</label>
+										<label class="input">
+											{{ form.ncheck }}
+										</label>
+										{% if form.ncheck.errors %}
+										<p class="text-danger">{{ form.ncheck.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.ncheck.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label class="label">{{ form.barcode.label }}</label>
+										<label class="input">
+											{{ form.barcode }}
+										</label>
+										{% if form.barcode.errors %}
+										<p class="text-danger">{{ form.barcode.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.barcode.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+
+							<fieldset>
+								<div class="row">
+									<section class="col col-4">
+										<label>{{ form.timestart.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.timestart }}
+										</label>
+										{% if form.timestart.errors %}
+										<p class="text-danger">{{ form.timestart.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.timestart.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										<label>{{ form.timeend.label }}</label>
+										<label class="input"> <i class="icon-append fa fa-calendar"></i>
+											{{ form.timeend }}
+										</label>
+										{% if form.timeend.errors %}
+										<p class="text-danger">{{ form.timeend.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.timeend.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										<label class="checkbox">
+											{{ form.timedm }}
+											<i></i>
+											{{ form.timedm.label }}
+										</label>	
+										<div class="note">{{ form.timedm.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+
+							<fieldset>
+
+										<label class="label">{{ form.goods.label }}</label>
+										<label class="input">
+											{{ form.goods }}
+										</label>
+										{% if form.goods.errors %}
+										<p class="text-danger">{{ form.goods.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.goods.field.help_text  }}</div>
+
+							</fieldset>
+							
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label class="label">{{ form.tax.label }}</label>
+										<label class="input">
+											{{ form.tax }}
+										</label>
+										{% if form.tax.errors %}
+										<p class="text-danger">{{ form.tax.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.tax.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label class="label">{{ form.discount.label }}</label>
+										<label class="input">
+											{{ form.discount }}
+										</label>
+										{% if form.discount.errors %}
+										<p class="text-danger">{{ form.discount.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.discount.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							
+							<fieldset>
+								<div class="row">
+									<section class="col col-4">
+										<label class="label">{{ form.stock.label }}</label>
+										<label class="input">
+											{{ form.stock }}
+										</label>
+										{% if form.stock.errors %}
+										<p class="text-danger">{{ form.stock.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.stock.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										<label class="label">{{ form.shop.label }}</label>
+										<label class="input">
+											{{ form.shop }}
+										</label>
+										{% if form.shop.errors %}
+										<p class="text-danger">{{ form.shop.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.shop.field.help_text  }}</div>
+									</section>
+									<section class="col col-4">
+										<label class="label">{{ form.cashbox.label }}</label>
+										<label class="input">
+											{{ form.cashbox }}
+										</label>
+										{% if form.cashbox.errors %}
+										<p class="text-danger">{{ form.cashbox.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.cashbox.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label class="label">{{ form.pricefrom.label }}</label>
+										<label class="input">
+											{{ form.pricefrom }}
+										</label>
+										{% if form.pricefrom.errors %}
+										<p class="text-danger">{{ form.pricefrom.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.pricefrom.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label class="label">{{ form.priceto.label }}</label>
+										<label class="input">
+											{{ form.priceto }}
+										</label>
+										{% if form.priceto.errors %}
+										<p class="text-danger">{{ form.priceto.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.priceto.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label class="label">{{ form.checksumfrom.label }}</label>
+										<label class="input">
+											{{ form.checksumfrom }}
+										</label>
+										{% if form.checksumfrom.errors %}
+										<p class="text-danger">{{ form.checksumfrom.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.checksumfrom.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label class="label">{{ form.checksumto.label }}</label>
+										<label class="input">
+											{{ form.checksumto }}
+										</label>
+										{% if form.checksumto.errors %}
+										<p class="text-danger">{{ form.checksumto.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.checksumto.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label class="label">{{ form.sort.label }}</label>
+										<label class="input">
+											{{ form.sort }}
+										</label>
+										{% if form.sort.errors %}
+										<p class="text-danger">{{ form.sort.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.sort.field.help_text  }}</div>
+									</section>
+									<section class="col col-6">
+										<label class="label">{{ form.operation.label }}</label>
+										<label class="input">
+											{{ form.operation }}
+										</label>
+										{% if form.operation.errors %}
+										<p class="text-danger">{{ form.operation.errors|striptags }}</p>
+										{% endif %}
+										<div class="note">{{ form.operation.field.help_text  }}</div>
+									</section>
+								</div>
+							</fieldset>	
+							
+							<footer>
+								<h4>Найдено: {{ checkcount }}</h4>
+								<h4>Покупателей: {{ buyertotal }}</h4>
+								
+								</br>
+								</br>
+								
+								<button type="submit" class="btn btn-primary">Применить</button>
+								<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+								<a href="/report/sale" class="btn btn-default">Сбросить</a>
+						
+								<span class="filter-tumbler">
+								{{ form.paging }} <label>{{ form.paging.label }}</label>
+								</span>
+								<span class="filter-tumbler">
+								 {{ form.instock }} <label>{{ form.instock.label }}</label>
+								</span>
+								<span class="filter-tumbler">
+								{{ form.beznal }} <label>{{ form.beznal.label }}</label> 
+								</span>
+								<span class="filter-tumbler">
+								{{ form.inbuyer }} <label>{{ form.inbuyer.label }}</label> 
+								</span>
+							</footer>
+						</form>
+
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+			
+						<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>ОТЧЕТ</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+
+						<div class="table-responsive">	
+							<table class="table table-bordered table-striped">
+								<caption><h4>ОТЧЕТ ПО ЧЕКАМ</h4></caption>
+								<thead>
+									<tr>
+										<th></th>
+										<th>Сумма без скидки</th>
+										<th>Сумма скидки</th>
+										<th>Сумма со скидкой</th>
+										<th>Наличные</th>
+										<th>Без наличные</th>
+										<th>Оплата бонусами</th>
+										<th>Начисление бонусов</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><b>ВСЕГО</b></td>
+										<td>{{ c_total_nodiscount|floatdot:2 }}</td>
+										<td>{{ c_total_discount|floatdot:2 }}</td>
+										<td>{{ c_total_sum|floatdot:2 }}</td>
+										<td>{{ c_total_nal|floatdot:2 }}</td>
+										<td>{{ c_total_beznal|floatdot:2 }}</td>
+										<td>{{ c_total_bonuspay|floatdot:2 }}</td>
+										<td>{{ c_total_bonusadd|floatdot:2 }}</td>
+									</tr>
+									<tr>
+										<td><b>МИНИМУМ</b></td>
+										<td>{{ c_min_nodiscount|floatdot:2 }}</td>
+										<td>{{ c_min_discount|floatdot:2 }}</td>
+										<td>{{ c_min_sum|floatdot:2 }}</td>
+										<td>{{ c_min_nal|floatdot:2 }}</td>
+										<td>{{ c_min_beznal|floatdot:2 }}</td>
+										<td>{{ c_min_bonuspay|floatdot:2 }}</td>
+										<td>{{ c_min_bonusadd|floatdot:2 }}</td>
+									</tr>
+									<tr>
+										<td><b>МАКСИМУМ</b></td>
+										<td>{{ c_max_nodiscount|floatdot:2 }}</td>
+										<td>{{ c_max_discount|floatdot:2 }}</td>
+										<td>{{ c_max_sum|floatdot:2 }}</td>
+										<td>{{ c_max_nal|floatdot:2 }}</td>
+										<td>{{ c_max_beznal|floatdot:2 }}</td>
+										<td>{{ c_max_bonuspay|floatdot:2 }}</td>
+										<td>{{ c_max_bonusadd|floatdot:2 }}</td>
+									</tr>
+									<tr>
+										<td><b>СРЕДНИЙ</b></td>
+										<td>{{ c_avg_nodiscount|floatdot:2 }}</td>
+										<td>{{ c_avg_discount|floatdot:2 }}</td>
+										<td>{{ c_avg_sum|floatdot:2 }}</td>
+										<td>{{ c_avg_nal|floatdot:2 }}</td>
+										<td>{{ c_avg_beznal|floatdot:2 }}</td>
+										<td>{{ c_avg_bonuspay|floatdot:2 }}</td>
+										<td>{{ c_avg_bonusadd|floatdot:2 }}</td>
+									</tr>
+									<tr>
+										<td colspan="8">
+											<span class="pull-right">
+											Количество чеков: <b>{{ checkcount }} </b>
+											Количество возвратов: <b>{{ checkreturn }} </b>
+											Количество позиций товаров: <b>{{ checkitems }} </b>
+											Всего товаров: <b>{{ checkitemscol }} </b>
+											</span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						{% if goodsreportview %}
+						<div class="table-responsive">	
+							<table class="table table-bordered table-striped">
+								<caption><h4>ОТЧЕТ ПО ТОВАРАМ</h4></caption>
+								<thead>
+									<tr>
+										<th></th>
+										<th>Сумма без скидки</th>
+										<th>Сумма скидки</th>
+										<th>Сумма со скидкой</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><b>ВСЕГО</b></td>
+										<td>{{ g_total_nodiscount|floatdot:2 }}</td>
+										<td>{{ g_total_discount|floatdot:2 }}</td>
+										<td>{{ g_total_sum|floatdot:2 }}</td>
+									</tr>
+									<tr>
+										<td colspan="4">
+											<span class="pull-right">
+											Количество товаров: <b>{{ g_total_count }} </b>
+											Количество позиций товаров: <b>{{ g_total_col|floatdot }} </b>
+											Сумма: <b>{{ g_total_sum|floatdot:2 }} </b>
+											</span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						{% endif %}
+						{% if discountreport %}
+						<div class="table-responsive">	
+							<table class="table table-bordered table-striped">
+								<caption><h4>ОТЧЕТ ПО СКИДКАМ</h4></caption>
+								<thead>
+									<tr>
+										<th>Скидка</th>
+										<th>Сумма</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in discountreport %}
+									<tr>
+										<td> {{ i.name }} </td>
+										<td>{{ i.sum_discount|floatdot:2 }}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						{% endif %}
+						{% if topgoodssold %}
+						<div class="table-responsive">	
+							<table class="table table-bordered table-striped">
+								<caption><h4>ТОП ТОВАРОВ</h4></caption>
+								<thead>
+									<tr>
+										<th>Товар</th>
+										<th>Цена товара (текущая)</th>
+										<th>Количество проданных</th>
+										<th>Сумма проданных</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for gtop in topgoodssold %}
+									<tr>
+										<td><a href="/goods/detail/{{ gtop.id }}">{{ gtop.name }}</a></td>
+										<td>{{ gtop.price|floatdot:2 }}</td>
+										<td>{{ gtop.c }}</td>
+										<td>{{ gtop.s|floatdot:2 }}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						{% endif %}
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+			
+			
+			
+			
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-2" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>СПИСОК ЧЕКОВ</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+
+						<div class="table-responsive">
+								
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>Номер чека</th>
+										<th>Дата</th>
+										<th>Магазин</th>
+										<th>Касса</th>
+										<th>Кассир</th>
+										<th>Покупатель</th>
+										<th>Оплата</th>
+										<th>Комментарий менеджера</th>
+										<th>Файл чек</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+									<tr>
+										<td>
+											{{ i.id }} / {{ i.nckkm }}</br>
+											{{ i.get_operation_display }}
+										</td>
+										<td>{{ i.time|date:"SHORT_DATETIME_FORMAT" }}</td>
+										<td>{{ i.shop.name }}</td>
+										<td>{{ i.cashbox.name }}</td>
+										<td>{{ i.seller.name }}</td>
+										<td>
+										<a href="/buyer/detail/{{ i.buyer.id }}">{{ i.buyer.f }} {{ i.buyer.i }} {{ i.buyer.o }}</a>
+										</td>
+										<td>
+											Сумма без скидки: {{ i|reportchecksumnodiscount }}
+											</br>
+											Сумма скидки: {{ i|reportchecksumdiscount }}
+											</br>
+											Сумма со скидкой: {{ i|reportchecksum }}
+											</br>
+											Наличные: {{ i.nal }}
+											</br>
+											Без Наличные: {{ i.beznal }}
+											</br>
+											ОплатаБонусы: {{ i.bonuspay }}
+											</br>
+											НачислениеБонусов: {{ i.bonusadd }}
+										</td>
+										<td>{{ i.commentmanager }}</td>
+										<td>
+											{% if i.sourcefile %}
+											<a href="{{ i.sourcefile.url }}">{{ i.fname }}</a>
+											{% endif %}
+										</td>
+										
+									</tr>
+									{% if i.checkitem_set.all %}
+									<tr>
+										<td>{{ i.nckkm }}</td>
+										<td colspan="8">
+											{% for ci in i.checkitem_set.all %}
+												{{ ci.id }} {{ ci.goods.id1c }} <a href="/goods/detail/{{ ci.goods.id }}">{{ ci.goods.name }}</a> {{ ci.price }} р. X {{ ci.col }} {{ ci.unit.value }} = {{ ci.sum }} р.
+												
+												
+												{% if ci.checkd_set.all %}
+												<div class="bg-warning">
+													{% for cd in ci.checkd_set.all %}
+														скидка: {{ cd.discount }} р. <a href="/discount/edit/{{ cd.discounts.id }}">{{ cd.discounts.name }}</a>
+													</br>
+													{% endfor %}
+												</div>
+												{% endif %}
+												
+												
+												</br>
+											{% endfor %}
+										</td>
+									
+									</tr>
+									{% endif %}
+									<tr><td></td></tr>
+									{% endfor %}
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+			
+			
+			
+			
+			
+			
+			
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+
+
+
+
+	
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Найдено: {{ checkcount }}</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+
+	
+		
+		
+			<ul class="pagination">
+				{% if object_list.has_previous %}
+					<li><a href="/report/sale/{{ object_list.paginator.page_range|first }}?{{ req }}"><i class="icon-double-angle-left"></i>Первая</a></li>
+				{% endif %}
+
+				{% if object_list.has_previous %}
+					<li><a href="/report/sale/{{ object_list.previous_page_number }}?{{ req }}"><i class="icon-angle-left"></i>Предыдущая</a></li>
+				{% endif %}
+				
+				{% for p in object_list.paginator.page_range|mypaginatorslice:object_list.number %}
+					{% if p != 0 %}
+						{% if p == object_list.number %}
+								<li class="active"><a href="" onclick="return false;">{{ object_list.number }}</a></li>
+							{% else %}
+								<li><a href="/report/sale/{{ p }}?{{ req }}">{{ p }}</a></li>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+					
+				{% if object_list.has_next %}
+					<li><a href="/report/sale/{{ object_list.next_page_number }}?{{ req }}">Следующая<i class="icon-angle-right"></i></a></li>
+				{% endif %}
+
+				{% if object_list.has_next %}
+					<li><a href="/report/sale/{{ object_list.paginator.page_range|last }}?{{ req }}">Последняя<i class="icon-double-angle-right"></i></a></li>
+				{% endif %}
+			</ul>
+
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+{% comment %}
+{% include "paginator.html" %}
+{% endcomment %}
+	
+	
+
+
+{% endblock %}
+

@@ -1,0 +1,103 @@
+{% extends "majorbase.html" %}
+{% block title %}Панель управления - список товаров{% endblock %}
+{% block description %}Панель управления - список товаров{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+	
+{% block script %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load opttag %}
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h3><i class="fa fa-shopping-cart" aria-hidden="true"></i> Заказ #{{ object.id }}</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="pull-right">
+			<h4>Наименований: {{ count }}&nbsp;&nbsp;Позиций: {{ quant|floatdot:0 }}&nbsp;&nbsp;сумма: {{ sum|floatdot:2 }} руб.</h4>
+	
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% if request.GET.pay == 'true' or request.GET.pay == 'false'%}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<div class="form-group">
+				<a href="?pay=select" class="btn btn-success">Способ оплаты</a>
+			</div>
+		</div>
+		<div class="col-md-12">
+
+			
+			<p>Поля отмеченные <sup class="required">*</sup> обязательные для заполнения</p>
+
+			<form action="" method="post" enctype="multipart/form-data" role="form">
+				{% csrf_token %}
+
+				
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+				<fieldset>
+				{% for i in form.visible_fields %}
+
+					<div class="form-group">
+						{% if i.field.required %}<sup class="required">*</sup>{% endif %}
+						<label>{{ i.label }}</label>
+						{{ i }}
+						{% if i.errors %}
+						<p class="text-danger">{{ i.errors|striptags }}</p>
+						{% endif %}
+						<p class="help-block">{{ i.field.help_text  }}</p>
+					</div>
+
+				{% endfor %}
+				
+				<button type="submit" class="btn btn-primary" onclick="sendtoprintbarcode(); return false;">Готово</button>
+				
+				</fieldset>
+				
+			</form>
+			
+			
+		</div>
+	</div>
+</div>
+
+{% else %}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Выберите способ оплаты</h4>
+			<div class="form-group">
+				<a href="?pay=true" class="btn btn-success">Безналичный</a>
+				<a href="?pay=false" class="btn btn-success ">Наличный</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endif %}
+
+	
+	
+	</br>
+
+{% endblock %}
+

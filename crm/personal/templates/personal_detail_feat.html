@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Подвиг {{ object.name }} {{ object.ctime|date:"SHORT_DATE_FORMAT" }}<small> {{ object.profileuser.user|who }}</small></h3>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+		{{ object.message }}
+
+		{% if object.pict.all %}
+			</br></br>
+			<div class="row">
+			{% for i in object.pict.all %}
+				<div class="col-md-3">
+				<img src="{{ i.pict200.url }}" class="imagebase{{ i.id }}"></img>
+				<a href="#" onclick="imagebasedel({{ i.id }}); return false;" class="imagebase{{ i.id }}">удалить</a>
+				</br></br>
+				</div>
+			{% endfor %}
+			</div>
+		{% endif %}
+			
+		</br></br>
+		<a href="{% url 'personal:personal_add_feat_image' object.id %}" class="btn btn-success">Добавить картинку</a>
+		
+		
+			
+			
+		</div>
+	</div>
+</div>
+	
+	
+	
+	</br>
+
+{% endblock %}
+

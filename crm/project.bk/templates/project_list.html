@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<div class="well">
+		<div class="form-group">
+				<a class="btn btn-success" href="{% url 'project:project_add' %}"><i class="fa fa-plus" aria-hidden="true"></i> Добавить проект</a>
+		</div>
+	</div>
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+		
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Проекты</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Название</th>
+										<th>Статус</th>
+										<th>Бюджет проекта</th>
+										<th>Участники</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+									<tr>
+										<td><a href = "{% url 'project:project_detail' i.id %}">{{ i.id }}</a></td>
+										<td>{{ i.name }}</td>
+										<td>
+											{% if i.status == 'created' %}
+												<span class="label label-primary">{{ i.get_status_display }}</span>
+											{% elif i.status == 'archived' %}
+												<span class="label label-default">{{ i.get_status_display }}</span>
+											{% else %}
+												<span class="label label-success">{{ i.get_status_display }}</span>
+											{% endif %}
+										</td>
+										<td>{{ i.plansum |floatformat:2 }} <i class="fa fa-rub" aria-hidden="true"></i></td>
+										<td>{% for e in i.executor.all %} {{ e }}</br> {% endfor%}</td>
+										<td>
+											{% if object.user == request.user %}
+											<div class="form-group">
+												<a class="btn btn-success" href="{% url 'project:project_edit' i.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Редактировать</a>
+											</div>
+											{% endif %}
+											<div class="form-group">
+												<a class="btn btn-success" href="{% url 'project:project_detail' i.id %}"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Подробнее</a>
+											</div>
+										</td>
+									
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+
+{% endblock %}
+

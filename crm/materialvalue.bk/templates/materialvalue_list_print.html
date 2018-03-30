@@ -1,0 +1,62 @@
+{% extends "materialvalue_base.html" %}
+{% block title %}Список{% endblock %}
+{% block description %}Список{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Список мат. ценностей</h3>
+		</div>
+	</div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>Категория</th>
+						<th>Название</th>
+						<th>Модель</th>
+						<th>Серийный номер</th>
+						<th>Статус</th>
+						<th>Местонахождение</th>
+						<th>Количество</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+					<tr>
+						<td>{{ i.id }}</td>
+						<td>{{ i.get_category_display }}</td>
+						<td>{{ i.name }}</td>
+						<td>{{ i.model }}</td>
+						<td>{{ i.serial }}</td>
+						<td>{{ i.get_status_display }}</td>
+						<td>
+							{% if i.materialvaluemove_set.last.shop  %}
+								{{ i.materialvaluemove_set.last.shop}}
+							{% else %}
+								{{ i.materialvaluemove_set.last.stock}}
+							{% endif %}
+						</td>
+						<td>{{ i.amount }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

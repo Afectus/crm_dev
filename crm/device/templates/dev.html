@@ -1,0 +1,94 @@
+{% extends "devbase.html" %}
+{% block title %}CRM{% endblock %}
+{% block description %}{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block bodystyle %}
+	{% if not user.is_authenticated %}
+		class="nocursor"
+	{% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+{% comment %}
+{% load nodetag %}
+{% endcomment %}
+
+
+	
+<div class="index-wrapper">
+	<div class="container-fluid">
+		</br>
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="text-center text-uppercase c2">Нажмите на нужную категорию:</h1>
+				<img src="/static/device/img/contact.png" class="contact" ondrag="return false" ondragdrop="return false" ondragstart="return false">
+			</div>
+		</div>
+		
+
+		<div class="row">
+			<div class="col-lg-1">
+			</div>
+			<div class="col-lg-10 text-center">
+				</br>
+				<div class="row">
+				
+
+				{% for i in object_list %}
+				
+				<div class="col-lg-4 tax-wrap">
+					<a href="/dev/list/{{ i.id }}" class="item1">
+						<div class="tax-item text-left">
+							<h2>{{ i.name }}</h2>
+							<img src="{{ i.pict1.url }}" class="photo">
+							<div class="btn11">Перейти</div>
+
+						</div>
+					</a>
+				</div>
+				
+				
+<!-- 				<div class="col-lg-4">
+					<div class="tax-item">
+						<div class="row">
+							<div class="col-lg-4">
+								<h1 class="text-uppercase">{{ i.name }}</h1>
+							</div>
+							<div class="col-lg-8">
+								<img class="" src="{{ i.pict1.url }}">
+							</div>
+						</div>
+						<div class="row">
+							<a href="#" class="btn1">Перейти</a>
+						</div>
+						
+					</div>
+				</div> -->
+				{% endfor %}
+
+				</div>
+				</br>
+			
+			
+			</div>
+			<div class="col-lg-1">
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<div class="row footer">
+	<div class="col-lg-12">
+		<p class="text-center c1">Все услуги и подробную информацию вы можете найти на нашем сайте <span class="c3">www.babah24.ru</span></p>
+		</div>
+</div>
+
+
+
+
+{% endblock %}

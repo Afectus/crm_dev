@@ -1,0 +1,11 @@
+.myfilterblock {
+	padding: 3px 10px;
+}
+
+.addtostoreajaxspinner-style {
+    height: 30px;
+    content: url(http://babah24.ru/c/img/spinner1.gif);
+    text-align: center;
+    margin: 0 auto;
+    padding: 8px 0 5px 0;
+}

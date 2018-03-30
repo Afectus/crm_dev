@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% comment %} {% extends "bizprocess_base.html" %} {% endcomment %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+
+{% block content %}
+
+{% load bizp %}
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<div class="well">
+		<div class="form-group">
+			<a class="btn btn-success" href="{% url 'bizprocess:bizpstep_add' object.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Добавить этап</a>
+		</div>
+	</div>
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+		
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Список этапов</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Название</th>
+										<th>Родитель</th>
+										<th>Сортировка</th>
+										<th>Отвественный</th>
+										<th>Исполнитель</th>
+										<th>Описание</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>{{ i.name }}</td>
+										<td>{{i.parent}}</td>
+										<td>{{i.sort}}</td>
+										<td>{{i.head}}</td>
+										<td>{{i.executor}}</td>
+										<td>{{i.desc}}</td>
+										<td>
+											{% comment %} <div class="form-group">
+												<a class="btn btn-success" href="{% url 'bizprocess:bizpstep_edit' i.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Редактировать</a>
+											</div> {% endcomment %}
+											
+											<div class="form-group">
+												<a class="btn btn-success" href="{% url 'bizprocess:bizpstep_table_detail' i.id %}"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Подробнее</a>
+											</div>
+										</td>
+									
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-circle-o" aria-hidden="true"></i> </span>
+					<h2>Диаграмма</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+					<div class="widget-body no-padding">
+						
+						{% include "bizpstep_diagram_include.html" %}
+						
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+{% endblock %}

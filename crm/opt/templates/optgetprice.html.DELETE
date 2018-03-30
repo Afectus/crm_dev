@@ -1,0 +1,311 @@
+{% extends "optbase.html" %}
+{% block title %}Панель управления - список товаров{% endblock %}
+{% block description %}Панель управления - список товаров{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+	
+{% block script %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Список товаров <small>позиций</small></h3>
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<form id="form_filter" action="/opt/getprice/1/" method="get" role="form">
+				{# {% csrf_token %} #}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+				{# {% for i in form.visible_fields %} #}
+				
+				<div class="bg-success myfilterblock">
+				
+					<div class="form-group"> 
+					<label>{{ form.q.label }}</label>
+					{{ form.q }}
+					{% if form.q.errors %}
+					<p class="text-danger">{{ form.q.errors|striptags }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.q.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+					
+					
+					<div class="form-group"> 
+					<label>{{ form.tax.label }}</label>
+					{{ form.tax}}
+					{% if form.tax.errors %}
+					<p class="text-danger">{{ form.tax.errors|striptags }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.tax.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			
+				
+				
+				<div class="bg-success myfilterblock">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group"> 
+							<label>{{ form.pricefrom.label }}</label>
+							{{ form.pricefrom }}
+							{% if form.pricefrom.errors %}
+							<p class="text-danger">{{ form.pricefrom.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.pricefrom.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group"> 
+							<label>{{ form.priceto.label }}</label>
+							{{ form.priceto }}
+							{% if form.priceto.errors %}
+							<p class="text-danger">{{ form.priceto.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.priceto.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				
+				
+	
+
+				</br>
+				
+<!-- 				<div class="bg-success myfilterblock">
+				
+					<div class="form-group"> 
+					<label>{{ form.sort.label }}</label>
+					{{ form.sort }}
+					{% if form.sort.errors %}
+					<p class="text-danger">{{ form.sort.errors|striptags }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.sort.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+				
+				</div> -->
+
+				{# {% endfor %} #}
+				
+
+				<div class="myfilterblock">
+					<div class="pull-left">
+						<div class="form-group"> 
+							<button type="submit" class="btn btn-success">Применить</button>
+							<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+							<a href="/goods/list" class="btn btn-success">Сбросить</a>
+							&nbsp;&nbsp;
+							<label>{{ form.paging.label }}</label> {{ form.paging }}
+						</div>
+					</div>
+					<div class="pull-right">
+						<h4>Товаров: {{ count }} &nbsp;&nbsp; Количество: {{ sum.s }}</h4>
+					</div>
+
+				</div>
+			</form>
+		
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table id="goods_list" class="table">
+				<thead>
+				  <tr>
+					<th></th>
+					<th>Название</th>
+					<th>Описание</th>
+					<th>Цена</th>
+					<th></th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>
+								{% if i.pict %}
+								<a href="{{ i.pict500.url }}" target="_blank"><img src="{{ i.pict120.url}}" /></a>
+								{% endif %}
+							</td>
+							<td>
+								{{ i.name }}
+								<p>
+								<div style="font-size: 12px;">
+									<span>ID: {{ i.id }}</span></br>
+								
+									{% comment %}
+									{% if i.id1c %}
+									<span>1C ID: <b>{{ i.id1c }}</b></span></br>
+									{% endif %}
+									{% endcomment %}
+									
+									{% if i.art %}
+									<span>Артикул: <b>{{ i.art }}</b></span></br>
+									{% endif %}
+									
+									{% comment %}
+									{% if i.base %}
+									<span>База: <b>{{ i.base.name }}</b></span></br>
+									{% endif %}
+									{% endcomment %}
+									
+									{% if i.idbitrix %}
+									<span><a href="http://babah24.ru/katalog/detail.php?ELEMENT_ID={{ i.idbitrix }}" target="_blank">Посмотреть на сайте</a></span></br>
+									{% endif %}
+	
+								</div>
+								</p>
+							</td>
+							<td>
+								{{ i.bname }}
+								<p>
+								{% proplist i.id as prop %}
+								{% for p in prop %}
+								<div style="font-size: 12px;">
+									<span>{{ p.name }}:</span>
+									<span>
+									{% if p.multiple %}
+										{% for pv in p.value %}
+											<b>{{ pv }}</b>
+										{% endfor %}
+									{% else %}
+										<b>{{ p.value }}</b>
+									{% endif %}
+									<b>{{ p.baseunit }}</b>
+									</span>
+								</div>
+								{% endfor  %}
+								</p>
+								
+								<p>
+								{% if i.video %}
+								видео: {{ i.video }}
+								{% endif %}
+								</br>
+								</p>
+
+								
+								{% if i.tax.all %}
+								<p>
+								<span>Категории:</span></br>
+								{% for t in i.tax.all %}
+									<small>{{ t.name }}</small>
+								{% endfor  %}
+								</p>
+								{% endif %}
+								
+								
+								
+							</td>
+							<td>
+								{{ i.startprice|floatdot }} руб.
+								
+								{% if i.goodsinstock %}
+									</br>
+									{% for q in i.goodsinstock.all %}
+										<small class="text-muted">{{ q.stock.name }} {{ q.value }}</small></br>
+									{% endfor %}
+								{% endif %}
+								
+							</td>
+							<td>
+								
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+			
+
+			
+			
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Найдено: {{ count }}</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+
+	
+		
+		
+			<ul class="pagination">
+				{% if object_list.has_previous %}
+					<li><a href="/opt/getprice/{{ object_list.paginator.page_range|first }}?{{ req }}"><i class="icon-double-angle-left"></i>Первая</a></li>
+				{% endif %}
+
+				{% if object_list.has_previous %}
+					<li><a href="/opt/getprice/{{ object_list.previous_page_number }}?{{ req }}"><i class="icon-angle-left"></i>Предыдущая</a></li>
+				{% endif %}
+				
+				{% for p in object_list.paginator.page_range|mypaginatorslice:object_list.number %}
+					{% if p == object_list.number %}
+						<li class="active"><a href="" onclick="return false;">{{ object_list.number }}</a></li>
+						{% else %}
+							<li><a href="/opt/getprice/{{ p }}?{{ req }}">{{ p }}</a></li>
+						{% endif %}
+				{% endfor %}
+					
+				{% if object_list.has_next %}
+					<li><a href="/opt/getprice/{{ object_list.next_page_number }}?{{ req }}">Следующая<i class="icon-angle-right"></i></a></li>
+				{% endif %}
+
+				{% if object_list.has_next %}
+					<li><a href="/opt/getprice/{{ object_list.paginator.page_range|last }}?{{ req }}">Последняя<i class="icon-double-angle-right"></i></a></li>
+				{% endif %}
+			</ul>
+
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+{% comment %}
+{% include "paginator.html" %}
+{% endcomment %}
+	
+	
+	
+	</br>
+
+{% endblock %}
+

@@ -1,0 +1,140 @@
+{% extends "majorbase.html" %}
+{% block title %}Панель управления - список товаров{% endblock %}
+{% block description %}Панель управления - список товаров{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+	
+{% block script %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load opttag %}
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h3><i class="fa fa-shopping-cart" aria-hidden="true"></i> Корзина #{{ object.id }}</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="pull-right">
+			<h4>Наименований: {{ count }}&nbsp;&nbsp;Позиций: {{ quant|floatdot:0 }}&nbsp;&nbsp;сумма: {{ sum|floatdot:2 }} руб.</h4>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table id="goods_list" class="table">
+				<thead>
+				  <tr>
+					<th></th>
+					<th>Описание</th>
+					<th>Цена</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>
+								{{ i.goods.name }}
+								<p>
+								<div style="font-size: 12px;">
+									<span>ID: {{ i.goods.id }}</span></br>
+								
+									{% comment %}
+									{% if i.goods.id1c %}
+									<span>1C ID: <b>{{ i.goods.id1c }}</b></span></br>
+									{% endif %}
+									{% endcomment %}
+									
+									{% if i.goods.art %}
+									<span>Артикул: <b>{{ i.goods.art }}</b></span></br>
+									{% endif %}
+									
+									{% comment %}
+									{% if i.goods.base %}
+									<span>База: <b>{{ i.goods.base.name }}</b></span></br>
+									{% endif %}
+									{% endcomment %}
+	
+								</div>
+								</p>
+							</td>
+							<td>
+								{{ i.goods.bname }}
+								
+
+								<p>
+								{% proplist i.goods.id as prop %}
+								{% for p in prop %}
+								<div style="font-size: 12px;">
+									<span>{{ p.name }}:</span>
+									<span>
+									{% if p.multiple %}
+										{% for pv in p.value %}
+											<b>{{ pv }}</b>
+										{% endfor %}
+									{% else %}
+										<b>{{ p.value }}</b>
+									{% endif %}
+									<b>{{ p.baseunit }}</b>
+									</span>
+								</div>
+								{% endfor  %}
+								</p>
+
+								
+								{% if i.goods.tax.all %}
+								<p>
+								<span>Категории:</span></br>
+								{% for t in i.goods.tax.all %}
+									<small>{{ t.name }}</small>
+								{% endfor  %}
+								</p>
+								{% endif %}
+								
+								
+								
+							</td>
+							<td>
+
+								<!-- {{ i.goods.startprice|floatdot }} руб. -->
+								{{ i.goods.manualstartprice|floatdot }} руб.
+								
+								<div>На складе: <b>{{ i.goods|getgoodsinstockvalue }}</b></div>
+								<div>В корзине: <b>{{ i.quant|floatdot:0 }}</b></div></br>
+	
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+			
+
+			
+			
+		</div>
+	</div>
+</div>
+
+
+
+{% comment %}
+{% include "paginator.html" %}
+{% endcomment %}
+	
+	
+	
+	</br>
+
+{% endblock %}
+

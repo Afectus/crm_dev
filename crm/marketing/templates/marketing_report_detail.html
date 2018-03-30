@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load tasktag %}
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Отчет #{{ object.id }} "{{ object.name }}"</h3>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-6">
+		
+			<div>
+			<span class="text-muted">Время создания: </span> {{ object.cdate|date:"SHORT_DATE_FORMAT" }}
+			</div>
+			
+			<div>
+			<span class="text-muted">Организатор: </span> {{ object.creator }} </br>
+			</div>
+			
+			<div>
+			<span class="text-muted">Место: </span> {{ object.place }} </br>
+			</div>
+			
+			<div>
+			<span class="text-muted">Комментарий: </span> {{ object.comment }} </br>
+			</div>
+			
+			<div>
+			<span class="text-muted">Количество посетителей: </span> {{ object.col }} </br>
+			</div>
+			
+			
+		</div>
+		<div class="col-md-6">
+		
+			<div class="thumbnail">
+				{% if object.usepersonal.all %}
+				<div>
+				<span>Задействованые сотрудники: </span>
+				{% for i in object.usepersonal.all %}
+					<span class="label {% if i.user == request.user %}label-success{% else %}label-default{% endif %}">
+						{{ i.user.first_name }} {{ i.user.last_name }}
+					</span>&nbsp;
+				{% endfor %}
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+		
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+				<hr>
+				<h3>Затраты</h3>
+			
+			
+				<div class="form-group">
+					<a href="{% url 'marketing:marketing_report_item_add' object.id %}" class="btn btn-success">Добавить затраты</a>
+				</div>
+			
+			
+				<table class="table">
+				<caption><h3>Список</h3></caption>
+				<thead>
+					<tr>
+						<th>Название</th>
+						<th>Сумма</th>
+						<th>Комментарий</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for i in object.marketing_report_item_set.all %}
+						<tr>
+							<td>{{ i.name }}</td>
+							<td>{{ i.sum|floatdot:2 }}</td>
+							<td>{{ i.comment|linebreaks }}</td>
+							<td>
+								<div class="form-group">
+									<a href="{% url 'marketing:marketing_report_item_del' i.id %}" class="btn btn-success">удалить</a>
+									<a href="{% url 'marketing:marketing_report_item_edit' i.id %}" class="btn btn-success">изменить</a>
+								</div>
+							</td>
+						</tr>
+					{% empty %}
+						<tr><td colspan="100%">нет записей</td></tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+
+
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+		
+			<div class="pull-right">Сумма: {{ sum }}</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
+

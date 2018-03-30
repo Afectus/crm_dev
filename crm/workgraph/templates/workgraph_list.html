@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<link rel='stylesheet' href='/static/bootstrap-year-calendar/css/bootstrap-year-calendar.min.css' />
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<div class="well">
+		<div data-provide="calendar"></div>
+		
+		<div class="form-group">
+			{{ object_list|modellinkadd }}
+		</div>
+	</div>
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+		
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>График работы</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Статус</th>
+										<th>Период</th>
+										<th>Сотрудник</th>
+										<th>Описание</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+								{% for i in object_list %}
+									<tr>
+										<td>{{ i.id }}</td>
+										<td>{{ i.status|mybool }}</td>
+										<td>
+											{{ i.sdate|date:"SHORT_DATE_FORMAT" }}
+											-
+											{{ i.edate|date:"SHORT_DATE_FORMAT" }}
+										</td>
+										<td>
+											{{ i.user.user|who }}
+										</td>
+										<td>{{ i.message }}</td>
+										<td>
+											<div class="form-group">
+											{{ i|modellinkedit }}
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+{% include "paginator.html" %}
+
+
+	
+<script src='/static/bootstrap-year-calendar/js/bootstrap-year-calendar.min.js'></script>
+
+<script src='/static/bootstrap-year-calendar/js/languages/bootstrap-year-calendar.ru.js'></script>
+
+	
+	
+<script>
+$(document).ready(function() {
+	var currentYear = new Date().getFullYear();
+	$('.calendar').calendar({
+	language: 'ru',
+	enableContextMenu: true,
+	enableRangeSelection: true,
+	        mouseOnDay: function(e) {
+            if(e.events.length > 0) {
+                var content = '';
+                
+                for(var i in e.events) {
+                    content += '<div class="event-tooltip-content">'
+                                    + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+                                    + '<div class="event-location">' + e.events[i].location + '</div>'
+                                + '</div>';
+                }
+            
+                $(e.element).popover({ 
+                    trigger: 'manual',
+                    container: 'body',
+                    html:true,
+                    content: content
+                });
+                
+                $(e.element).popover('show');
+            }
+        },
+        mouseOutDay: function(e) {
+            if(e.events.length > 0) {
+                $(e.element).popover('hide');
+            }
+        },
+	dataSource: [
+			{% for i in workgraph_nopaging %}
+            {
+                id: {{ i.id }},
+                name: 'Работа: {{ i.user.user|who }}',
+                location: '{{ i.message }}',
+                startDate: new Date({{ i.sdate.year }}, {{ i.sdate.month }}-1, {{ i.sdate.day }}),
+                endDate: new Date({{ i.edate.year }}, {{ i.edate.month }}-1, {{ i.edate.day }})
+            },
+			{% endfor %}
+			{% for i in holiday %}
+            {
+                id: {{ i.id }},
+                name: 'Отпуск: {{ i.user.user|who }}',
+                location: '{{ i.message }}',
+                startDate: new Date({{ i.sdate.year }}, {{ i.sdate.month }}-1, {{ i.sdate.day }}),
+                endDate: new Date({{ i.edate.year }}, {{ i.edate.month }}-1, {{ i.edate.day }})
+            },
+			{% endfor %}
+        ],
+
+	});
+});
+	
+</script>
+
+
+
+{% endblock %}
+

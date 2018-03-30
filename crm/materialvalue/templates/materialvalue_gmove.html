@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<h2>Фильтр </h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+
+					
+						<form class="smart-form" id="form_filter" action="" method="post" role="form">
+						{% csrf_token %}
+
+						{% for hidden in form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+						
+						{# {% for i in form.visible_fields %} #}
+						{# {% endfor %} #}
+
+							<fieldset>
+								<label class="label">{{ form.name.label }}</label>
+								<label class="input">
+										{{ form.name }}
+								</label>
+								{% if form.name.errors %}
+								<p class="text-danger">{{ form.name.errors|striptags }}</p>
+								{% endif %}
+								<div class="note">{{ form.name.field.help_text  }}</div>
+							</fieldset>	
+
+							<fieldset>
+								<label class="label">{{ form.gmtype.label }}</label>
+								<label class="input">
+										{{ form.gmtype }}
+								</label>
+								{% if form.gmtype.errors %}
+								<p class="text-danger">{{ form.gmtype.errors|striptags }}</p>
+								{% endif %}
+								<div class="note">{{ form.gmtype.field.help_text  }}</div>
+							</fieldset>	
+						
+							<fieldset>
+								<label class="label">{{ form.shopstock.label }}</label>
+								<label class="input">
+										{{ form.shopstock }}
+								</label>
+								{% if form.shopstock.errors %}
+								<p class="text-danger">{{ form.shopstock.errors|striptags }}</p>
+								{% endif %}
+								<div class="note">{{ form.shopstock.field.help_text  }}</div>
+							</fieldset>	
+							
+							<fieldset>
+								<label class="label">{{ form.ids.label }}</label>
+								<label class="input">
+										{{ form.ids }}
+								</label>
+								{% if form.ids.errors %}
+								<p class="text-danger">{{ form.ids.errors|striptags }}</p>
+								{% endif %}
+								<div class="note">{{ form.ids.field.help_text  }}</div>
+							</fieldset>	
+
+							<footer>
+								<div class="pull-left">
+									<h4>Количество: {{ object_list.count }}</h4>
+								</div>
+								<div class="pull-right">
+									<div class="form-group"> 
+										<button type="submit" class="btn btn-success">Переместить</button>
+									</div>
+								</div>
+							</footer>
+						</form>
+
+						<script>
+							$('#id_gmtype').change(function(){
+								if($(this).val() == 'writeoff'){
+									$("#id_shopstock").find("option:contains('Списание')").attr("selected", "selected");
+								}
+							});
+						</script>
+
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+
+		
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Список перемещаемых материальных ценностей</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>id</th>
+										<th>Категория</th>
+										<th>Название</th>
+										<th>Модель</th>
+										<th>Серийный номер</th>
+										<th>Статус</th>
+										<th>Местонахождение</th>
+										<th>Количество</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for i in object_list %}
+									<tr>
+										<td><a href="{% url 'materialvalue:materialvalue_detail' i.id %}">{{ i.id }}</a></td>
+										<td>{{ i.get_category_display }}</td>
+										<td>{{ i.name }}</td>
+										<td>{{ i.model }}</td>
+										<td>{{ i.serial }}</td>
+										<td>{{ i.get_status_display }}</td>
+										<td>
+											{% if i.mvmove_set.last.shop  %}
+												{{ i.mvmove_set.last.shop}}
+											{% else %}
+												{{ i.mvmove_set.last.stock}}
+											{% endif %}
+										</td>
+										<td>{{ i.amount }}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+			
+		
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+{% endblock %}
+

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+	
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Проекты</h3>
+			
+			<div class="form-group">
+				{{ object_list|modellinkadd }}
+			</div>
+
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>id</th>
+					<th>Статус</th>
+					<th>Период</th>
+					<th>Исполнители</th>
+					<th>Название</th>
+					<th>Описание</th>
+					<th></th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>{{ i.id }}</td>
+							<td>{{ i.status|mybool }}</td>
+							<td>
+								{{ i.sdate|date:"SHORT_DATE_FORMAT" }}
+								-
+								{{ i.edate|date:"SHORT_DATE_FORMAT" }}
+							</td>
+							<td>
+								{% for e in i.executor.all %}
+									{{ e.user|who }}
+								{% endfor %}
+							</td>
+							<td>{{ i.name }}</td>
+							<td>{{ i.message }}</td>
+							<td>
+								<div class="form-group">
+								{{ i|modellinkedit }}
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+		</div>
+	</div>
+</div>
+
+{% include "paginator.html" %}
+
+	</br>
+
+{% endblock %}
+

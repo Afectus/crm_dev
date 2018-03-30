@@ -1,0 +1,75 @@
+{% load nodetag %}
+{% if is_paginated %}
+<nav class="devpag">
+	<div class="page-info">
+	Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</br>
+	</div>
+	
+	<ul class="pagination">
+		
+			{% if page_obj.has_previous %}
+			<li class="page-item">
+				<a class="page-link pb2" href="?page={{ page_obj.paginator.page_range|first }}">
+				<i class="fa fa-step-backward" aria-hidden="true"></i>
+				</a>
+			</li>
+			{% else %}
+			<li class="page-item">
+				<a class="page-link pb2 btn disabled" href="#">
+				<i class="fa fa-step-backward" aria-hidden="true"></i>
+				</a>
+			</li>
+			{% endif %}
+		
+
+			{% if page_obj.has_previous %}
+			<li class="page-item">
+				<a class="page-link pb2" href="?page={{ page_obj.previous_page_number }}">
+				<i class="fa fa-chevron-left" aria-hidden="true"></i>
+				</a>
+			</li>
+			{% else %}
+			<li class="page-item">
+				<a class="page-link pb2 btn disabled" href="#">
+				<i class="fa fa-chevron-left" aria-hidden="true"></i>
+				</a>
+			</li>
+			{% endif %}
+		
+		
+		{% for p in page_obj.paginator.page_range|mypaginatorslice1:page_obj.number %}
+				{% if p == page_obj.number %}
+					<li class="page-item active"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+				{% else %}
+					<li class="page-item"><a class="page-link pb2" href="?page={{ p }}">{{ p }}</a></li>
+				{% endif %}
+		{% endfor %}
+			
+		{% if page_obj.has_next %}
+			<li class="page-item">
+				<a class="page-link pb2" href="?page={{ page_obj.next_page_number }}"><i class="fa fa-chevron-right" aria-hidden="true"></i>
+				</a>
+			</li>
+		{% else %}
+			<li class="page-item">
+				<a class="page-link pb2 btn disabled" href="#"><i class="fa fa-chevron-right" aria-hidden="true"></i>
+				</a>
+			</li>
+		{% endif %}
+
+		{% if page_obj.has_next %}
+			<li class="page-item">
+				<a class="page-link pb2" href="?page={{ page_obj.paginator.page_range|last }}">
+				<i class="fa fa-step-forward" aria-hidden="true"></i>
+				</a>
+			</li>
+		{% else %}
+			<li class="page-item">
+				<a class="page-link pb2 btn disabled" href="#">
+				<i class="fa fa-step-forward" aria-hidden="true"></i>
+				</a>
+			</li>
+		{% endif %}
+	</ul>
+</nav>
+{% endif %}

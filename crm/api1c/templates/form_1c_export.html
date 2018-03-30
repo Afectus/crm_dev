@@ -1,0 +1,94 @@
+{% extends "form_1c_base.html" %}
+{% block title %}Панель управления{% endblock %}
+
+{% block content %}
+
+{% load nodetag %}
+
+{% comment %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+			<p>
+			<h4>json</h4>
+			<kbd>{{ object|objtojson1|safe }}</kbd>
+			</p>
+		</div>
+		<div class="col-md-3">
+			<h4>javascript</h4>
+			<p>
+				<kbd>
+				data1c.export(json)</br>
+				</kbd>
+			</p>
+		</div>
+		<div class="col-md-3">
+			<h4>javascript</h4>
+			<p>
+				<kbd>
+				{{ next }} </br>
+				</kbd>
+			</p>
+		</div>
+	</div>
+</div>
+{% endcomment %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+			<div>Перенаправление через: <span id="nextcount"></span> сек.</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			{% if object %}
+				{% comment %}
+				<a href="#" class="btn btn-success" onclick="data1c.exportto1c(datajson);return false;">Экспорт в 1с</a>
+				{% endcomment %}
+				<a href="/form/1c/getcard/?salt={{ salt }}&crc={{ crc }}&phone={{ object.buyer.phone }}" class="btn btn-success invisible">Показать покупателя</a>
+			{% endif %}
+		</div>
+	</div>
+</div>
+<script>
+
+var datajson = '{{ object|objtojson1|safe }}';
+
+var nextcount = 2000;
+
+data1c.exportto1c = function(data)
+{
+	//console.log(data)
+	var jres = JSON.parse(data);
+	console.log(jres);
+	return true;
+}
+
+var nextcounttmp = (nextcount+3000)/1000;
+document.getElementById('nextcount').innerHTML = nextcounttmp;
+var x = setInterval(function() {
+	nextcounttmp = nextcounttmp - 1;
+	//console.log(nextcounttmp);
+	if(nextcounttmp>=0)
+	{
+		document.getElementById('nextcount').innerHTML = nextcounttmp;
+	}
+	//if(nextcounttmp<=1 && nextcounttmp>-2){} //несколько попыток
+}, 1000);
+
+
+setTimeout(function() {
+	var data1cex = data1c.exportto1c(datajson);
+	//if (data1cex)
+	//{
+		window.location = '{{ next }}';
+		//window.location.replace('{{ next }}');
+	//}
+}, nextcount);
+
+</script>
+{% endblock %}

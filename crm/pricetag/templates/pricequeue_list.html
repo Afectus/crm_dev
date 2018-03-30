@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+{% block script %}{% endblock %}
+
+{% block content %}
+
+{% load nodetag %}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Очередь печати</h3>
+			<div class="form-group">
+				<a href="{% url 'pricetag:pricequeue_clear' %}" class="btn btn-warning jqueryconfirm">Удалить все задания</a>
+			</div>
+			<div>Всего: {{ object_list.count }}</div>
+
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>id/idgoods/bitrix/id1c</th>
+					<th>Работает</th>
+					<th>Товар</th>
+					<th></th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>
+								{{ i.id }}/{{ i.goods.id }}/{{ i.goods.idbitrix }}
+								</br>
+								{{ i.goods.id1c }}
+								</br>
+								<a href="http://babah24.ru/c/print/print.php?ELEMENT_ID={{ i.goods.idbitrix }}&clear_cache=Y" target="_blank">Ценник оригинал</a>
+								
+							</td>
+							<td>{{ i.status|mybool }}</td>
+							<td>{{ i.goods.name }} / <a href="http://babah24.ru/katalog/detail.php?ELEMENT_ID={{ i.goods.idbitrix }}" target="_blank">{{ i.goods.bname }}</a> / {{ i.goods.art }} {{ i.barcode }}</td>
+							<td>
+								{% if not i.send %}
+								<div class="form-group">
+									<a href="{% url 'pricetag:pricequeue_del' i.id %}" class="btn btn-warning btn-sm">Удалить</a>
+								</div>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+			
+
+			{% include "paginator.html" %}
+			
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+

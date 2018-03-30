@@ -1,0 +1,6 @@
+import datetime
+
+s = datetime.datetime.strptime("01/06/17", "%d/%m/%y")
+e = datetime.datetime.strptime("30/06/17", "%d/%m/%y")
+
+checkitem.objects.filter(fcheck__shop__id=6, fcheck__time__range=(s,e), operation='sale').distinct().aggregate(s=Sum('sum'), c=Count('id'), col=Sum('col'))

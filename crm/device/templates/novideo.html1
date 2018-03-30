@@ -1,0 +1,19 @@
+{% extends "device/base.html" %}
+{% block title %}CRM{% endblock %}
+{% block description %}{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% comment %}
+{% load nodetag %}
+{% endcomment %}
+
+
+<div class="pageNoVideo" ondrag="return false" ondragdrop="return false" ondragstart="return false">
+	<img src="/static/device/img/big_logo.png" ondrag="return false" ondragdrop="return false" ondragstart="return false">
+</div>
+
+
+{% endblock %}

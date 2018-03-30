@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+<script>
+$(document).ready(function() {
+	$("#id_executor").chosen({
+		placeholder_text_multiple: " Поиск исполнителя",
+		no_results_text: "не найдено",
+		search_contains: true,
+	});
+});
+</script>
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Редактировать задание</h3>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+
+		
+				<p>Поля отмеченные <sup class="required">*</sup> обязательные для заполнения</p>
+				
+				<form action="" method="post" enctype="multipart/form-data" role="form">
+				{% csrf_token %}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+				<div class="form-group">
+				{% if form.status.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.status.label }}</label>
+				{{ form.status }}
+				{% if form.status.errors %}
+				<p class="text-danger">{{ form.status.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.status.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+
+				<div class="form-group">
+				{% if form.name.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.name.label }}</label>
+				{{ form.name }}
+				{% if form.name.errors %}
+				<p class="text-danger">{{ form.name.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.name.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+
+				<div class="form-group">
+				{% if form.message.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.message.label }}</label>
+				{{ form.message }}
+				{% if form.message.errors %}
+				<p class="text-danger">{{ form.message.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.message.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+
+				<div class="form-group"> 
+				{% if form.priority.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.priority.label }}</label>
+				{{ form.priority }}
+				{% if form.priority.errors %}
+				<p class="text-danger">{{ form.priority.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.priority.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+				
+				
+				<div class="form-group">
+				{% if form.etime.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.etime.label }}</label>
+				
+				<div class="input-group date mydatepicker">
+					{{ form.etime }}
+					<div class="input-group-addon">
+					<span class="glyphicon glyphicon-th"></span>
+					</div>
+				</div>
+				
+				{% if form.etime.errors %}
+				<p class="text-danger">{{ form.etime.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.etime.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+	
+
+				
+				<div class="form-group">
+				{% if form.executor.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.executor.label }}</label>
+				{{ form.executor }}
+				{% if form.executor.errors %}
+				<p class="text-danger">{{ form.executor.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.executor.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+
+				<div class="form-group"> 
+				{% if form.rating.field.required %}<sup class="required">*</sup>{% endif %}
+				<label>{{ form.rating.label }}</label>
+				{{ form.rating }}
+				{% if form.rating.errors %}
+				<p class="text-danger">{{ form.rating.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.rating.field.help_text  }}</p>
+				</div>
+				<div class="clearfix"></div>
+
+				</br>
+
+
+				<div class="form-group"> 
+					<button type="submit" class="btn btn-success">Готово</button>
+					</span>
+				</div>
+
+				
+			</form>
+			
+		</div>
+	</div>
+</div>
+
+	</br>
+
+{% endblock %}
+

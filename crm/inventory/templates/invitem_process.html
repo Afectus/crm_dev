@@ -1,0 +1,268 @@
+{% extends "invbase.html" %}
+{% block title %}Панель управления - список покупателей{% endblock %}
+{% block description %}Панель управления - список покупателей{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+{% block bodystyle %}{% endblock %}
+
+
+<div class="" style="bottom: 30px; position: fixed; background-color: #fff; width: 100%; z-index: 65000;">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<h4>Инвентаризация<small> #{{ object.id }} {{ object.name }} от {{ object.cdate|date:"SHORT_DATE_FORMAT" }}</small></h4>
+				<form id="invbarcodesearch" action="{{ next }}" method="get" enctype="multipart/form-data" role="form" class="form-inline" autocomplete="off">
+				{# {% csrf_token %} #}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+				{# {% for i in form.visible_fields %} #}
+				
+
+				<div class="form-group"> 
+				{# <label>{{ form.barcode.label }}</label> #}
+				{{ form.barcode }}
+				{% comment %}
+				{% if form.barcode.errors %}
+				<p class="text-danger">{{ form.barcode.errors|striptags }}</p>
+				{% endif %}
+				<p class="help-block">{{ form.barcode.field.help_text  }}</p>
+				{% endcomment %}
+				</div>
+
+
+				{# <button type="submit" class="btn btn-success">Отправить</button> #}
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+</br>
+
+{% if object_list %}
+{% for i in object_list %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-6 text-center">
+			
+			
+			
+			{% if i.pict %}
+			<a href="{{ i.pict500.url }}" target="_blank"><img src="{{ i.pict120.url}}" /></a>
+			{% endif %}
+			
+			<p>
+			<a href="/goods/detail/{{ i.id }}" target="_blank">{{ i.name }}</a>
+			</br>
+			{{ i.bname }}
+			</p>
+
+			</hr>
+
+			<p>
+			<div style="font-size: 12px;">
+				<span>СТАТУС: {{ i.status|mybool }}</span></br>
+				
+				<span>CRM ID: <a href="/admin/node/goods/{{ i.id }}/change/" target="_blank">{{ i.id }}</a></span></br>
+				
+				{% if i.id1c %}
+				<span>1C ID: <b>{{ i.id1c }}</b></span></br>
+				{% endif %}
+				
+				{% if i.art %}
+				<span>Артикул: <b>{{ i.art }}</b></span></br>
+				{% endif %}
+				
+				{% if i.base %}
+				<span>База: <b>{{ i.base.name }}</b></span></br>
+				{% endif %}
+				
+				{% if i.idbitrix %}
+				<span>BITRIX ID: <a href="http://babah24.ru/katalog/detail.php?ELEMENT_ID={{ i.idbitrix }}" target="_blank">{{ i.idbitrix }}</a></span></br>
+				{% endif %}
+				
+				
+
+				
+			</div>
+			</p>
+
+			<p>
+			<span>Категории:</span></br>
+			{% for t in i.tax.all %}
+				<small>{{ t.name }}</small>
+			{% endfor  %}
+			</p>
+			
+
+
+
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-6 text-center">
+		
+			{% if barcode %}
+			<div class="form-group">
+				<input name="col" type="number" onchange="setcol(this.value)" />
+			</div>
+			
+			<div class="form-group">					
+				<a href="#" class="btn btn-success btn-lg invadd">Добавить</a>
+			</div>
+			{% endif %}
+			
+			<div class="">
+			{{ i.price|floatdot }} руб.	
+			</div>
+			
+			{% if i.barcodelist_set.all	%}
+			<div style="border: 1px silver dotted; padding: 5px;">
+			<span>Штрих код</span></br>
+			{% for bar in i.barcodelist_set.all %}
+			<span><b>
+			
+			{{ bar.barcode }} ({{ bar.unit }})
+
+			</b></span></br>
+			{% endfor %}
+			</div>
+			{% endif %}
+			
+		</div>
+	</div>
+</div>
+{% endfor %}
+
+{% else %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+		<h4>Сканируйте штрих код</h4>
+		</div>
+	</div>
+{% endif %}
+
+
+
+<hr>
+
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>Штрихкод</th>
+					<th>Название</th>
+					<th>Кол.</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in invlist %}
+						<tr id="item{{ i.id }}">
+							<td>
+								{{ i.barcode }}
+								<div class="form-group">					
+									<a href="/inv/item/edit/{{ i.id }}/?next={{ next }}#item{{ i.id }}" class="btn btn-success btn-sm">Редактировать</a>
+								</div>
+							</td>
+							<td>
+								<a href="/goods/detail/{{ i.goods.id }}">{{ i.goods.name }}</a>
+								{{ i.lifedate|date:"SHORT_DATE_FORMAT" }}
+							</td>
+							<td>
+								{{ i.col }}
+								{% comment %}
+								<div class="form-group">					
+									<a href="/inv/item/del/{{ i.id }}/?next={{ next }}" class="btn btn-success btn-xs">X</a>
+								</div>
+								{% endcomment %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+
+		</div>
+	</div>
+</div>
+
+
+
+{% comment %}
+{% include "paginator.html" %}
+{% endcomment %}
+	
+	
+	
+	</br>
+
+	
+	
+<script>
+
+function redirectlocationhash()
+{
+	if(window.location.hash) {
+		$(window.location.hash).addClass('bg-danger');
+		$(window.location.hash).addClass('lead');
+		//console.log(window.location.hash);
+	}
+	return false;
+}
+
+
+function focusbarcodeinput()
+{
+	$('#id_barcode').val('');
+	$('#id_barcode').focus();
+	console.log('clear');
+	return true;
+}
+
+
+function setcol(value)
+{
+	if(value > 65535) { return false; }
+	var url = '/inv/item/add/{{ object.id }}/{{ barcode }}/'+value+'/?next={{ next }}';
+	$('a.invadd').attr('href', url);
+	return true;
+}
+
+
+
+$('input[name="barcode"]').on("change paste keyup", function(){
+    //if($(this).val().length >15){
+       $('#invbarcodesearch').submit();
+    //}
+});
+
+$(document).ready(function() {
+
+	setcol(1);
+
+	redirectlocationhash();
+	focusbarcodeinput();
+	//setTimeout(function() {focusbarcodeinput()}, 1000);
+	
+
+
+});
+
+
+</script>
+	
+	
+	
+{% endblock %}
+

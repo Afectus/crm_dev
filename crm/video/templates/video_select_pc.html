@@ -1,0 +1,37 @@
+{% extends "video_base.html" %}
+{% block title %}ДЕМОНСТРАЦИЯ ВИДЕО{% endblock %}
+{% block description %}ДЕМОНСТРАЦИЯ ВИДЕО{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load videotag %}
+
+{% block bodystyle %}{% endblock %}
+
+
+<div class="container">			
+	<div class="row">
+		<div class="col-md-12">
+			{% for i in object_list %}					
+				<h3>{{ i.shop.name }} ({{ i.id }})</h3>
+					{% devicelist i.id as devlist %}
+					{% for d in devlist %}
+					<div class="form-group">
+						<a class="btn btn-success" href="{% url 'video:video_show_pc' d.id %}?{{ request.GET.urlencode }}"><i class="fa fa-television" aria-hidden="true"></i> {{ d.name }}</a>
+					</div>
+				{% endfor %}
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+
+</br>
+
+	
+	
+{% endblock %}
+

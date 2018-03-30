@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+
+from django.conf.urls import include, url
+from django.contrib import admin
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+from django.contrib import auth
+from django.shortcuts import HttpResponseRedirect
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
+
+from django.views.generic.base import TemplateView
+from django.views.generic import RedirectView
+
+from django.shortcuts import render_to_response, render
+
+from rest_framework import routers
+
+from .views import *
+
+from .api import *
+
+router = routers.DefaultRouter(trailing_slash=False)
+
+app_name = 'bitrix'
+urlpatterns = [
+	url(r'^buyer/auth/phone/?$', buyerauthphone),
+	url(r'^buyer/auth/code/?$', buyerauthcode),
+	url(r'^buyer/info/(?P<token>\w+)/?$', buyerinfo),
+	url(r'^buyer/adv/(?P<control>on)/(?P<token>\w+)/?$', buyeradv),
+	url(r'^buyer/adv/(?P<control>off)/(?P<token>\w+)/?$', buyeradv),
+	url(r'^buyer/message/(?P<token>\w+)/?$', buyermessagemake),
+	#
+	url(r'^bitrix/review/add/?$', review_create.as_view()),
+	#url(r'^bitrix/review/list/?$', bitrixreviewlist),
+	url(r'^bitrix/review/list/?$', bitrixreviewlist.as_view()),
+	#api
+	#url(r'^bitrix/buyerisauth/(?P<authtoken>\w+)/?$', buyerauthtesttoken.as_view(), name='buyerauthtesttoken'),
+]
+
+
+
+
+

@@ -1,0 +1,44 @@
+{% extends "testtest_base.html" %}
+{% block title %}Список{% endblock %}
+{% block description %}Список{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Список процессов</h3>
+		</div>
+	</div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>Название</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+					<tr>
+						<td>{{ i.id }}</td>
+						<td><a href="/testtest/testa/{{ i.id }}">{{ i.name }}</a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

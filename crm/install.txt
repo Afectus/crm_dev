@@ -1,0 +1,104 @@
+apt-get update
+apt-get upgrade
+apt-get install -y sudo mc tmux curl
+apt-get install -y build-essential
+apt-get install -y apache2 nginx openvpn proftpd fail2ban
+apt-get install -y libapache2-mod-php php-mysql
+apt-get install -y libmariadbd-dev #libmysqld-dev 
+apt-get install -y postgresql libpq-dev 
+apt-get install -y python3-dev 
+apt-get install -y sphinxsearch libreoffice 
+apt-get install -y net-tools #ifconfig debian 9
+apt-get install -y postfix
+
+#bitrix
+apt-get install -y libjpeg-dev libpng-dev libfreetype6-dev
+apt-get install -y php-gd php7.0-gd php7.0-xml php-mbstring php7.0-mbstring php7.0-curl php-curl
+
+#rc.local
+systemctl start rc-local
+systemctl status rc-local
+
+#
+dpkg-reconfigure locales
+dpkg-reconfigure tzdata
+
+#change to python3
+update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+update-alternatives --install /usr/bin/python python /usr/bin/python3.5 2
+update-alternatives --config python
+
+#install pip
+wget --no-check-certificate https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+
+#for windows
+#http://landinghub.visualstudio.com/visual-cpp-build-tools
+
+#
+pip install pillow
+pip install django-imagekit
+pip install uwsgi
+pip install django
+pip install django-ckeditor
+pip install django-simple-captcha
+pip install awesome-slugify
+#pip install django-guardian
+#pip install wadofstuff-django-serializers
+pip install django_extensions
+pip install django-cors-headers
+#pip install redis
+pip install requests #for recaptcha
+pip install django-debug-toolbar
+#pip install django-bleach #remove <script>
+pip install aldjemy
+pip install qrcode
+pip install bs4 #check_sites.py
+pip install django-pg-utils #DistinctSum() for annotate
+pip install django-unused-media
+pip install djangorestframework
+pip install djangorestframework-jsonapi
+pip install coreapi #djangorestframework
+pip install PyPDF2
+pip install xlrd
+pip install xlwt
+pip install xmltodict
+pip install python-telegram-bot
+pip install socketIO-client
+pip install weasyprint #conver HTML to PDF for opt contract
+pip install python-levenshtein pyBarcode
+#
+
+
+#nodejs
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
+npm install -g forever
+
+
+#
+--------------MySQL---------------------
+pip install mysqlclient
+pip install pymysql 
+#pip install MySQL-python
+drop database bit;
+create database bit DEFAULT CHARACTER SET = utf8 COLLATE utf8_general_ci;
+grant all on bit.* to 'bit'@'localhost' identified by 'bit';
+#
+dpkg-reconfigure tzdata
+service mysql restart
+-------------PosthgreSQL------------
+#pg_hba.conf -> local all all md5
+service postgresql restart
+pip install psycopg2 #postgresql
+su - postgres
+psql
+drop database crm;
+\q
+createuser -U postgres crm -P
+#Должна ли новая роль иметь полномочия суперпользователя? (y - да/n - нет) y
+#Новая роль должна иметь право создавать базы данных? (y - да/n - нет) y
+#Новая роль должна иметь право создавать другие роли? (y - да/n - нет) y
+createdb -U crm -E utf8 -O crm crm -T template0
+-------------------------------------------
+

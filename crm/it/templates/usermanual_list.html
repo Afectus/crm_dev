@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Документация</h3>
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">	
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>id</th>
+					<th>Заголовок</th>
+					<th></th>
+					<th></th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for i in object_list %}
+						<tr>
+							<td>{{ i.id }}</td>
+							<td>{{ i.name }}</td>
+							<td>{{ i.desc|safe }}</td>
+							<td>
+								<div class="form-group">
+									<a class="btn btn-xs btn-success" href='{% url "it:usermanual_detail" i.id %}'>Подробнее</a>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+				
+{% include "paginator.html" %}
+			
+		</div>
+	</div>
+</div>
+
+	
+	
+	</br>
+
+{% endblock %}
+

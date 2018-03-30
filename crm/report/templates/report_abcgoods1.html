@@ -1,0 +1,493 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+{% load reporttag %}
+
+
+<script>
+$(document).ready(function() {
+	$("#id_goods").chosen({
+		placeholder_text_multiple: "Поиск",
+		no_results_text: "не найдено",
+		search_contains: true,
+	});
+});
+</script>
+
+
+				<!-- widget grid -->
+				<section id="widget-grid" class="">
+					<!-- row -->
+					<div class="row">
+						<!-- NEW WIDGET START -->
+						<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+									<h2>Отчет</h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body">
+			<form id="form_filter" action="/report/abcgoods/1/" method="get" role="form">
+				{# {% csrf_token %} #}
+
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				
+				{# {% for i in form.visible_fields %} #}
+				
+				<div class="bg-success myfilterblock">
+					<div class="row">
+						<div class="col-md-6">	
+							<div class="form-group"> 
+							<label>{{ form.ncheck.label }}</label>
+							{{ form.ncheck }}
+							{% if form.ncheck.errors %}
+							<p class="text-danger">{{ form.ncheck.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.ncheck.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group"> 
+							<label>{{ form.barcode.label }}</label>
+							{{ form.barcode }}
+							{% if form.barcode.errors %}
+							<p class="text-danger">{{ form.barcode.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.barcode.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="bg-info myfilterblock">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.timestart.label }}</label>
+							
+							<div class="input-group date mydatepicker">
+								{{ form.timestart }}
+								<div class="input-group-addon">
+								<span class="glyphicon glyphicon-th"></span>
+								</div>
+							</div>
+							
+							{% if form.timestart.errors %}
+							<p class="text-danger">{{ form.timestart.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.timestart.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.timeend.label }}</label>
+							
+							<div class="input-group date mydatepicker">
+								{{ form.timeend }}
+								<div class="input-group-addon">
+								<span class="glyphicon glyphicon-th"></span>
+								</div>
+							</div>
+							
+							{% if form.timeend.errors %}
+							<p class="text-danger">{{ form.timeend.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.timeend.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.timedm.label }}</label>
+							</br>
+							{{ form.timedm }}
+							{% if form.timedm.errors %}
+							<p class="text-danger">{{ form.timedm.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.timedm.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="bg-success myfilterblock">
+					<div class="form-group"> 
+					<label>{{ form.goods.label }}</label>
+					{{ form.goods }}
+					{% if form.goods.errors %}
+					<p class="text-danger">{{ form.goods.errors|striptags }}</p>
+					{% endif %}
+					<p class="help-block">{{ form.goods.field.help_text  }}</p>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				
+				<div class="bg-success myfilterblock">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group"> 
+							<label>{{ form.tax.label }}</label>
+							{{ form.tax}}
+							{% if form.tax.errors %}
+							<p class="text-danger">{{ form.tax.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.tax.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group"> 
+							<label>{{ form.discount.label }}</label>
+							{{ form.discount}}
+							{% if form.discount.errors %}
+							<p class="text-danger">{{ form.discount.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.discount.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				
+				
+				
+				
+				<div class="bg-success myfilterblock">
+					<div class="row">
+						<div class="col-md-4">	
+							<div class="form-group"> 
+							<label>{{ form.stock.label }}</label>
+							{{ form.stock }}
+							{% if form.stock.errors %}
+							<p class="text-danger">{{ form.stock.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.stock.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.shop.label }}</label>
+							{{ form.shop }}
+							{% if form.shop.errors %}
+							<p class="text-danger">{{ form.shop.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.shop.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.cashbox.label }}</label>
+							{{ form.cashbox }}
+							{% if form.cashbox.errors %}
+							<p class="text-danger">{{ form.cashbox.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.cashbox.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				
+				
+				
+				<div class="bg-success myfilterblock">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.pricefrom.label }}</label>
+							{{ form.pricefrom }}
+							{% if form.pricefrom.errors %}
+							<p class="text-danger">{{ form.pricefrom.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.pricefrom.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.priceto.label }}</label>
+							{{ form.priceto }}
+							{% if form.priceto.errors %}
+							<p class="text-danger">{{ form.priceto.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.priceto.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.pdown.label }}</label>
+							{{ form.pdown }}
+							{% if form.pdown.errors %}
+							<p class="text-danger">{{ form.pdown.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.pdown.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				
+
+
+				<div class="bg-success myfilterblock">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.operation.label }}</label>
+							{{ form.operation }}
+							{% if form.operation.errors %}
+							<p class="text-danger">{{ form.operation.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.operation.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.sort.label }}</label>
+							{{ form.sort }}
+							{% if form.sort.errors %}
+							<p class="text-danger">{{ form.sort.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.sort.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group"> 
+							<label>{{ form.base.label }}</label>
+							{{ form.base}}
+							{% if form.base.errors %}
+							<p class="text-danger">{{ form.base.errors|striptags }}</p>
+							{% endif %}
+							<p class="help-block">{{ form.base.field.help_text  }}</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				
+				
+				</br>
+
+				<div class="myfilterblock">
+					<div class="form-group"> 
+						<button type="submit" class="btn btn-success">Применить</button>
+						<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+						<a href="/report/abcgoods" class="btn btn-success">Сбросить</a>
+						
+						
+						<span class="filter-tumbler">
+						{{ form.paging }} <label>{{ form.paging.label }}</label>
+						</span>
+						<span class="filter-tumbler">
+						 {{ form.instock }} <label>{{ form.instock.label }}</label>
+						</span>
+						<span class="filter-tumbler">
+						{{ form.inbuyer }} <label>{{ form.inbuyer.label }}</label> 
+						</span>
+					</div>
+				</div>
+				
+				
+				<div class="myfilterblock">
+					<span class="pull-right">
+					Количество чеков: <b>{{ checkcount }} </b>
+					Количество товаров: <b>{{ topgoods.count }} </b>
+					Сумма чеков: <b>{{ checksum }} </b>
+					
+					</span>
+				</div>
+				
+
+				
+				
+				
+			</form>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+
+							{% if object_list %}
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false">
+								<!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+								<header>
+									<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+									<h2>ОТЧЕТ</h2>
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget edit box -->
+									<div class="jarviswidget-editbox">
+										<!-- This area used as dropdown edit box -->
+
+									</div>
+									<!-- end widget edit box -->
+
+									<!-- widget content -->
+									<div class="widget-body no-padding">
+
+										<div class="table-responsive">
+												
+											<table class="table table-bordered table-striped">
+												<thead>
+													<tr>
+														<th>Товар</th>
+														<th>Цена (закупочная)</th>
+														<th>Цена (текущая)</th>
+														<th>Количество проданных</th>
+														<th>Сумма чеков</th>
+														<th>Выручка сумма</th>
+														<th>Объем %</th>
+														<th>Нарастающим %</th>
+														<th>Группа ABC</th>
+													</tr>
+												</thead>
+												<tbody>
+													{% for i in object_list %}
+													<tr>
+														<td><a href="/goods/detail/{{ i.id }}">{{ i.name }} </a><small>({{ i.base.name }})</small></td>
+														<td>{{ i.startprice }}</td>
+														<td>{{ i.price }}</td>
+														<td>{{ i.col }}</td>
+														<td>{{ i.sum }}</td>
+														<td>{{ i.profit }}</td>
+														<td>{{ i.p|floatdot:1 }}%</td>
+														<td>{{ i.pp|floatdot:1 }}%</td>
+														<td>{{ i.abc }}</td>
+													</tr>
+													{% endfor %}
+												</tbody>
+											</table>
+											
+										</div>
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+							{% endif %}
+
+						</article>
+						<!-- WIDGET END -->
+					</div>
+					<!-- end row -->
+					
+					
+					
+					<div class="row">
+						<div class="col-sm-12 col-md-12 col-lg-12">
+							<div class="well">
+								<h3>Найдено: {{ count }}</h3>
+								<div class="">
+								<ul class="pagination pagination-lg">
+									{% if object_list.has_previous %}
+										<li><a href="/report/abcgoods/{{ object_list.paginator.page_range|first }}?{{ req }}"><i class="icon-double-angle-left"></i>Первая</a></li>
+									{% endif %}
+
+									{% if object_list.has_previous %}
+										<li><a href="/report/abcgoods/{{ object_list.previous_page_number }}?{{ req }}"><i class="icon-angle-left"></i>Предыдущая</a></li>
+									{% endif %}
+									
+									{% for p in object_list.paginator.page_range|mypaginatorslice:object_list.number %}
+										{% if p != 0 %}
+											{% if p == object_list.number %}
+													<li class="active"><a href="" onclick="return false;">{{ object_list.number }}</a></li>
+												{% else %}
+													<li><a href="/report/abcgoods/{{ p }}?{{ req }}">{{ p }}</a></li>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+										
+									{% if object_list.has_next %}
+										<li><a href="/report/abcgoods/{{ object_list.next_page_number }}?{{ req }}">Следующая<i class="icon-angle-right"></i></a></li>
+									{% endif %}
+
+									{% if object_list.has_next %}
+										<li><a href="/report/abcgoods/{{ object_list.paginator.page_range|last }}?{{ req }}">Последняя<i class="icon-double-angle-right"></i></a></li>
+									{% endif %}
+								</ul>
+
+								</div>
+							</div>
+				
+						</div>
+					</div>
+
+				</section>
+				
+				
+				
+				
+				
+
+
+{% endblock %}
+

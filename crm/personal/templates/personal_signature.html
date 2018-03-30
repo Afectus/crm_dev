@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+	</head>
+	<body>
+		<div style="width:100%!important;font-family:Arial,sans-serif;background-color:white" bgcolor="white" link="gray" alink="gray" text="gray">
+			<!-- main -->
+			<table cellpadding="0" cellspacing="0" border="0" width="1000px" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;color:gray">
+				<tbody>
+					<tr>
+						<!-- left -->
+						<td valign="center" align="center" width="200" style="font-size:0;line-height:0px;padding-top:3px">
+					
+							<a style="text-decoration:none;" href="http://babah24.ru/go" target="_blank" rel="noreferrer">
+								<img src="http://babah24.ru/images/html_mail/logoorange.png" width="150" height="70" alt="babah24" border="0" style="display:inline-block;outline:none;text-decoration:none;font-size:24px;line-height:30px;font-weight:bold;color:gray" />
+							</a>
+							
+							<p style="color:gray;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:25px;margin-top:10px;margin-bottom:7px">
+							С нами события ярче!
+							</p>
+							
+							<p style="color:gray;font-family:Arial,Helvetica,sans-serif;font-style:italic;font-size:16px;line-height:25px;margin-top:0;margin-bottom:7px">
+								<a href="http://facebook.com/babahkrsk/" target="_blank" style="color: gray; text-decoration:none"><img src="http://babah24.ru/images/html_mail/f.png" alt="babah24_facebook" border="0" width="28" height="28" style="display:inline-block;outline:none;text-decoration:none;font-size:24px;line-height:30px;font-weight:bold;color:#000001" /></a>
+								
+								<a href="http://vk.com/babah24" target="_blank" style="color: gray; text-decoration:none"><img src="http://babah24.ru/images/html_mail/v.png" alt="babah24_vkontakte" border="0" width="28" height="28" style="display:inline-block;outline:none;text-decoration:none;font-size:24px;line-height:30px;font-weight:bold;color:#000001" /></a>
+								
+								<a href="https://www.ok.ru/babahKRSK" target="_blank" style="color: gray; text-decoration:none"><img src="http://babah24.ru/images/html_mail/o.png" alt="babah24_vkontakte" border="0" width="28" height="28" style="display:inline-block;outline:none;text-decoration:none;font-size:24px;line-height:30px;font-weight:bold;color:#000001" /></a>
+
+								<a href="http://instagram.com/babah24/" target="_blank" style="color: gray; text-decoration:none"><img src="http://babah24.ru/images/html_mail/i.png" alt="babah24_instagram" border="0" width="28" height="28" style="display:inline-block;outline:none;text-decoration:none;font-size:24px;line-height:30px;font-weight:bold;color:#000001" /></a>
+
+								<a href="https://www.youtube.com/channel/UCffD8rp11Xt4uA2OiT2LAgQ" target="_blank" style="color: gray; text-decoration:none"><img src="http://babah24.ru/images/html_mail/y.png" alt="babah24_youtube" border="0" width="28" height="28" style="display:inline-block;outline:none;text-decoration:none;font-size:24px;line-height:30px;font-weight:bold;color:#000001" /></a>
+							</p>
+
+							<p style="color:gray;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:25px;margin-top:0;margin-bottom:7px">
+							<a style="color:gray;text-decoration:underline" href="http://babah24.ru/go" target="_blank" rel="noreferrer">
+								<img src="http://babah24.ru/images/html_mail/babahorange.png" width="150" height="30" alt="babah24" border="0" style="display:inline-block;outline:none;text-decoration:none;font-size:24px;line-height:30px;font-weight:bold;color:gray" /></a>
+							</p>
+
+						</td>
+						<!-- right -->
+						<td valign="top" width="800" style="padding-top:8px;padding-left:15px; border-left:1px black solid;">
+							<span style="color:gray;font-family:Arial,Helvetica,sans-serif;font-style:italic;font-size:16px;line-height:20px;margin-top:0;margin-bottom:0px">
+							С уважением, {{ object.user.first_name }} {{ object.user.last_name }}</br>
+							</span>
+							<span style="color:gray;font-family:Arial,Helvetica,sans-serif;font-style:italic;font-size:16px;line-height:20px;margin-top:0;margin-bottom:5px">
+							{{ object.position }}</br>
+							</span>
+							
+							{% comment %}
+							<span style="color:gray;font-family:Arial,Helvetica,sans-serif;font-style:italic;font-size:16px;line-height:20px;margin-top:0;margin-bottom:10px">
+							г. Красноярск, ул. 9 мая 79/2</br>
+							</span>
+
+							{% endcomment %}
+							
+							</br>
+							
+							<span style="color:gray;font-family:Arial,Helvetica,sans-serif;font-style:italic;font-size:16px;line-height:15px;margin-top:0;margin-bottom:0px">
+								{% if object.phonemobile %}
+								<span style="color:gray;font-family:Arial,Helvetica,sans-serif;font-style:italic;font-size:16px;line-height:17px;margin-top:0;margin-bottom:0px">
+								Тел.моб.:&nbsp;
+								<a style="color:gray;text-decoration:none" href="tel:{{ object.phonemobile }}" target="_blank" rel="noreferrer" value="{{ object.phonemobile }}">{{ object.phonemobile }}</a>
+								</span>
+								{% endif %}
+								
+								{% if object.phonemobile and object.phonework %}
+								</br>
+								{% endif %}
+								
+								{% if object.phonework %}
+								<span style="color:gray;font-family:Arial,Helvetica,sans-serif;font-style:italic;font-size:16px;line-height:17px;margin-top:0;margin-bottom:0px">
+								Тел.раб.:&nbsp;
+								<a style="color:gray;text-decoration:none" href="tel:{{ object.phonework }}" target="_blank" rel="noreferrer" value="{{ object.phonework }}">{{ object.phonework }}</a>
+								</span>
+								{% endif %}
+							</span>
+							
+							{% if object.address %}
+							<div style="color:gray;font-family:Arial,Helvetica,sans-serif;font-style:italic;font-size:16px;line-height:17px;margin-top:10px;margin-bottom:10px">Адрес: {{ object.address }}
+							</div>
+							{% else %}
+							<div style="color:gray;font-family:Arial,Helvetica,sans-serif;font-style:italic;font-size:16px;line-height:17px;margin-top:10px;margin-bottom:10px"></div>
+							{% endif %}
+							
+							
+							{% if object.role == 'office' %}
+							<div style="color:gray;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:20px;margin-top:0;margin-bottom:10px">Магазины качественных фейерверков "Бабах"</div>
+							{% endif %}
+							
+							
+							<span style="color:gray;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:10px;margin-top:0;margin-bottom:0px">
+							Аэродизайн событий: гелиевые шары, фонтаны, арки, BUBBLE, Инсайдеры, фольгированные фигуры, цифры.
+							</span>
+							<br />
+							<span style="color:gray;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:10px;margin-top:0;margin-bottom:0px">
+							Пиротехнические изделия оптом и в розницу: фейерверки, фонтаны, римские свечи, цветной дым, петарды.
+							</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- end main -->
+		</div>
+	</body>
+</html>

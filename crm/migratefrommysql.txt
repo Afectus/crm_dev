@@ -1,0 +1,12 @@
+# pip install psycopg2
+# pip install py-mysql2pgsql
+# su - postgres
+# psql
+
+postgres=# drop database crm;
+postgres=# create database crm;
+postgres=# grant all privileges on database crm to crm;
+
+# py-mysql2pgsql #in directory create config mysql2pgsql.yml
+
+# py-mysql2pgsql -v -f mysql2pgsql.yml

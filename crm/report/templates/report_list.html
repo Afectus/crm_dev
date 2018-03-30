@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Отчеты</h3>
+			
+		</div>
+	</div>
+</div>
+
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			
+			<div class="row">
+				<div class="col-md-4">
+					<h3><a href="/report/sale/">Отчет чеки</a></h3>
+					<p>Список чеков</p>
+				</div>
+				
+				<div class="col-md-4">
+					<h3><a href="/report/visitor/">Отчет посетители</a></h3>
+					<p>Счетчик посетителей</p>
+				</div>
+				<div class="col-md-4">
+					<h3><a href="/report/visitorperiod/">Отчет посетители период</a></h3>
+					<p>Счетчик посетителей</p>
+				</div>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+
+	</br>
+	
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			
+			<div class="row">
+				<div class="col-md-4">
+					<h3><a href="/report/salegoods/">Отчет по товарам</a></h3>
+					<p>Отчет по товарам</p>
+				</div>
+				<div class="col-md-4">
+					<h3><a href="/report/sumperiod/">Отчет сумма период</a></h3>
+					<p>Отчет сумма период</p>
+				</div>
+				
+				<div class="col-md-4">
+					<h3><a href="/report/abcgoods/">ABC Анализ по товарам</a></h3>
+					<p>ABC Анализ</p>
+				</div>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+
+	</br>
+
+{% endblock %}
+

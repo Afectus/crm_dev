@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+{% load static %}
+
+{% block content %}
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+
+		
+		
+
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>Хранилище аккаунтов</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+							<h1>Детали</h1>
+							<table class="table table-bordered table-striped" style="font: regular">
+								<tr><th>Название</th><th>{{ object.name }}</th></tr>
+								<tr><th>Логин</th><th>
+										<a href="#" data-login="{{object.login}}" onclick="$(this).html($(this).attr('data-login'))">**********</a>
+								</th></tr>
+								<tr><th>Пароль</th><th><a href="#" data-password="{{object.password}}" onclick="$(this).html($(this).attr('data-password'))">**********</a></th></tr>
+								<tr><th>Комментарии</th><th>{{ object.comment }}</th></tr>
+							</table>
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+{% endblock %}
+
