@@ -80,11 +80,6 @@ class dellist_list(ListView):
         context_data.update({'form': Form_filter_order(self.request.GET),})
         return context_data
 
-    def get_context_data(self, *args, **kwargs):
-        context_data = super(dellist_mylist, self).get_context_data(*args, **kwargs)
-        context_data.update({'form': Form_filter_order(self.request.GET),})
-        return context_data
-
 class dellist_detail(DetailView):
 	model = dellist
 	template_name = 'dellist_detail.html'
