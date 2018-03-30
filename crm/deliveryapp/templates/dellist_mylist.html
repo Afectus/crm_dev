@@ -32,21 +32,19 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
+									<a href="{% url 'dellist_list' %}" class="btn btn-success">Все доставки</a>
 									<a href="{% url 'dellist_add' %}" class="btn btn-success">Создать доставку</a>
-									<a href="{% url 'dellist_mylist' %}" class="btn btn-success">Мои доставки</a>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<form class="smart-form" id="form_filter" action="" method="get" role="form">
 									<fieldset>
 										<label class="label">{{ form.sort.label }}</label>
-										<label class="input">
-											{{ form.sort }}
-										</label>
+										<label class="input">{{ form.sort }}</label>
 										{% if form.sort.errors %}
-										<p class="text-danger">{{ form.sort.errors|striptags }}</p>
+											<p class="text-danger">{{ form.sort.errors|striptags }}</p>
 										{% endif %}										
-										<div class="note">{{ form.sort.field.help_text  }}</div>
+											<div class="note">{{ form.sort.field.help_text  }}</div>
 									</fieldset>	
 									<footer>
 										<div class="pull-left"><h4>Найдено: {{ object_list.count }}</h4></div>
