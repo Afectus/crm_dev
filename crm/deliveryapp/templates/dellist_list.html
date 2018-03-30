@@ -28,39 +28,60 @@
 					</div>
 					<!-- end widget edit box -->
 					<!-- widget content -->
-					<div class="widget-body">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group">
-									<a href="{% url 'dellist_add' %}" class="btn btn-success">Создать доставку</a>
-									<form action="" method="get">
-										<button type="submit" class="btn btn-success" id="" name="alldelivery" value="alldelivery"> Все доставки</button>
-									</form>
-									<form action="" method="get">
-										<button type="submit" class="btn btn-success" id="" name="mydelivery" value="mydelivery"> Mои доставки</button>
-									</form>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<form class="smart-form" id="form_filter" action="" method="get" role="form">
-									<fieldset>
-										<label class="label">{{ form.sort.label }}</label>
-										<label class="input">
-											{{ form.sort }}
-										</label>
-										{% if form.sort.errors %}
-										<p class="text-danger">{{ form.sort.errors|striptags }}</p>
-										{% endif %}										
-										<div class="note">{{ form.sort.field.help_text  }}</div>
-									</fieldset>	
-									<footer>
-										<div class="pull-left"><h4>Найдено: {{ object_list.count }}</h4></div>
-										<button type="submit" class="btn btn-primary">Применить</button>
-										<a href="{% url 'dellist_list' %}" class="btn btn-default">Сбросить</a>
-									</footer>
-								</form>
-							</div>
-						</div>
+					<div class="widget-body no-padding">
+
+					<form class="smart-form" id="form_filter" action="" method="get" role="form">
+						{# {% csrf_token %} #}
+
+						{% for hidden in form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+						
+						{# {% for i in form.visible_fields %} #}
+						{# {% endfor %} #}
+
+							<header>
+								<h3>Фильтр</h3>
+							</header>
+
+							<fieldset>
+								<section>
+									<label class="label">{{ form.filter.label }}</label>
+									<label class="input">
+										{{ form.filter }}
+									</label>
+									{% if form.filter.errors %}
+									<p class="text-danger">{{ form.filter.errors|striptags }}</p>
+									{% endif %}
+									<div class="note">{{ form.filter.field.help_text  }}</div>
+								</section>
+							</fieldset>	
+							
+							<fieldset>
+								<section>
+									<label class="label">{{ form.sort.label }}</label>
+									<label class="input">
+										{{ form.sort }}
+									</label>
+									{% if form.sort.errors %}
+									<p class="text-danger">{{ form.sort.errors|striptags }}</p>
+									{% endif %}
+									<div class="note">{{ form.sort.field.help_text  }}</div>
+								</section>
+							</fieldset>	
+
+							<footer>
+								<div class="pull-left"><h4>Найдено: {{ count }}</h4></div>
+								<button type="submit" class="btn btn-primary">Применить</button>
+								<!-- <a href="#" class="btn btn-success" onclick="$('#form_filter')[0].reset(); return false;">Очистить</a> -->
+								<a href="{% url 'dellist_add' %}" class="btn btn-default">Сбросить</a>
+								<a href="{% url 'dellist_add' %}" class="btn btn-success">Создать доставку</a>
+								
+							</footer>
+						</form>
+					
+					
+					
 					<!-- end widget content -->
 					</div>
 				<!-- end widget div -->
@@ -153,5 +174,5 @@
 	<!-- END ROW -->
 </section>
 
-{% include "paginator.html" %}
+{% include "xpaginator.html" %}
 {% endblock %}
