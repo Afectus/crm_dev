@@ -65,6 +65,7 @@
 							<table class="table table-bordered table-striped">
 								<thead>
 									<tr>
+										<th>id</th>
 										<th>Приложение</th>
 										<th></th>
 										<th></th>
@@ -73,6 +74,7 @@
 								<tbody>
 									{% for i in object_list %}
 									<tr>
+										<td>{{i.id}}</td>
 										<td>{{i.name}}</td>
 										<td>
 												<div class="form-group">
