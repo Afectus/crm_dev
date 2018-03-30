@@ -1,4 +1,7 @@
 from .models import *
+from notify.models import *
+from telegramtemplate.models import *
+
 from django.views.generic.edit import CreateView, DeleteView, UpdateView ,FormView
 from django.views.generic import ListView,DetailView
 from django.urls import reverse_lazy,reverse
@@ -7,12 +10,35 @@ from acl.views import get_object_or_denied
 from django.shortcuts import HttpResponseRedirect
 from django import forms
 
+def get_message(typetemplate, user, path):
+    # Переменные шаблона:<br>
+    # (today) - Сегодняшняя дата<br>
+    # (user) - Пользователь<br>
+    # (url) - Ссылка на объект (crm.babah24.ru)<br>
+    #today = datetime.date.today()
+    now = datetime.datetime.now()
+
+    fullname = user.first_name + " " + user.last_name
+
+    t = telegramtemplate.objects.filter(name=typetemplate)
+    t = t.first()
+    message = t.message
+    message = message.replace('(today)', now.strftime('%d-%m-%Y %H:%M:%S'))
+    message = message.replace('(user)', str(fullname))
+    message = message.replace('(url)', 'crm.babah24.ru%s' % path)
+    return message
+
+# отправляем сообщения в очередь
+def send_message(iuser, message):
+    nh=notifyhandler.objects.get(name='telegram_chat')
+    nq=notifyqueue.objects.create(handler=nh, value=message)
+
 
 class Form_filter_order(forms.Form):
 
 	sortchoice=(
-		('ctime', 'Новые'),
-		('-ctime', 'Старые'),
+		('ctime', 'Старые'),
+		('-ctime', 'Новые'),
 		('-area', 'Район'),
 		('-status', 'Статус'),
 		)
@@ -21,60 +47,43 @@ class Form_filter_order(forms.Form):
 
 
 class dellist_list(ListView):
-	model = dellist
-	template_name = 'dellist_list.html'
-	paginate_by = 10
+    model = dellist
+    template_name = 'dellist_list.html'
+    paginate_by = 10
 
-	
-	def dispatch(self, request, *args, **kwargs):
-		#get_object_or_denied(self.request.user, 'deliveryapp', 'L') #проверяем права
-		return super(dellist_list, self).dispatch(request, *args, **kwargs)
-	
-	def get_queryset(self):
-		data = super(dellist_list, self).get_queryset().order_by('-id')
+    def dispatch(self, request, *args, **kwargs):
+        #get_object_or_denied(self.request.user, 'deliveryapp', 'L') #проверяем права
+        return super(dellist_list, self).dispatch(request, *args, **kwargs)
 
-		f=Form_filter_order(self.request.GET)
-		req = ''
-		
-		if f.is_valid():
-			fdata = f.cleaned_data
-			if fdata['sort']:
-				data=data.order_by(fdata['sort'])
-		
-		return data
+    def get_queryset(self):
+        data = super(dellist_list, self).get_queryset().order_by('-id')
+        f=Form_filter_order(self.request.GET)
+        req = ''
 
-	def get_context_data(self, *args, **kwargs):
-		context_data = super(dellist_list, self).get_context_data(*args, **kwargs)
-		context_data.update({'form': Form_filter_order(self.request.GET),})
-		return context_data
+        if f.is_valid():
+            fdata = f.cleaned_data
+        if fdata['sort']:
+            data=data.order_by(fdata['sort'])
 
-class dellist_mylist(ListView):
-	model = dellist
-	template_name = 'dellist_mylist.html'
-	paginate_by = 10
-	
-	def dispatch(self, request, *args, **kwargs):
-		#get_object_or_denied(self.request.user, 'deliveryapp', 'L') #проверяем права
-		return super(dellist_mylist, self).dispatch(request, *args, **kwargs)
+        if 'mydelivery' not in self.request.session:
+            self.request.session['mydelivery'] = ''
 
-	def get_queryset(self):
-		data = super(dellist_mylist, self).get_queryset()
-		data = data.filter(courier=self.request.user).order_by('-id')
+        if self.request.GET.get('mydelivery'):
+            self.request.session['mydelivery'] = 'True'
+        elif self.request.GET.get('alldelivery'):
+            self.request.session['mydelivery'] = 'False'
 
-		f=Form_filter_order(self.request.GET)
-		req = ''
-		
-		if f.is_valid():
-			fdata = f.cleaned_data
-			if fdata['sort']:
-				data=data.order_by(fdata['sort'])
-		return data
+        return data
 
-	def get_context_data(self, *args, **kwargs):
-		context_data = super(dellist_mylist, self).get_context_data(*args, **kwargs)
-		context_data.update({'form': Form_filter_order(self.request.GET),})
-		return context_data
+    def get_context_data(self, *args, **kwargs):
+        context_data = super(dellist_list, self).get_context_data(*args, **kwargs)
+        context_data.update({'form': Form_filter_order(self.request.GET),})
+        return context_data
 
+    def get_context_data(self, *args, **kwargs):
+        context_data = super(dellist_mylist, self).get_context_data(*args, **kwargs)
+        context_data.update({'form': Form_filter_order(self.request.GET),})
+        return context_data
 
 class dellist_detail(DetailView):
 	model = dellist
@@ -92,63 +101,81 @@ class dellist_detail(DetailView):
 
 
 class dellist_add(CreateView):
-	model = dellist
-	template_name = '_edit2.html'
-	fields = ['order', 'status' ,'area', 'addr', 'comment']
+    model = dellist
+    template_name = '_edit2.html'
+    fields = ['order', 'status' ,'area', 'addr', 'comment']
 
-	def dispatch(self, request, *args, **kwargs):
-		get_object_or_denied(self.request.user, 'deliveryapp', 'C') #проверяем права
-		return super(dellist_add, self).dispatch(request, *args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        get_object_or_denied(self.request.user, 'deliveryapp', 'C') #проверяем права
+        return super(dellist_add, self).dispatch(request, *args, **kwargs)
 
-	def form_valid(self, form):
-		instance = form.save(commit=False)
-		instance.save()
-		self.data=instance
-		comments = "%s создал доставку id: %s" % (self.request.user, instance.id)
-		de=delevent.objects.create(user=self.request.user, dellist=instance, event='add', comment=comments,)
-		return super(dellist_add, self).form_valid(form)
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.save()
+        self.data=instance
+        comments = "%s создал доставку id: %s"%(self.request.user, instance.id)
+        de=delevent.objects.create(user=self.request.user, dellist=instance, event='add', comment=comments,)
 
-	def get_success_url(self):
-		return reverse_lazy('dellist_list')
+        path = reverse('dellist_detail', args=[instance.id])
+        value_chat = get_message('dellist_add', self.request.user, path)
+        send_message(User.objects.get(username='telegram_chat'), value_chat)
+
+        return super(dellist_add, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('dellist_list')
 
 
 class dellist_edit(UpdateView):
-	model = dellist
-	template_name = '_edit2.html'
-	fields = ['order', 'status' ,'area', 'addr', 'comment']
+    model = dellist
+    template_name = '_edit2.html'
+    fields = ['order', 'status' ,'area', 'addr', 'comment']
 
-	def form_valid(self, form):
-		instance = form.save(commit=False)
-		instance.save()
-		self.data=instance
-		comments = "%s отредактировал доставку id: %s" % (self.request.user, instance.id)
-		de=delevent.objects.create(user=self.request.user, dellist=instance, event='edit', comment=comments,)
-		return super(dellist_edit, self).form_valid(form)
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.save()
+        self.data=instance
+        comments = "%s отредактировал доставку id: %s"%(self.request.user, instance.id)
+        de=delevent.objects.create(user=self.request.user, dellist=instance, event='edit', comment=comments,)
 
-	def dispatch(self, request, *args, **kwargs):
-		get_object_or_denied(self.request.user, 'deliveryapp', 'C') #проверяем права
-		return super(dellist_edit, self).dispatch(request, *args, **kwargs)
+        path = reverse('dellist_detail', args=[instance.id])
+        value_chat = get_message('dellist_edit', self.request.user, path)
+        send_message(User.objects.get(username='telegram_chat'), value_chat)
 
-	def get_success_url(self):
-		return reverse_lazy('dellist_list')
+        return super(dellist_edit, self).form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        get_object_or_denied(self.request.user, 'deliveryapp', 'C') #проверяем права
+        return super(dellist_edit, self).dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('dellist_list')
 
 def dellist_accept(request, pk):
-	data = get_object_or_404(dellist, id=pk, status='wait')
-	#get_object_or_denied(request.user, 'deliveryapp', 'C')
-	data.status='accept'
-	data.courier=request.user
-	data.save()
-	comments = "%s взял доставку id: %s"%(request.user, data.id)
-	de=delevent.objects.create(user=request.user, dellist=data, event='accept', comment=comments,)
-	return HttpResponseRedirect(reverse('dellist_detail', args=[data.id]))
+    data = get_object_or_404(dellist, id=pk, status='wait')
+    #get_object_or_denied(request.user, 'deliveryapp', 'C')
+    data.status='accept'
+    data.courier=request.user
+    data.save()
+    comments = "%s взял доставку id: %s"%(request.user, data.id)
+    de=delevent.objects.create(user=request.user, dellist=data, event='accept', comment=comments,)
+
+    path = reverse('dellist_detail', args=[data.id])
+    value_chat = get_message('dellist_accept', request.user, path)
+    send_message(User.objects.get(username='telegram_chat'), value_chat)
+
+    return HttpResponseRedirect(reverse('dellist_detail', args=[data.id]))
 
 def dellist_success(request, pk):
-	data = get_object_or_404(dellist, id=pk, status='accept')
-	#get_object_or_denied(request.user, 'deliveryapp', 'C')
-	data.status='success'
-	data.save()
-	comments = "%s выполнил доставку id: %s"%(request.user, data.id)
-	de=delevent.objects.create(user=request.user, dellist=data, event='success', comment=comments,)
-	return HttpResponseRedirect(reverse('dellist_detail', args=[data.id]))
+    data = get_object_or_404(dellist, id=pk, status='accept')
+    #get_object_or_denied(request.user, 'deliveryapp', 'C')
+    data.status='success'
+    data.save()
+    comments = "%s выполнил доставку id: %s"%(request.user, data.id)
 
+    path = reverse('dellist_detail', args=[data.id])
+    value_chat = get_message('dellist_success', request.user, path)
+    send_message(User.objects.get(username='telegram_chat'), value_chat)
 
+    de=delevent.objects.create(user=request.user, dellist=data, event='success', comment=comments,)
+    return HttpResponseRedirect(reverse('dellist_detail', args=[data.id]))
