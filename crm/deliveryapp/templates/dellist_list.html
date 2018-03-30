@@ -33,7 +33,12 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									<a href="{% url 'dellist_add' %}" class="btn btn-success">Создать доставку</a>
-									<a href="{% url 'dellist_mylist' %}" class="btn btn-success">Мои доставки</a>
+									<form action="" method="get">
+										<button type="submit" class="btn btn-success" id="" name="alldelivery" value="alldelivery"> Все доставки</button>
+									</form>
+									<form action="" method="get">
+										<button type="submit" class="btn btn-success" id="" name="mydelivery" value="mydelivery"> Mои доставки</button>
+									</form>
 								</div>
 							</div>
 							<div class="col-md-6">
