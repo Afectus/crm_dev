@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="telegramtemplate.telegramtemplate" pk="1">
+        <field name="name" type="CharField">ttppe</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) вы стали участником нового проекта "(projectname)" (ссылка: (url) )</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="2">
+        <field name="name" type="CharField">ttppc</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) пользователем (user) был опубликован проект "(projectname)" (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="3">
+        <field name="name" type="CharField">ttape</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) проект "(projectname)", в котором вы участвуете, был переведен в архив (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="4">
+        <field name="name" type="CharField">ttapc</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) пользователем (user) проект "(projectname)" был переведен в архив (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="5">
+        <field name="name" type="CharField">ttcpe</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) проект "(projectname)", в котором вы участвуете, был изменён (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="6">
+        <field name="name" type="CharField">ttcpc</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) пользователем (user) проект "(projectname)" был изменён (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="7">
+        <field name="name" type="CharField">ttacp</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) пользователь (user) оставил комментарий для проекта "(projectname)" (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="8">
+        <field name="name" type="CharField">ttapse</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) вы стали исполнителем в новом этапе "(stepname)" проекта "(projectname)" (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="9">
+        <field name="name" type="CharField">ttapsc</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) пользователь (user) создал новый этап "(stepname)" проекта "(projectname)" (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="10">
+        <field name="name" type="CharField">ttcpse</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) этап "(stepname)" проекта "(projectname)", в котором вы участвуете, был изменён (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="11">
+        <field name="name" type="CharField">ttcpsc</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) пользователем (user) этап "(stepname)" проекта "(projectname)" был изменён (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="12">
+        <field name="name" type="CharField">ttacps</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) пользователь (user) оставил комментарий для этапа "(stepname)" проекта "(projectname)" (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="13">
+        <field name="name" type="CharField">tteps</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) этап "(stepname)" проекта "(projectname)" был завершен (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="14">
+        <field name="name" type="CharField">filexchanger_add</field>
+        <field name="desc" type="CharField">Почта добавление элемента</field>
+        <field name="message" type="TextField">Сегодня (today) пользователь (user)  отправил вам письмо (ссылка: (url))</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="15">
+        <field name="name" type="CharField">corpmail_add</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) пользователь "(user)" отправил вам сообщение (ссылка: (url) )</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="16">
+        <field name="name" type="CharField">corpmail_reply</field>
+        <field name="desc" type="CharField"></field>
+        <field name="message" type="TextField">Сегодня (today) пользователь "(user)" ответил вам в сообщении (ссылка: (url) )</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="17">
+        <field name="name" type="CharField">useridea_add</field>
+        <field name="desc" type="CharField">useridea_add</field>
+        <field name="message" type="TextField">Сегодня (today) пользователь (user) предложил новую идею (url) - Смотрим, оцениваем, комментируем!</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="18">
+        <field name="name" type="CharField">useridea_comment_add</field>
+        <field name="desc" type="CharField">useridea_comment_add</field>
+        <field name="message" type="TextField">Сегодня (today) пользователь (user) прокомментировал идею (url)</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="19">
+        <field name="name" type="CharField">news_add</field>
+        <field name="desc" type="CharField">news_add</field>
+        <field name="message" type="TextField">Сегодня (today) пользователь (user) поделился новостью (url)</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="20">
+        <field name="name" type="CharField">vaucher_add</field>
+        <field name="desc" type="CharField">vaucher_add</field>
+        <field name="message" type="TextField">Сегодня (today) пользователь (user) добавил новый расходный кассовый ордер (url)</field>
+    </object>
+    <object model="telegramtemplate.telegramtemplate" pk="21">
+        <field name="name" type="CharField">dellist_add</field>
+        <field name="desc" type="CharField">Добавлена доставка</field>
+        <field name="message" type="TextField">Новая доставка (today) (user) (url)</field>
+    </object>
+</django-objects>
