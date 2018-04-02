@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block description %}Панель управления{% endblock %}
+{% block keywords %}{% endblock %}
+
+
+{% block content %}
+
+{% load nodetag %}
+
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+	<!-- START ROW -->
+	<div class="row">
+
+		<!-- NEW COL START -->
+		<article class="col-sm-12 col-md-12 col-lg-12">
+			<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+				<header>
+					<h2>Фильтр </h2>
+				</header>
+				<!-- widget div-->
+					<div class="widget-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<a href="{% url 'dellist_list' %}" class="btn btn-success">К списку доставок</a>
+									<a href="{% url 'dellist_add' %}" class="btn btn-success">Создать доставку</a>
+								</div>
+							</div>
+						</div>
+					<!-- end widget content -->
+					</div>
+				<!-- end widget div -->
+			<!-- end widget -->
+			</div>
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+				<!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+				<header>
+					<span class="widget-icon"> <i class="fa fa-shopping-cart" aria-hidden="true"></i> </span>
+					<h2>Доставка id: {{ object.id }}</h2>
+				</header>
+
+				<!-- widget div-->
+				<div>
+
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+
+					</div>
+					<!-- end widget edit box -->
+
+					<!-- widget content -->
+					<div class="widget-body">
+
+						<div class="row">
+							<div class="col-md-6">
+								от  {{ object.ctime|date:"SHORT_DATETIME_FORMAT" }}
+								
+								<div class="form-group">
+								<b>Статус:</b>
+								</br>
+								{% if object.status == 'wait' %}
+								<font color="red">{{object.get_status_display}}</font>
+								{% endif %}
+								{% if object.status == 'cancel' %}
+								<font color="red">{{object.get_status_display}}</font>
+								{% endif %}
+								{% if object.status == 'accept' %}
+								<font color="DarkOliveGreen">{{object.get_status_display}}</font>
+								{% endif %}
+								{% if object.status == 'success' %}
+								<font color="DarkGreen">{{object.get_status_display}}</font>
+								{% endif %}
+									
+								</div>
+			
+								</br></br>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									{% if object.status == 'wait' %}
+									<a href="{% url 'dellist_accept' object.id %}" class="btn btn-success">Принять доставку</a>
+									{% endif %}
+									
+									{% if object.status == 'accept' %}
+									<a href="{% url 'dellist_success' object.id %}" class="btn btn-success">Доставленно</a>
+									{% endif %}
+									{% comment %}
+									<a href="{% url 'order:edit' object.id %}" class="btn btn-default">Редактировать</a>
+									
+									<a href="http://babah24.ru/bitrix/admin/sale_order_view.php?ID={{ object.bitrixorderid }}" class="btn btn-default" target="_blank">Заказ в Битрикс</a>
+									
+									<a href="{% url 'order:order_detail_print' object.id %}" class="btn btn-default" target="_blank">Печать</a>
+									{% endcomment %}
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<b>Телефон:</b> {{ object.order.phone }}
+								{% if object.order.uname %}</br>
+									<b>Имя покупателя:</b> {{ object.order.uname }}
+								{% endif %}
+								{% if object.city %}</br>
+									<b>Город:</b> {{ object.get_city_display }}
+								{% endif %}
+								{% if object.area %}</br>
+									<b>Район:</b> {{ object.area }}
+								{% endif %}
+								{% if object.addr %}</br>
+									<b>Адрес доставки:</b> {{ object.addr }}
+								{% endif %}
+								{% if object.order.discont %}</br>
+									<b>Дисконтная карта:</b> {{ object.order.discont }}
+								{% endif %}
+								{% if object.comment %}</br>
+									<b>Комментарий:</b> {{ object.comment }}
+								{% endif %}
+								{% if object.order.terminal %}</br>
+									<b>Терминал:</b> {{ object.order.terminal|mybool }}
+								{% endif %}
+							</div>
+							<div class="col-md-6">
+								{% if object.order.cart %}
+									{{ object.order.cart }}
+								{% endif %}
+							</div>
+						</div>
+						
+
+						<div class="row">
+							<div class="col-md-12">
+								<h3>События:</h3>
+
+								<div class="table-responsive">
+								<table class="table table-bordered">
+									{% for de in context_get_delevent %}
+									<tr>
+										<td>{{ de.ctime|date:"SHORT_DATETIME_FORMAT"}}</td>
+										<td>{{ de.get_event_display }}</td>
+										<td>{{ de.comment }}</td>
+										<td>{% if de.user %}{{ de.user|who }}{% endif %}</td>
+										<td>{{ de.info }}</td>
+										<td>
+
+										</td>
+										
+									</tr>
+									{% endfor %}
+								</table>
+								</div>
+
+							</div>
+
+
+
+					
+					</div>
+					<!-- end widget content -->
+
+				</div>
+				<!-- end widget div -->
+
+			</div>
+			<!-- end widget -->
+
+		</article>
+		<!-- END COL -->
+
+	</div>
+
+	<!-- END ROW -->
+</section>
+
+
+{% endblock %}
+

@@ -61,6 +61,7 @@ urlpatterns = [
 	url(r'^', include('report3.urls')),
 	url(r'^', include('softapp.urls')),
 	url(r'^', include('deliveryapp.urls')),
+	url(r'^', include('bidapp.urls')),
 	#algol
 	url(r'^', include('accountstorage.urls')),
 	url(r'^', include('project.urls')),

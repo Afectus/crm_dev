@@ -22,6 +22,7 @@ INSTALLED_APPS = [
 	'report3',
 	'softapp',
 	'deliveryapp',
+	'bidapp',
 	#algol
 	'accountstorage',
 	'project',
