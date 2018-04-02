@@ -121,7 +121,7 @@ class project_add(CreateView):
 class project_list(ListView): 
 	template_name = 'project_list.html' 
 	model = project 
-	paginate_by = 10
+	paginate_by = 20
 
 	def dispatch(self, request, *args, **kwargs): 
 		return super(project_list, self).dispatch(request, *args, **kwargs) 
